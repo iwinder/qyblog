@@ -12,7 +12,7 @@ go install github.com/marmotedu/go-gitlint/cmd/go-gitlint@latest
 ## githook: commit-msg配置
 ```shell
 # Create hook
-echo 'gitlint --msg-file=$1' > .git/hooks/commit-msg
+echo 'go-gitlint  --msg-file=$1' > .git/hooks/commit-msg
 # Make it executable
 chmod +x .git/hooks/commit-msg 
 ``` 
