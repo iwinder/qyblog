@@ -13,16 +13,19 @@ make && make install
 # 使用
 git cz 
 ```
-### 方式二-不推荐
-这种方式需要看被安装到哪个目录中，不然会提示找不到命令
+### 方式二
+这种方式会被安装进环境变量 `GOBIN` 的目录中 ，需将`GOBIN`配置进`PATH`中，不然会提示找不到命令
 ```shell
+# 1.16以及之前
+go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+# 1.17
 go  install github.com/lintingzhen/commitizen-go@latest
-# 使用，如果当前项目中有vendor文件夹，将会被安装到这里面，之后执行如下命令即可
+# 使用 
 commitizen-go
 ```
  
 
-1.17开始，使用 `go get`将提示如下信息：
+1.17开始，使用 `go get`将提示如下信息，意味着`go get` 只用来下载普通的包，安装可执行程序应该使用 `go install`：
 > go get: installing executables with 'go get' in module mode is deprecated.
 To adjust and download dependencies of the current module, use 'go get -d'.
 To install using requirements of the current module, use 'go install'.

@@ -5,9 +5,9 @@
 ## 安装
 
 ```shell
-# Go1.17开始提示go get: installing executables with 'go get' in module mode is deprecated.
+# Go1.16以及之前，最后一次记录，之后仅记录 go install 的方式
 go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
-#  方式二
+#  Go1.17
 go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 ```
 
@@ -19,13 +19,13 @@ git-chglog --init
 
 
 选择
-- ? What is the URL of your repository? https://gitee.com/windcoder/qingyublog
-- ? What is your favorite style? github
-- ? Choose the format of your favorite commit message <type>(<scope>): <subject>
-- ? What is your favorite template style? standard
-- ? Do you include Merge Commit in CHANGELOG? No
-- ? Do you include Revert Commit in CHANGELOG? Yes
-- ? In which directory do you output configuration files and templates? .chglog
+- ? What is the URL of your repository? `https://gitee.com/windcoder/qingyublog`
+- ? What is your favorite style? `github`
+- ? Choose the format of your favorite commit message `<type>(<scope>): <subject>`
+- ? What is your favorite template style? `standard`
+- ? Do you include Merge Commit in CHANGELOG? `No`
+- ? Do you include Revert Commit in CHANGELOG? `Yes`
+- ? In which directory do you output configuration files and templates? `.chglog`
 
 
 ```shell
