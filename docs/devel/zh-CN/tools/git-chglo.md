@@ -5,9 +5,9 @@
 ## 安装
 
 ```shell
-# Go1.16及以前
-go get github.com/git-chglog/git-chglog/cmd/git-chglog
-#  Go1.17 
+# Go1.17开始提示go get: installing executables with 'go get' in module mode is deprecated.
+go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+#  方式二
 go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 ```
 
