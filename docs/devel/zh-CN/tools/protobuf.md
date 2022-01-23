@@ -1,4 +1,4 @@
-# protobuf环境配置
+# protobuf安装与环境配置
 
 ## 安装 protobuf
 ```shell
@@ -23,10 +23,11 @@ go install github.com/golang/protobuf/protoc-gen-go
 
 ### autoreconf: not found
 
-具体问题:
+#### 【Q】具体问题
 >   ./autogen.sh: 4: autoreconf: not found
 
-解决方案：
+#### 【A】解决方案
+
 ```shell
 sudo apt-get install autoconf automake libtool
 ```
@@ -34,38 +35,46 @@ sudo apt-get install autoconf automake libtool
 
 ### error: C++ preprocessor
 
-具体问题：
+#### 【Q】具体问题
 > checking how to run the C++ preprocessor... /lib/cpp
 configure: error: in `/home/wind/Wind/apps/common/protobuf':
 configure: error: C++ preprocessor "/lib/cpp" fails sanity check
 See `config.log' for more details
-> 
-解决方案：
+>
+
+#### 【A】解决方案
+
 ```shell
 sudo apt-get install g++
 ```
 
 ### no configuration information is in third_party/googletest
-具体问题：
+
+#### 【Q】具体问题
 > configure: WARNING: no configuration information is in third_party/googletest
 
-解决方案：
+#### 【A】解决方案
+
+执行如下命令，可以检测并补全`third_party`目录下所有文件，包括但不限于`googletest`，是最简单的方式：
 ```shell
-# 最简单的方式：
+
 git submodule update --init --recursive
 ```
-也可以通过如下完成： 
+
+也可以直接通过如下完成： 
 - 从 https://github.com/google/googletest/releases 获取源文件
 - 如 https://github.com/google/googletest/archive/refs/tags/release-1.11.0.tar.gz
 - 解压并重命名为`googletest`（即去掉文件夹中的版本号）,并放到 `third_party/`即可。
 
 ##  libprotoc.so.30: cannot open shared object file: No such file or directory
 
-具体问题：
+#### 【Q】具体问题
+
 > protoc: error while loading shared libraries: libprotoc.so.30: cannot open shared object file: No such file or directory
 
-解决方案：
-最简单的方式是在`/etc/profile` 或` .bashrc` 等相关文件中加入：` export LD_LIBRARY_PATH=/usr/local/lib`,如：
+#### 【A】解决方案
+
+方案一： 最简单的方式是在`/etc/profile` 或` .bashrc` 等相关文件中加入：` export LD_LIBRARY_PATH=/usr/local/lib`,如：
 ```shell
 # vim /etc/profile
 # 文件最下面添加：
@@ -73,7 +82,7 @@ export LD_LIBRARY_PATH=/usr/local/lib
 # source /etc/profile 
 ```
 
-但使用过程中发现仅当次有效，注销系统后又失效了，顾采用了如下方式：
+方案二： 但使用过程中发现仅当次有效，注销系统后又失效了，故采用了如下方式：
 
 1. 通过 `sudo vim /etc/ld.so.conf.d/libprotobuf.conf ` 新建【/etc/ld.so.conf.d/libprotobuf.conf】 ，内容如下：
     ```shell
