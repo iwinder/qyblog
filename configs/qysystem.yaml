@@ -1,0 +1,18 @@
+server:
+  mode: debug
+  healthz: true
+  max-ping-count: 3
+
+insecure:
+  bind-address: {QYCMS_SYSTEM_INSECURE_BIND_ADDRESS}
+  bind-port: {QYCMS_SYSTEM_INSECURE_BIND_PORT}
+
+mysql:
+  host: ${MARIADB_HOST}
+  username: ${MARIADB_USERNAME}
+  password: ${MARIADB_PASSWORD}
+  database: ${MARIADB_DATABASE}
+  max-idle-connecctions: 100
+  max-open-connections: 100
+  max-connection-life-time: 10s
+  log-level: 4
