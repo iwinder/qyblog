@@ -3,14 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	//"github.com/spf13/cobra/cobra/cmd"
+	"github.com/spf13/cobra/cobra/cmd"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 	"os"
 )
 
 func init() {
 	// "github.com/spf13/cobra" 需要 github.com/spf13/viper ,但目前其对1.17不兼容，暂时记录不添加。
-	//rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(versionCmd)
 }
 
 var (
@@ -28,12 +29,12 @@ func main() {
 	//	pflag.Usage()
 	//	return
 	//}
-	//cmd.Execute()
+	cmd.Execute()
 	// 从配置文件中读取配置
-	//if *cfg != "" {
-	//	viper.SetConfigFile(*cfg)   // 指定配置文件名
-	//	viper.SetConfigType("yaml") // 如果配置文件名中没有文件扩展名，则需要指定配置文件的格式，告诉viper以何种格式解析文件
-	//}
+	if *cfg != "" {
+		viper.SetConfigFile(*cfg)   // 指定配置文件名
+		viper.SetConfigType("yaml") // 如果配置文件名中没有文件扩展名，则需要指定配置文件的格式，告诉viper以何种格式解析文件
+	}
 }
 
 var versionCmd = &cobra.Command{
