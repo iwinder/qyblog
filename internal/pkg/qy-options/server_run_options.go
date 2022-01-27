@@ -1,7 +1,7 @@
 package qy_options
 
 import (
-	server "gitee.com/windcoder/qingyublog/internal/pkg/qy-server"
+	server "gitee.com/windcoder/qingyucms/internal/pkg/qy-server"
 	"github.com/spf13/pflag"
 )
 

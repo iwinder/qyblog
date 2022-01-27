@@ -1,4 +1,4 @@
-module gitee.com/windcoder/qingyublog
+module gitee.com/windcoder/qingyucms
 
 go 1.17
 

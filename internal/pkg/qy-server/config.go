@@ -7,6 +7,10 @@ type Config struct {
 	Healthz bool
 }
 
+type InsecureSeringInfo struct {
+	Address string
+}
+
 func NewConfig() *Config {
 	return &Config{
 		Mode:    gin.ReleaseMode,
