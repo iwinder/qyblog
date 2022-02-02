@@ -4,11 +4,14 @@ go 1.17
 
 require (
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/marmotedu/errors v1.0.2
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.10.0
+	github.com/tpkeeper/gin-dump v1.0.1
 	go.uber.org/zap v1.20.0
 	gorm.io/driver/mysql v1.2.3
 	gorm.io/gorm v1.22.5

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	code "gitee.com/windcoder/qingyublog/internal/pkg/qy-error-code"
+	code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
 	"github.com/marmotedu/errors"
 )
 
