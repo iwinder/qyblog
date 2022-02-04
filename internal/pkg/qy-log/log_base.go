@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"time"
 )
 
 type InfoLogger interface {
@@ -83,6 +84,11 @@ func (l *infoLogger) Infow(msg string, keysAndValues ...interface{}) {
 type zapLogger struct {
 	zapLogger *zap.Logger
 	infoLogger
+}
+
+func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (l *zapLogger) Debug(msg string, fields ...Field) {

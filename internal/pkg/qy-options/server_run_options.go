@@ -6,8 +6,9 @@ import (
 )
 
 type ServerRunOptions struct {
-	Mode    string `json:"mode" mapstructure:"mode"`
-	Healthz bool   `json:"healthz" mapstructure:"healthz"`
+	Mode        string   `json:"mode" mapstructure:"mode"`
+	Healthz     bool     `json:"healthz" mapstructure:"healthz"`
+	MiddleWares []string `json:"middlewares" mapstructure:"middlewares"`
 }
 
 func NewServerRunOptions() *ServerRunOptions {
