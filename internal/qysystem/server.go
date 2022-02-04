@@ -8,6 +8,7 @@ import (
 	genericoptions "gitee.com/windcoder/qingyucms/internal/pkg/qy-options"
 	genericapiserver "gitee.com/windcoder/qingyucms/internal/pkg/qy-server"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/config"
+	"gitee.com/windcoder/qingyucms/internal/qysystem/store"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store/mysql"
 )
 
@@ -45,16 +46,17 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	//extraConfig, err := buildExtraConfig(cfg)
-	//if err != nil {
-	//	return nil, err
-	//}
+	extraConfig, err := buildExtraConfig(cfg)
+	if err != nil {
+		return nil, err
+	}
 
 	genericServer, err := genericConfig.Complete().New()
 	if err != nil {
 		return nil, err
 	}
 
+	extraConfig.complete().New()
 	//extraServer, err := extraConfig.complete().New()
 
 	server := &apiServer{
@@ -104,4 +106,9 @@ func (s preparedAPIServer) Run() error {
 		log.Fatalf("start shutdown manager failed: %s", err.Error())
 	}
 	return s.genericAPIServer.Run()
+}
+
+func (c *completedExtraConfig) New() {
+	storeIns, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)
+	store.SetClient(storeIns)
 }

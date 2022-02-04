@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
-	"github.com/marmotedu/errors"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
 )
 
 func main() {

@@ -1,9 +1,9 @@
 package core
 
 import (
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
 	log "gitee.com/windcoder/qingyucms/internal/pkg/qy-log"
 	"github.com/gin-gonic/gin"
-	"github.com/marmotedu/errors"
 	"net/http"
 )
 

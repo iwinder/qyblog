@@ -5,7 +5,7 @@ import (
 	v1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-api/qysystem/v1"
 	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
 	code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
-	"github.com/marmotedu/errors"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
 	"gorm.io/gorm"
 )
 

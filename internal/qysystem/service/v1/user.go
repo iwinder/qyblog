@@ -5,8 +5,8 @@ import (
 	v1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-api/qysystem/v1"
 	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
 	code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store"
-	"github.com/marmotedu/errors"
 )
 
 type UserSrv interface {

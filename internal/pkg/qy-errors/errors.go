@@ -62,3 +62,11 @@ func Wrap(err error, message string) error {
 
 	return &withStack{err, callers()}
 }
+
+func WithCode(code int, format string, args ...interface{}) error {
+	return &withCode{
+		err:   fmt.Errorf(format, args...),
+		code:  code,
+		stack: callers(),
+	}
+}

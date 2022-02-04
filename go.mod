@@ -10,7 +10,6 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gogo/protobuf v1.3.2
 	github.com/gosuri/uitable v0.0.4
-	github.com/marmotedu/errors v1.0.2
 	github.com/mattn/go-isatty v0.0.14
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6
 	github.com/satori/go.uuid v1.2.0
@@ -20,6 +19,7 @@ require (
 	github.com/tpkeeper/gin-dump v1.0.1
 	github.com/zsais/go-gin-prometheus v0.1.0
 	go.uber.org/zap v1.20.0
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gorm.io/driver/mysql v1.2.3
 	gorm.io/gorm v1.22.5
 )
