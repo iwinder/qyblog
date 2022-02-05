@@ -25,6 +25,7 @@ type ExtraConfig struct {
 	Addr         string
 	MaxMsgSize   int
 	mysqlOptions *genericoptions.MySQLOptions
+	qyOptions    *genericoptions.QyOptions
 }
 type completedExtraConfig struct {
 	*ExtraConfig
@@ -97,6 +98,7 @@ func buildExtraConfig(cfg *config.Config) (*ExtraConfig, error) {
 		Addr:         fmt.Sprintf("%s:%d", cfg.InsecureServing.BindAddress, cfg.InsecureServing.BindPort),
 		MaxMsgSize:   0,
 		mysqlOptions: cfg.MySQLOptions,
+		qyOptions:    cfg.QyOptions,
 	}, nil
 }
 
@@ -111,4 +113,5 @@ func (s preparedAPIServer) Run() error {
 func (c *completedExtraConfig) New() {
 	storeIns, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)
 	store.SetClient(storeIns)
+	config.GetQyComConfigOr(c.qyOptions)
 }

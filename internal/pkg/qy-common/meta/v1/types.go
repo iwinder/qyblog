@@ -13,12 +13,13 @@ type ListMeta struct {
 	TotalCount int64 `json:"totalCount,omitempty"`
 }
 type ObjectMeta struct {
-	ID uint64 `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id"`
-	//InstanceID string `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null"`
+	ID         uint64 `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id"`
+	InstanceID string `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null"`
 	//Name       string    `json:"name,omitempty" gorm:"colum:name;type:varchar(255);not null"`
-	Extend    Extend    `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
-	CreatedAt time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
-	UpdatedAt time.Time `json:"updatedAt,omitempty" gorm:"column:updated_at"`
+	Extend       Extend    `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
+	ExtendShadow string    `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
+	CreatedAt    time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
+	UpdatedAt    time.Time `json:"updatedAt,omitempty" gorm:"column:updated_at"`
 }
 type CreateOptions struct {
 	TypeMeta `json:",inline"`

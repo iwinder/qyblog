@@ -4,8 +4,8 @@ const (
 	// ErrSuccess - 200 ：OK，执行成功
 	ErrSuccess int = iota + 100001
 
-	// ErrUnknow - 500 ：Internal server error. 未知异常
-	ErrUnknow
+	// ErrUnknown - 500 ：Internal server error. 未知异常
+	ErrUnknown
 
 	// ErrBind - 400 ：Error occurred while binding the request body to the struct. 请求参数绑定结构体异常
 	ErrBind
@@ -22,5 +22,5 @@ const (
 
 const (
 	// ErrDatabase - 500 ：Database error. 数据库异常
-	ErrDatabase int = iota + 100001
+	ErrDatabase int = iota + 100101
 )

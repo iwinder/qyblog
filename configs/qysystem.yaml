@@ -16,3 +16,5 @@ mysql:
   max-open-connections: 100
   max-connection-life-time: 10s
   log-level: 4
+qy:
+  token: SAkSgsuN

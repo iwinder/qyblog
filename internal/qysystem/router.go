@@ -17,7 +17,7 @@ func installMiddleware(g *gin.Engine) {
 
 func installController(g *gin.Engine) *gin.Engine {
 	storeIns, _ := mysql.GetMySQLFactoryOr(nil)
-	v1 := g.Group("/v1")
+	v1 := g.Group("/admin/v1")
 	{
 		userv1 := v1.Group("/users")
 		{
