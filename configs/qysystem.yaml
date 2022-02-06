@@ -16,5 +16,11 @@ mysql:
   max-open-connections: 100
   max-connection-life-time: 10s
   log-level: 4
+
+jwt:
+  realm: JWT # jwt 标识
+  key: xImnc4G5WnNyVYFpG0kAyn4arYFoGM1Es # 服务端密钥
+  timeout: 24h # token 过期时间(小时)
+  max-refresh: 24h # token 更新时间(小时)
 qy:
   token: SAkSgsuN

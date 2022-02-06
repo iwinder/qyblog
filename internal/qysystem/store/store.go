@@ -4,6 +4,7 @@ var client Factory
 
 type Factory interface {
 	Users() UserStore
+	CommonDB() CommonStore
 	Close() error
 }
 

@@ -52,12 +52,16 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
+	erra := extraConfig.complete().New()
+	if erra != nil {
+		return nil, erra
+	}
+
 	genericServer, err := genericConfig.Complete().New()
 	if err != nil {
 		return nil, err
 	}
 
-	extraConfig.complete().New()
 	//extraServer, err := extraConfig.complete().New()
 
 	server := &apiServer{
@@ -110,8 +114,12 @@ func (s preparedAPIServer) Run() error {
 	return s.genericAPIServer.Run()
 }
 
-func (c *completedExtraConfig) New() {
-	storeIns, _ := mysql.GetMySQLFactoryOr(c.mysqlOptions)
+func (c *completedExtraConfig) New() error {
+	storeIns, err := mysql.GetMySQLFactoryOr(c.mysqlOptions)
+	if err != nil {
+		return err
+	}
 	store.SetClient(storeIns)
 	config.GetQyComConfigOr(c.qyOptions)
+	return nil
 }

@@ -40,3 +40,7 @@ func GetQyComConfigOr(opts *genericoption.QyOptions) (QyComConfig, error) {
 	}
 	return qycnf, nil
 }
+
+func GetQYConfig() QyComConfig {
+	return qycnf
+}

@@ -24,3 +24,10 @@ const (
 	// ErrDatabase - 500 ：Database error. 数据库异常
 	ErrDatabase int = iota + 100101
 )
+
+const (
+	ErrEncrypt int = iota + 100201
+	ErrSignatureInvalid
+	ErrExpired
+	ErrInvalidAuthHeader
+)

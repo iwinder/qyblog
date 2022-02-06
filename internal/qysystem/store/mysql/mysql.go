@@ -19,6 +19,10 @@ func (ds *datastore) Users() store.UserStore {
 	return newUsers(ds)
 }
 
+func (ds *datastore) CommonDB() store.CommonStore {
+	return newCommonDB(ds)
+}
+
 func (ds *datastore) Close() error {
 	db, err := ds.db.DB()
 	if err != nil {

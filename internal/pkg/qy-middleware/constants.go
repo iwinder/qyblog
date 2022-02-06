@@ -16,6 +16,9 @@ const (
 	KeyXContentTypeOptions       = "X-Content-Type-Options"
 	KeyXXSSProtection            = "X-XSS-Protection"
 	KeyStrictTransportSecurity   = "Strict-Transport-Security"
+	KeyAuthorization             = "Authorization"
 
 	MaxAge = 12
+
+	AuthBasic = "Basic"
 )
