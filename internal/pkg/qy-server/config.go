@@ -1,6 +1,17 @@
 package qy_server
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"time"
+)
+
+const (
+	// RecommendedHomeDir defines the default directory used to place all iam service configurations.
+	RecommendedHomeDir = ".qycms"
+
+	// RecommendedEnvPrefix defines the ENV prefix used by all iam service.
+	RecommendedEnvPrefix = "QYCMS"
+)
 
 type Config struct {
 	Mode            string
@@ -9,10 +20,18 @@ type Config struct {
 	EnableMetrics   bool
 	Healthz         bool
 	InsecureServing *InsecureServingInfo
+	Jwt             *JwtInfo
 }
 
 type InsecureServingInfo struct {
 	Address string
+}
+
+type JwtInfo struct {
+	Realm      string
+	Key        string
+	Timeout    time.Duration
+	MaxRefresh time.Duration
 }
 
 func NewConfig() *Config {
@@ -22,6 +41,12 @@ func NewConfig() *Config {
 		Healthz:         true,
 		EnableProfiling: true,
 		EnableMetrics:   true,
+		Jwt: &JwtInfo{
+			Realm:      "qycms jwt",
+			Key:        "",
+			Timeout:    1 * time.Hour,
+			MaxRefresh: 1 * time.Hour,
+		},
 	}
 }
 

@@ -3,6 +3,7 @@ package options
 import (
 	"encoding/json"
 	cliflag "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/cli/flag"
+	"gitee.com/windcoder/qingyucms/internal/pkg/qy-common/utils/idUtil"
 	log "gitee.com/windcoder/qingyucms/internal/pkg/qy-log"
 	genericoption "gitee.com/windcoder/qingyucms/internal/pkg/qy-options"
 	server "gitee.com/windcoder/qingyucms/internal/pkg/qy-server"
@@ -12,6 +13,7 @@ type Options struct {
 	GenericServerRunOptions *genericoption.ServerRunOptions       `json:"server" mapstructure: "server"`
 	InsecureServing         *genericoption.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
 	MySQLOptions            *genericoption.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
+	JwtOptions              *genericoption.JwtOptions             `json:"jwt" mapstructure:"jwt"`
 	Log                     *log.Options                          `json:"log" mapstructure:"log"`
 	QyOptions               *genericoption.QyOptions              `json:"qy" mapstructure:"qy"`
 }
@@ -21,6 +23,7 @@ func NewOptions() *Options {
 		GenericServerRunOptions: genericoption.NewServerRunOptions(),
 		InsecureServing:         genericoption.NewInsecureServingOptions(),
 		MySQLOptions:            genericoption.NewMySQLOptions(),
+		JwtOptions:              genericoption.NewJwtOptions(),
 		Log:                     log.NewOptions(),
 		QyOptions:               genericoption.NewQyOptions(),
 	}
@@ -34,11 +37,20 @@ func (o *Options) ApplyTo(c *server.Config) error {
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
 	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	o.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
+	o.JwtOptions.AddFlags(fss.FlagSet("jwt"))
 	o.Log.AddFlags(fss.FlagSet("logs"))
+	o.QyOptions.AddFlags(fss.FlagSet("qy"))
 	return fss
 }
 
 func (o *Options) String() string {
 	data, _ := json.Marshal(o)
 	return string(data)
+}
+
+func (o *Options) Complete() error {
+	if o.JwtOptions.Key == "" {
+		o.JwtOptions.Key = idUtil.NewSecretKey()
+	}
+	return nil
 }

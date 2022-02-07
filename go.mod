@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/appleboy/gin-jwt/v2 v2.8.0
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/casbin/casbin/v2 v2.41.0
 	github.com/casbin/gorm-adapter/v3 v3.4.6
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
