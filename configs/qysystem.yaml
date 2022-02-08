@@ -17,6 +17,11 @@ mysql:
   max-connection-life-time: 10s
   log-level: 4
 
+redis:
+  host: ${REDIS_HOST} # redis 地址，默认 127.0.0.1:6379
+  port: ${REDIS_PORT} # redis 端口，默认 6379
+  password: ${REDIS_PASSWORD} # redis 密码
+
 jwt:
   realm: JWT # jwt 标识
   key: xImnc4G5WnNyVYFpG0kAyn4arYFoGM1Es # 服务端密钥

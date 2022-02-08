@@ -12,6 +12,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-redis/redis/v7 v7.4.1
 	github.com/gogo/protobuf v1.3.2
 	github.com/gosuri/uitable v0.0.4
 	github.com/mattn/go-isatty v0.0.14

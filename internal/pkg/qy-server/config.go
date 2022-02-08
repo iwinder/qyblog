@@ -43,7 +43,6 @@ func NewConfig() *Config {
 		EnableMetrics:   true,
 		Jwt: &JwtInfo{
 			Realm:      "qycms jwt",
-			Key:        "",
 			Timeout:    1 * time.Hour,
 			MaxRefresh: 1 * time.Hour,
 		},

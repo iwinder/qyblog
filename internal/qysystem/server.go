@@ -1,12 +1,14 @@
 package qysystem
 
 import (
+	"context"
 	"fmt"
 	"gitee.com/windcoder/qingyucms/internal/pkg/qy-common/shutdown"
 	posixsignal "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/shutdown/shutdownmanagers"
 	log "gitee.com/windcoder/qingyucms/internal/pkg/qy-log"
 	genericoptions "gitee.com/windcoder/qingyucms/internal/pkg/qy-options"
 	genericapiserver "gitee.com/windcoder/qingyucms/internal/pkg/qy-server"
+	storage "gitee.com/windcoder/qingyucms/internal/pkg/qy-storage"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/config"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store/mysql"
@@ -14,6 +16,7 @@ import (
 
 type apiServer struct {
 	gs               *shutdown.GracefulShutdown
+	redisOptions     *genericoptions.RedisOptions
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
 
@@ -66,6 +69,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 
 	server := &apiServer{
 		gs:               gs,
+		redisOptions:     cfg.RedisOptions,
 		genericAPIServer: genericServer,
 	}
 	return server, nil
@@ -73,6 +77,7 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 
 func (s *apiServer) PrepareRun() preparedAPIServer {
 	initRouter(s.genericAPIServer.Engine)
+	s.initRedisStore()
 	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
 		mysqlStore, _ := mysql.GetMySQLFactoryOr(nil)
 		if mysqlStore != nil {
@@ -122,4 +127,29 @@ func (c *completedExtraConfig) New() error {
 	store.SetClient(storeIns)
 	config.GetQyComConfigOr(c.qyOptions)
 	return nil
+}
+
+func (s *apiServer) initRedisStore() {
+	ctx, cancel := context.WithCancel(context.Background())
+	s.gs.AddShutdownCallback(shutdown.ShutdownFunc(func(string) error {
+		cancel()
+		return nil
+	}))
+
+	config := &storage.Config{
+		Host:                  s.redisOptions.Host,
+		Port:                  s.redisOptions.Port,
+		Addrs:                 s.redisOptions.Addrs,
+		Username:              s.redisOptions.Username,
+		Password:              s.redisOptions.Password,
+		Database:              s.redisOptions.Database,
+		MasterName:            s.redisOptions.MasterName,
+		MaxIdle:               s.redisOptions.MaxIdle,
+		MaxActive:             s.redisOptions.MaxActive,
+		Timeout:               s.redisOptions.Timeout,
+		EnableCluster:         s.redisOptions.EnableCluster,
+		UseSSL:                s.redisOptions.UseSSL,
+		SSLInsecureSkipVerify: s.redisOptions.SSLInsecureSkipVerify,
+	}
+	go storage.ConnectToRedis(ctx, config)
 }
