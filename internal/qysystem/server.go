@@ -3,6 +3,7 @@ package qysystem
 import (
 	"context"
 	"fmt"
+	pb "gitee.com/windcoder/qingyucms/internal/pkg/qy-api/proto/qysystem/v1"
 	"gitee.com/windcoder/qingyucms/internal/pkg/qy-common/shutdown"
 	posixsignal "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/shutdown/shutdownmanagers"
 	log "gitee.com/windcoder/qingyucms/internal/pkg/qy-log"
@@ -10,13 +11,17 @@ import (
 	genericapiserver "gitee.com/windcoder/qingyucms/internal/pkg/qy-server"
 	storage "gitee.com/windcoder/qingyucms/internal/pkg/qy-storage"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/config"
+	cacheV1 "gitee.com/windcoder/qingyucms/internal/qysystem/controller/v1/cache"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store"
 	"gitee.com/windcoder/qingyucms/internal/qysystem/store/mysql"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type apiServer struct {
 	gs               *shutdown.GracefulShutdown
 	redisOptions     *genericoptions.RedisOptions
+	grpcAPIServer    *grpcAPIServer
 	genericAPIServer *genericapiserver.GenericAPIServer
 }
 
@@ -55,9 +60,9 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	erra := extraConfig.complete().New()
-	if erra != nil {
-		return nil, erra
+	extraServer, err := extraConfig.complete().New()
+	if err != nil {
+		return nil, err
 	}
 
 	genericServer, err := genericConfig.Complete().New()
@@ -65,12 +70,11 @@ func createAPIServer(cfg *config.Config) (*apiServer, error) {
 		return nil, err
 	}
 
-	//extraServer, err := extraConfig.complete().New()
-
 	server := &apiServer{
 		gs:               gs,
 		redisOptions:     cfg.RedisOptions,
 		genericAPIServer: genericServer,
+		grpcAPIServer:    extraServer,
 	}
 	return server, nil
 }
@@ -119,14 +123,29 @@ func (s preparedAPIServer) Run() error {
 	return s.genericAPIServer.Run()
 }
 
-func (c *completedExtraConfig) New() error {
+func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
+	opts := []grpc.ServerOption{
+		grpc.MaxRecvMsgSize(c.MaxMsgSize),
+		//grpc.Creds(c),
+	}
+	grpcServer := grpc.NewServer(opts...)
+
 	storeIns, err := mysql.GetMySQLFactoryOr(c.mysqlOptions)
 	if err != nil {
-		return err
+		log.Fatalf("Failed to get cache instance: %s", err.Error())
 	}
 	store.SetClient(storeIns)
 	config.GetQyComConfigOr(c.qyOptions)
-	return nil
+
+	cacheIns, err := cacheV1.GetCacheInsOr(storeIns)
+	if err != nil {
+		log.Fatalf("Failed to get cache instance: %s", err.Error())
+	}
+
+	pb.RegisterCacheServer(grpcServer, cacheIns)
+
+	reflection.Register(grpcServer)
+	return &grpcAPIServer{grpcServer, c.Addr}, nil
 }
 
 func (s *apiServer) initRedisStore() {

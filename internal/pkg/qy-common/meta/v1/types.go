@@ -12,6 +12,20 @@ type TypeMeta struct {
 type ListMeta struct {
 	TotalCount int64 `json:"totalCount,omitempty"`
 }
+
+type ListOptions struct {
+	TypeMeta `json:",inline"`
+
+	LabelSelector string `json:"labelSelector,omitempty" form:"labelSelector"`
+
+	FieldSelector string `json:"fieldSelector,omitempty" form:"fieldSelector"`
+
+	TimeoutSeconds *int64 `json:"timeoutSeconds,omitempty"`
+
+	Offset *int64 `json:"offset,omitempty" form:"offset"`
+
+	Limit *int64 `json:"limit,omitempty" form:"limit"`
+}
 type ObjectMeta struct {
 	ID         uint64 `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id"`
 	InstanceID string `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null"`

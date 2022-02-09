@@ -10,8 +10,9 @@ import (
 )
 
 type Options struct {
-	GenericServerRunOptions *genericoption.ServerRunOptions       `json:"server" mapstructure: "server"`
+	GenericServerRunOptions *genericoption.ServerRunOptions       `json:"server" mapstructure:"server"`
 	InsecureServing         *genericoption.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
+	GRPCOptions             *genericoption.GRPCOptions            `json:"grpc" mapstructure:"grpc"`
 	MySQLOptions            *genericoption.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
 	RedisOptions            *genericoption.RedisOptions           `json:"redis" mapstructure:"redis"`
 	JwtOptions              *genericoption.JwtOptions             `json:"jwt" mapstructure:"jwt"`
@@ -23,6 +24,7 @@ func NewOptions() *Options {
 	o := Options{
 		GenericServerRunOptions: genericoption.NewServerRunOptions(),
 		InsecureServing:         genericoption.NewInsecureServingOptions(),
+		GRPCOptions:             genericoption.NewGRPCOptions(),
 		MySQLOptions:            genericoption.NewMySQLOptions(),
 		RedisOptions:            genericoption.NewRedisOptions(),
 		JwtOptions:              genericoption.NewJwtOptions(),
@@ -39,6 +41,7 @@ func (o *Options) ApplyTo(c *server.Config) error {
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
 	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
 	o.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
+	o.GRPCOptions.AddFlags(fss.FlagSet("grpc"))
 	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
 	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
 	o.JwtOptions.AddFlags(fss.FlagSet("jwt"))
