@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	v1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-api/qysystem/v1"
 	db "gitee.com/windcoder/qingyucms/internal/pkg/qy-db"
 	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
 	logger "gitee.com/windcoder/qingyucms/internal/pkg/qy-log/qy-logger"
@@ -30,6 +31,16 @@ func (ds *datastore) Close() error {
 	}
 
 	return db.Close()
+}
+
+func (ds *datastore) InitTables() error {
+	return ds.db.AutoMigrate(
+		v1.User{},
+		v1.Role{},
+		v1.Privilege{},
+		v1.Menu{},
+		v1.CasbinRule{},
+	)
 }
 
 var (

@@ -134,7 +134,12 @@ func (c *completedExtraConfig) New() (*grpcAPIServer, error) {
 	if err != nil {
 		log.Fatalf("Failed to get cache instance: %s", err.Error())
 	}
+	aerr := storeIns.InitTables()
+	if aerr != nil {
+		log.Fatalf("Failed to Init Tables: %s", err.Error())
+	}
 	store.SetClient(storeIns)
+
 	config.GetQyComConfigOr(c.qyOptions)
 
 	cacheIns, err := cacheV1.GetCacheInsOr(storeIns)

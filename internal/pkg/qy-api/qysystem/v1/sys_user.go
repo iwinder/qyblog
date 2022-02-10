@@ -17,8 +17,7 @@ type User struct {
 	Salt              string `json:"-" gorm:"-" validate:"omitempty"`
 	Email             string `json:"email" gorm:"column:email" validate:"required,email,min=1,max=100"`
 	Phone             string `json:"phone" gorm:"column:phone" validate:"omitempty"`
-	AdminFlag         int    `json:"adminFlag,omitempty" gorm:"column:admin_flag" validate:"omitempty"`
-	DelFlag           int    `json:"delFlag,omitempty" gorm:"column:del_flag" validate:"omitempty"`
+	AdminFlag         bool   `json:"adminFlag,omitempty" gorm:"column:admin_flag" validate:"omitempty"`
 }
 
 type UserList struct {

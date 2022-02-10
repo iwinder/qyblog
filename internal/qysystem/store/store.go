@@ -6,6 +6,7 @@ type Factory interface {
 	Users() UserStore
 	CommonDB() CommonStore
 	Close() error
+	InitTables() error
 }
 
 func Client() Factory {

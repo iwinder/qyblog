@@ -27,9 +27,9 @@ type ListOptions struct {
 	Limit *int64 `json:"limit,omitempty" form:"limit"`
 }
 type ObjectMeta struct {
-	ID         uint64 `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id"`
-	InstanceID string `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null"`
-	//Name       string    `json:"name,omitempty" gorm:"colum:name;type:varchar(255);not null"`
+	ID           uint64    `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id"`
+	InstanceID   string    `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null"`
+	DelFlag      int       `json:"delFlag,omitempty" gorm:"column:del_flag" validate:"omitempty"`
 	Extend       Extend    `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
 	ExtendShadow string    `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
 	CreatedAt    time.Time `json:"createdAt,omitempty" gorm:"column:created_at"`
