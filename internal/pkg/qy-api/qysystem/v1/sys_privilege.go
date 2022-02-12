@@ -1,6 +1,11 @@
 package v1
 
-import metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
+import (
+	"encoding/json"
+	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
+	"gitee.com/windcoder/qingyucms/internal/pkg/qy-common/utils/idUtil"
+	"gorm.io/gorm"
+)
 
 type Privilege struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -16,4 +21,25 @@ type Privilege struct {
 
 func (p *Privilege) TableName() string {
 	return "qy_sys_privilege"
+}
+
+func (p *Privilege) BeforeCreate(tx *gorm.DB) (er error) {
+	return
+}
+
+func (p *Privilege) AfterCreate(tx *gorm.DB) (err error) {
+	p.InstanceID = idUtil.GetInstanceID(p.ID, "privilege-")
+	return tx.Save(p).Error
+}
+
+func (p *Privilege) BeforeUpdate(tx *gorm.DB) (err error) {
+	p.ExtendShadow = p.Extend.String()
+	return err
+}
+
+func (p *Privilege) AfterFind(tx *gorm.DB) (err error) {
+	if err := json.Unmarshal([]byte(p.ExtendShadow), &p.Extend); err != nil {
+		return err
+	}
+	return nil
 }

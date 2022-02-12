@@ -11,6 +11,7 @@ import (
 
 type UserSrv interface {
 	Create(ctx context.Context, user *v1.User, options metav1.CreateOptions) error
+	Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error
 	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
 }
 
@@ -37,4 +38,11 @@ func (u *userService) Get(ctx context.Context, username string, opts metav1.GetO
 		return nil, err
 	}
 	return user, nil
+}
+
+func (u *userService) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
+	if err := u.store.Users().Delete(ctx, username, opts); err != nil {
+		return errors.WithCode(code.ErrDatabase, err.Error())
+	}
+	return nil
 }

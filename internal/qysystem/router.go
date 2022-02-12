@@ -39,7 +39,9 @@ func installController(g *gin.Engine) *gin.Engine {
 			userController := user.NewUserController(storeIns)
 			userv1.POST("", userController.Create)
 			userv1.GET(":username", userController.Get)
+			userv1.DELETE(":username", userController.Delete)
 		}
+		v1.Use(auto.AuthFunc())
 	}
 
 	return g

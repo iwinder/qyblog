@@ -1,6 +1,11 @@
 package v1
 
-import metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
+import (
+	"encoding/json"
+	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qy-common/meta/v1"
+	"gitee.com/windcoder/qingyucms/internal/pkg/qy-common/utils/idUtil"
+	"gorm.io/gorm"
+)
 
 type CasbinRule struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -16,4 +21,25 @@ type CasbinRule struct {
 
 func (c *CasbinRule) TableName() string {
 	return "qy_sys_casbin_rule"
+}
+
+func (c *CasbinRule) BeforeCreate(tx *gorm.DB) (er error) {
+	return
+}
+
+func (c *CasbinRule) AfterCreate(tx *gorm.DB) (err error) {
+	c.InstanceID = idUtil.GetInstanceID(c.ID, "casbinru-")
+	return tx.Save(c).Error
+}
+
+func (c *CasbinRule) BeforeUpdate(tx *gorm.DB) (err error) {
+	c.ExtendShadow = c.Extend.String()
+	return err
+}
+
+func (c *CasbinRule) AfterFind(tx *gorm.DB) (err error) {
+	if err := json.Unmarshal([]byte(c.ExtendShadow), &c.Extend); err != nil {
+		return err
+	}
+	return nil
 }
