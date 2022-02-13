@@ -15,8 +15,8 @@ type ListMeta struct {
 }
 
 type ListOptions struct {
-	TypeMeta `json:",inline"`
-
+	TypeMeta      `json:",inline"`
+	Unscoped      bool   `json:"unscoped"`
 	LabelSelector string `json:"labelSelector,omitempty" form:"labelSelector"`
 
 	FieldSelector string `json:"fieldSelector,omitempty" form:"fieldSelector"`
@@ -30,7 +30,8 @@ type ListOptions struct {
 type ObjectMeta struct {
 	ID           uint64         `json:"id,omitempty" gorm:"primary_key;AUTO_INCREMENt;column:id;comment:主键"`
 	InstanceID   string         `json:"instanceID,omitempty" gorm:"unique;colum:instance_id;type:varchar(32);not null;comment:唯一资源标识"`
-	StatusFlag   int            `json:"status,omitempty" gorm:"column:status_flag;default 1;comment:启用标识，1 启用，2 禁用" validate:"omitempty"`
+	Sort         int            `json:"Sort" gorm:"colum:sort;default 0"`
+	StatusFlag   int            `json:"status,omitempty" gorm:"column:status_flag;default 0;comment:启用标识，0 启用，1 禁用,2 删除" validate:"omitempty"`
 	Extend       Extend         `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
 	ExtendShadow string         `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
 	CreatedAt    time.Time      `json:"createdAt,omitempty" gorm:"column:created_at"`
@@ -48,6 +49,7 @@ type UpdateOptions struct {
 type GetOptions struct {
 	TypeMeta `json:",inline"`
 	DryRun   []string `json:"dryRun,omitempty"`
+	Unscoped bool     `json:"unscoped"`
 }
 
 type DeleteOptions struct {

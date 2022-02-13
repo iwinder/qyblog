@@ -40,6 +40,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (er error) {
 
 func (u *User) AfterCreate(tx *gorm.DB) (err error) {
 	u.InstanceID = idUtil.GetInstanceID(u.ID, "user-")
+	u.Sort = int(u.ID)
 	return tx.Save(u).Error
 }
 
@@ -50,6 +51,10 @@ func (u *User) BeforeUpdate(tx *gorm.DB) (err error) {
 }
 
 func (u *User) AfterFind(tx *gorm.DB) (err error) {
+	if u.DeletedAt.Valid {
+		// 不为空,则已删除
+		u.StatusFlag = 2
+	}
 	if err := json.Unmarshal([]byte(u.ExtendShadow), &u.Extend); err != nil {
 		return err
 	}

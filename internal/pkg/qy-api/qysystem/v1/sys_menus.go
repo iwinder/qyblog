@@ -13,7 +13,6 @@ type Menu struct {
 	Path              string `json:"path" gorm:"path"`
 	TargetId          uint64 `json:"targetId" gorm:"target_id"`
 	TargetType        string `json:"targetType" gorm:"target_type"`
-	Sort              int    `json:"sort" gorm:"sort"`
 	blanked           bool   `json:"blanked" gorm:"blanked"`
 	parentId          uint64 `json:"parentId" gorm:"column:parent_id"`
 }

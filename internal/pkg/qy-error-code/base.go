@@ -30,4 +30,6 @@ const (
 	ErrSignatureInvalid
 	ErrExpired
 	ErrInvalidAuthHeader
+
+	ErrPasswordIncorrect
 )

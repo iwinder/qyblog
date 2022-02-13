@@ -13,7 +13,6 @@ type Privilege struct {
 	Url               string `json:"url" gorm:"url"`
 	Icon              string `json:"icon" gorm:"icon"`
 	identifier        string `json:"identifier" gorm:"identifier"`
-	Sort              int    `json:"sort" gorm:"sort"`
 	hided             bool   `json:"hided" gorm:"hided"`
 	description       string `json:"description" gorm:"description"`
 	parentId          uint64 `json:"parentId" gorm:"column:parent_id"`

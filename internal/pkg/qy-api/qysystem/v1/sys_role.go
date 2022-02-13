@@ -11,7 +11,6 @@ type Role struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	Name              string `json:"name" gorm:"column:name""`
 	Key               string `json:"key" gorm:"key"`
-	Sort              int    `json:"Sort" gorm:"sort"`
 }
 
 func (r *Role) TableName() string {
