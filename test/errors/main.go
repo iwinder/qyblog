@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
-	errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
+	code "gitee.com/windcoder/qingyucms/internal/pkg/qycms-error-code"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qygo-errors"
 )
 
 func main() {

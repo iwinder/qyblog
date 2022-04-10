@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+
+# IAM 项目源码根目录
+IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
+
+# 生成文件存放目录
+LOCAL_OUTPUT_ROOT="${IAM_ROOT}/${OUT_DIR:-_output}"
+
+
+readonly MARIADB_HOST=${MARIADB_HOST:-127.0.0.1:3306} # MariaDB 主机地址
+readonly MARIADB_DATABASE=${MARIADB_DATABASE:-qycmsdev} # MariaDB iam 应用使用的数据库名
+readonly MARIADB_USERNAME=${MARIADB_USERNAME:-root} # iam 数据库用户名
+readonly MARIADB_PASSWORD=${MARIADB_PASSWORD:-0932} # iam 数据库密码
+
+
+
+readonly QYCMS_SYSTEM_INSECURE_BIND_ADDRESS=${IAM_APISERVER_INSECURE_BIND_ADDRESS:-127.0.0.1}
+readonly QYCMS_SYSTEM_INSECURE_BIND_PORT=${IAM_APISERVER_INSECURE_BIND_PORT:-8080}
