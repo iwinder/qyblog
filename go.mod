@@ -7,8 +7,10 @@ require (
 	github.com/casbin/gorm-adapter/v3 v3.6.0
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-gonic/gin v1.7.7
+	github.com/novalagung/gubrak v1.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/speps/go-hashids v2.0.0+incompatible
+	github.com/spf13/pflag v1.0.5
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	gorm.io/driver/mysql v1.3.3

@@ -2,10 +2,11 @@ package v1
 
 import (
 	"context"
-	//code "gitee.com/windcoder/qingyucms/internal/pkg/qy-error-code"
-	//errors "gitee.com/windcoder/qingyucms/internal/pkg/qy-errors"
-	//log "gitee.com/windcoder/qingyucms/internal/pkg/qy-log"
+
 	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qycms-common/meta/v1"
+	code "gitee.com/windcoder/qingyucms/internal/pkg/qycms-error-code"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qygo-errors"
+	log "gitee.com/windcoder/qingyucms/internal/pkg/qygo-log"
 	v1 "gitee.com/windcoder/qingyucms/internal/qycms/models/v1"
 	"gitee.com/windcoder/qingyucms/internal/qycms/store"
 	"sync"
@@ -34,7 +35,7 @@ func newUsers(srv *service) *userService {
 
 func (u *userService) Create(ctx context.Context, user *v1.User, opts metav1.CreateOptions) error {
 	if err := u.store.Users().Create(ctx, user, opts); err != nil {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	return nil
 }
@@ -49,21 +50,21 @@ func (u *userService) Get(ctx context.Context, username string, opts metav1.GetO
 
 func (u *userService) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
 	if err := u.store.Users().Update(ctx, user, opts); err != nil {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	return nil
 }
 
 func (u *userService) Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error {
 	if err := u.store.Users().Delete(ctx, username, opts); err != nil {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	return nil
 }
 
 func (u *userService) DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error {
 	if err := u.store.Users().DeleteCollection(ctx, usernames, opts); err != nil {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil
@@ -72,9 +73,9 @@ func (u *userService) DeleteCollection(ctx context.Context, usernames []string, 
 func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
-		//log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
+		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())
 
-		//return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	var m sync.Map
 	for _, user := range users.Items {
@@ -99,7 +100,7 @@ func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.Us
 		infos = append(infos, info.(*v1.User))
 	}
 
-	//log.L(ctx).Debugf("get %d users from backend storage.", len(infos))
+	log.L(ctx).Debugf("get %d users from backend storage.", len(infos))
 
 	return &v1.UserList{ListMeta: users.ListMeta, Items: infos}, nil
 }
@@ -109,7 +110,7 @@ func (u *userService) ListOptional(ctx context.Context, opts metav1.ListOptions)
 func (u *userService) ChangePassword(ctx context.Context, user *v1.User) error {
 
 	if err := u.store.Users().Update(ctx, user, metav1.UpdateOptions{}); err != nil {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 
 	return nil

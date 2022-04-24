@@ -4,8 +4,9 @@ import (
 	"context"
 	"gitee.com/windcoder/qingyucms/internal/pkg/qycms-common/gormutil"
 	metav1 "gitee.com/windcoder/qingyucms/internal/pkg/qycms-common/meta/v1"
+	code "gitee.com/windcoder/qingyucms/internal/pkg/qycms-error-code"
+	errors "gitee.com/windcoder/qingyucms/internal/pkg/qygo-errors"
 	v1 "gitee.com/windcoder/qingyucms/internal/qycms/models/v1"
-	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -37,7 +38,7 @@ func (u *userStore) Delete(ctx context.Context, username string, opts metav1.Del
 
 	err := u.db.Where("username = ?", username).Delete(&v1.User{}).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		//return errors.WithCode(code.ErrDatabase, err.Error())
+		return errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	return nil
 }
@@ -56,9 +57,9 @@ func (u *userStore) Get(ctx context.Context, username string, opts metav1.GetOpt
 	err := u.db.Where("username=?", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			//return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
+			return nil, errors.WithCode(code.ErrUserNotFound, err.Error())
 		}
-		//return nil, errors.WithCode(code.ErrDatabase, err.Error())
+		return nil, errors.WithCode(code.ErrDatabase, err.Error())
 	}
 	return user, nil
 }

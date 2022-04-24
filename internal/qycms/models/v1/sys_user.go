@@ -55,3 +55,8 @@ func (u *User) AfterFind(tx *gorm.DB) (err error) {
 	}
 	return nil
 }
+
+func (u *User) Compare(pwd string) (err error) {
+	err = auth.Compare(u.Password, pwd)
+	return
+}
