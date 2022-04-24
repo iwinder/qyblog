@@ -1,8 +1,9 @@
 package idUtil
 
 import (
-	"gitee.com/windcoder/qingyucms/internal/pkg/ qygo-common/utils/stringUtil"
-	"github.com/speps/go-hashids"
+	"gitee.com/windcoder/qingyucms/internal/pkg/qygo-common/utils/stringUtil"
+	//"gitee.com/windcoder/qingyucms/internal/pkg/qygo-common/utils/stringUtil"
+	hashids "github.com/speps/go-hashids"
 	"math/rand"
 )
 

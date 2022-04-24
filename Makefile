@@ -1,5 +1,5 @@
 root:
-	export Root=gitee.com/windcoder/qingyublog
+	export Root=gitee.com/windcoder/qingyucms
 
 
 build:
