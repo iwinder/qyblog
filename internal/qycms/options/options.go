@@ -9,26 +9,26 @@ import (
 )
 
 type Options struct {
-	//GenericServerRunOptions *genericoption.ServerRunOptions       `json:"server" mapstructure:"server"`
-	//InsecureServing         *genericoption.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
-	//GRPCOptions             *genericoption.GRPCOptions            `json:"grpc" mapstructure:"grpc"`
-	//MySQLOptions            *genericoption.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
-	//RedisOptions            *genericoption.RedisOptions           `json:"redis" mapstructure:"redis"`
-	//JwtOptions              *genericoption.JwtOptions             `json:"jwt" mapstructure:"jwt"`
-	Log       *log.Options             `json:"log" mapstructure:"log"`
-	QyOptions *genericoption.QyOptions `json:"qy" mapstructure:"qy"`
+	GenericServerRunOptions *genericoption.ServerRunOptions       `json:"server" mapstructure:"server"`
+	InsecureServing         *genericoption.InsecureServingOptions `json:"insecure" mapstructure:"insecure"`
+	GRPCOptions             *genericoption.GRPCOptions            `json:"grpc" mapstructure:"grpc"`
+	MySQLOptions            *genericoption.MySQLOptions           `json:"mysql" mapstructure:"mysql"`
+	RedisOptions            *genericoption.RedisOptions           `json:"redis" mapstructure:"redis"`
+	JwtOptions              *genericoption.JwtOptions             `json:"jwt" mapstructure:"jwt"`
+	Log                     *log.Options                          `json:"log" mapstructure:"log"`
+	QyOptions               *genericoption.QyOptions              `json:"qy" mapstructure:"qy"`
 }
 
 func NewDefaultOptions() *Options {
 	o := Options{
-		//GenericServerRunOptions: genericoption.NewServerRunOptions(),
-		//InsecureServing:         genericoption.NewInsecureServingOptions(),
-		//GRPCOptions:             genericoption.NewGRPCOptions(),
-		//MySQLOptions:            genericoption.NewMySQLOptions(),
-		//RedisOptions:            genericoption.NewRedisOptions(),
-		//JwtOptions:              genericoption.NewJwtOptions(),
-		Log:       log.NewDefaultOption(),
-		QyOptions: genericoption.NewDefaultQyOptions(),
+		GenericServerRunOptions: genericoption.NewServerRunOptions(),
+		InsecureServing:         genericoption.NewInsecureServingOptions(),
+		GRPCOptions:             genericoption.NewGRPCOptions(),
+		MySQLOptions:            genericoption.NewMySQLOptions(),
+		RedisOptions:            genericoption.NewRedisOptions(),
+		JwtOptions:              genericoption.NewJwtOptions(),
+		Log:                     log.NewDefaultOption(),
+		QyOptions:               genericoption.NewDefaultQyOptions(),
 	}
 	return &o
 }
@@ -38,12 +38,12 @@ func NewDefaultOptions() *Options {
 //}
 
 func (o *Options) Flags() (fss cliflag.NamedFlagSets) {
-	//o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
-	//o.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
-	//o.GRPCOptions.AddFlags(fss.FlagSet("grpc"))
-	//o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
-	//o.RedisOptions.AddFlags(fss.FlagSet("redis"))
-	//o.JwtOptions.AddFlags(fss.FlagSet("jwt"))
+	o.GenericServerRunOptions.AddFlags(fss.FlagSet("generic"))
+	o.InsecureServing.AddFlags(fss.FlagSet("insecure serving"))
+	o.GRPCOptions.AddFlags(fss.FlagSet("grpc"))
+	o.MySQLOptions.AddFlags(fss.FlagSet("mysql"))
+	o.RedisOptions.AddFlags(fss.FlagSet("redis"))
+	o.JwtOptions.AddFlags(fss.FlagSet("jwt"))
 	o.Log.AddFlags(fss.FlagSet("logs"))
 	o.QyOptions.AddFlags(fss.FlagSet("qy"))
 	return fss

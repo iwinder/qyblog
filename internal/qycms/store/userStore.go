@@ -13,6 +13,7 @@ type UserStore interface {
 	// DeleteByWhere(ctx context.Context, whereStr string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error
 	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
+	CountByUserName(ctx context.Context, username string, opts metav1.GetOptions) (int, error)
+	List(ctx context.Context, opts v1.UserListOption) (*v1.UserList, error)
 	ListOptional(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
 }

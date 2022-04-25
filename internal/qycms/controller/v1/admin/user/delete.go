@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Delete 删除用户
 func (u *UserController) Delete(c *gin.Context) {
 	log.L(c).Info("delete user function called.")
 
@@ -18,3 +19,18 @@ func (u *UserController) Delete(c *gin.Context) {
 	}
 	core.WriteResponse(c, nil, nil)
 }
+
+//// DeleteCollection 真删除
+//func (u *UserController) DeleteCollection(c *gin.Context) {
+//	log.L(c).Info("batch delete user function called.")
+//
+//	usernames := c.QueryArray("name")
+//
+//	if err := u.srv.Users().DeleteCollection(c, usernames, metav1.DeleteOptions{}); err != nil {
+//		core.WriteResponse(c, err, nil)
+//
+//		return
+//	}
+//
+//	core.WriteResponse(c, nil, nil)
+//}

@@ -10,7 +10,7 @@ import (
 
 type User struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
-	Username          string `json:"username,omitempty" gorm:"colum:username;type:varchar(255);not null"`
+	Username          string `json:"username,omitempty" gorm:"unique;colum:username;type:varchar(255);not null"`
 	Nickname          string `json:"nickname" gorm:"column:nickname" validate:"required,min=1,max=30"`
 	Avatar            string `json:"avatar" gorm:"column:avatar" validate:"omitempty"`
 	Password          string `json:"password,omitempty" gorm:"column:password" validate:"required"`
@@ -25,12 +25,18 @@ type UserList struct {
 	Items           []*User `json:"items"`
 }
 
+type UserListOption struct {
+	metaV1.ListOptions `json:"page"`
+	User               `json:"user"`
+}
+
 func (u *User) TableName() string {
 	return "qy_sys_user"
 }
 
-func (u *User) BeforeCreate(tx *gorm.DB) (er error) {
-	return
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	u.Password, err = auth.Encrypt(u.Password + u.Salt)
+	return err
 }
 
 func (u *User) AfterCreate(tx *gorm.DB) (err error) {
@@ -40,7 +46,6 @@ func (u *User) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 func (u *User) BeforeUpdate(tx *gorm.DB) (err error) {
-	u.Password, err = auth.Encrypt(u.Password + u.Salt)
 	u.ExtendShadow = u.Extend.String()
 	return err
 }

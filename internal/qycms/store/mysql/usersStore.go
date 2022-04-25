@@ -64,7 +64,19 @@ func (u *userStore) Get(ctx context.Context, username string, opts metav1.GetOpt
 	return user, nil
 }
 
-func (u *userStore) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+func (u *userStore) CountByUserName(ctx context.Context, username string, opts metav1.GetOptions) (int, error) {
+	var total int64 = 0
+	err := u.db.Where("username =?", username).Count(&total).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 0, nil
+		}
+		return 0, errors.WithCode(code.ErrDatabase, err.Error())
+	}
+	return int(total), nil
+}
+
+func (u *userStore) List(ctx context.Context, opts v1.UserListOption) (*v1.UserList, error) {
 	ret := &v1.UserList{}
 
 	ol := gormutil.Unpointer(opts.Offset, opts.Limit)

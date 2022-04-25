@@ -17,12 +17,18 @@ func (u *UserController) Create(c *gin.Context) {
 		return
 	}
 	r.Salt = token
+	// 查询用户名是否唯一
+	_, aerr := u.srv.Users().CheckExistByUserName(c, c.Param("username"), metav1.GetOptions{Unscoped: true})
+	if aerr != nil {
+		core.WriteResponse(c, aerr, nil)
+		return
+	}
+	// 不存在则新增
 	if err := u.srv.Users().Create(c, &r, metav1.CreateOptions{}); err != nil {
 		core.WriteResponse(c, err, nil)
 		return
 	}
 
-	//if errs :=
 	core.WriteResponse(c, nil, r)
 
 }

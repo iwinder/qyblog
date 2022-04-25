@@ -18,7 +18,9 @@ type UserSrv interface {
 	Delete(ctx context.Context, username string, opts metav1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, usernames []string, opts metav1.DeleteOptions) error
 	Get(ctx context.Context, username string, opts metav1.GetOptions) (*v1.User, error)
-	List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
+	CountByUserName(ctx context.Context, username string, opts metav1.GetOptions) (int, error)
+	CheckExistByUserName(ctx context.Context, username string, opts metav1.GetOptions) (bool, error)
+	List(ctx context.Context, opts v1.UserListOption) (*v1.UserList, error)
 	ListOptional(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error)
 	ChangePassword(ctx context.Context, user *v1.User) error
 }
@@ -48,6 +50,25 @@ func (u *userService) Get(ctx context.Context, username string, opts metav1.GetO
 	return user, nil
 }
 
+func (u *userService) CountByUserName(ctx context.Context, username string, opts metav1.GetOptions) (int, error) {
+	user, err := u.store.Users().CountByUserName(ctx, username, opts)
+	if err != nil {
+		return 0, err
+	}
+	return user, nil
+}
+
+func (u *userService) CheckExistByUserName(ctx context.Context, username string, opts metav1.GetOptions) (bool, error) {
+	user, err := u.store.Users().CountByUserName(ctx, username, opts)
+	if err != nil {
+		return false, err
+	}
+	if user > 0 {
+		return false, errors.WithCode(code.ErrUserNameHad, err.Error())
+	}
+	return true, nil
+}
+
 func (u *userService) Update(ctx context.Context, user *v1.User, opts metav1.UpdateOptions) error {
 	if err := u.store.Users().Update(ctx, user, opts); err != nil {
 		return errors.WithCode(code.ErrDatabase, err.Error())
@@ -70,7 +91,7 @@ func (u *userService) DeleteCollection(ctx context.Context, usernames []string, 
 	return nil
 }
 
-func (u *userService) List(ctx context.Context, opts metav1.ListOptions) (*v1.UserList, error) {
+func (u *userService) List(ctx context.Context, opts v1.UserListOption) (*v1.UserList, error) {
 	users, err := u.store.Users().List(ctx, opts)
 	if err != nil {
 		log.L(ctx).Errorf("list users from storage failed: %s", err.Error())

@@ -7,6 +7,7 @@ type LimitAndOffset struct {
 	Limit  int
 }
 
+// Unpointer 装载分页参数
 func Unpointer(offset *int64, limit *int64) *LimitAndOffset {
 	o, l := 0, DefaultLimit
 
