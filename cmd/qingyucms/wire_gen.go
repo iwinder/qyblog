@@ -7,13 +7,13 @@
 package main
 
 import (
-	"qingyucms/internal/biz"
-	"qingyucms/internal/conf"
-	"qingyucms/internal/data"
-	"qingyucms/internal/server"
-	"qingyucms/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/internal/biz"
+	"github.com/iwinder/qingyucms/internal/conf"
+	"github.com/iwinder/qingyucms/internal/data"
+	"github.com/iwinder/qingyucms/internal/server"
+	"github.com/iwinder/qingyucms/internal/service"
 )
 
 // Injectors from wire.go:

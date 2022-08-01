@@ -3,7 +3,7 @@ module github.com/iwinder/qingyucms
 go 1.18
 
 require (
-	github.com/go-kratos/kratos/v2 v2.4.0
+	github.com/go-kratos/kratos/v2 v2.4.1
 	github.com/google/wire v0.5.0
 	google.golang.org/genproto v0.0.0-20220524023933-508584e28198
 	google.golang.org/grpc v1.46.2
@@ -26,4 +26,12 @@ require (
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
+)
+
+replace (
+	golang.org/x/net => golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2
+	golang.org/x/sync => golang.org/x/sync v0.0.0-20220513210516-0976fa681c29
+	golang.org/x/sys => golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
+	golang.org/x/text => github.com/golang/text v0.3.7
+ 	golang.org/x/tools => github.com/golang/tools v0.0.0-20190422233926-fe54fb35175b // indirect
 )

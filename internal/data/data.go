@@ -1,9 +1,9 @@
 package data
 
 import (
-	"qingyucms/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/iwinder/qingyucms/internal/conf"
 )
 
 // ProviderSet is data providers.
