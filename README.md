@@ -1,37 +1,51 @@
-# qingyublog
+# Kratos Project Template
 
-#### 介绍
-博客后端go语言版
+## Install Kratos
+```
+go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
+```
+## Create a service
+```
+# Create a template project
+kratos new server
 
-#### 软件架构
-软件架构说明
+cd server
+# Add a proto template
+kratos proto add api/server/server.proto
+# Generate the proto code
+kratos proto client api/server/server.proto
+# Generate the source code of service by proto file
+kratos proto server api/server/server.proto -t internal/service
 
+go generate ./...
+go build -o ./bin/ ./...
+./bin/server -conf ./configs
+```
+## Generate other auxiliary files by Makefile
+```
+# Download and update dependencies
+make init
+# Generate API files (include: pb.go, http, grpc, validate, swagger) by proto file
+make api
+# Generate all files
+make all
+```
+## Automated Initialization (wire)
+```
+# install wire
+go get github.com/google/wire/cmd/wire
 
-#### 安装教程
+# generate wire
+cd cmd/server
+wire
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Docker
+```bash
+# build
+docker build -t <your-docker-image-name> .
 
-#### 使用说明
+# run
+docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf <your-docker-image-name>
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
