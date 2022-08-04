@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package qycms_user.v1;
+import "google/api/annotations.proto";
+
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_user/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_user.v1";
+
+service User {
+	rpc CreateUser (CreateUserRequest) returns (CreateUserReply);
+	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply);
+	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
+	rpc GetUser (GetUserRequest) returns (GetUserReply){
+		option (google.api.http) = {
+			get: "/admin/user/{uid}"
+		};
+	}
+	rpc ListUser (ListUserRequest) returns (ListUserReply);
+}
+
+
+
+message  CreateUserInfo{
+
+}
+
+message UserInfoResponse {
+	string username = 1;
+	string password = 2;
+	string nickName = 3;
+	uint64 uid = 4;
+}
+message CreateUserRequest {
+	string username = 1;
+	string password = 2;
+	string nickName = 3;
+
+
+}
+message CreateUserReply {
+	UserInfoResponse user = 1;
+}
+
+message UpdateUserRequest {}
+message UpdateUserReply {}
+
+message DeleteUserRequest {}
+message DeleteUserReply {}
+
+message GetUserRequest {
+	uint64 uid = 1;
+}
+message GetUserReply {
+	UserInfoResponse user = 1;
+}
+
+message ListUserRequest {}
+message ListUserReply {}

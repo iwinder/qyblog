@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"github.com/iwinder/qingyucms/app/qycms-user/internal/conf"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/biz"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
@@ -44,6 +45,7 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 			db:  dbIns,
 			log: l,
 		}
+		dbIns.AutoMigrate(&biz.UserBiz{})
 	})
 	if mysqlDb.db == nil || err != nil {
 		log.Fatalf("failed opening connection to mysql: %v", err)

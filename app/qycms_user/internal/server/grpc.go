@@ -4,9 +4,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	v1 "github.com/iwinder/qingyucms/api/helloworld/v1"
-	"github.com/iwinder/qingyucms/app/qycms-user/internal/conf"
-	"github.com/iwinder/qingyucms/app/qycms-user/internal/service"
+	"github.com/iwinder/qingyucms/api/qycms_user/v1"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/conf"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/service"
 )
 
 // NewGRPCServer new a gRPC server.
@@ -26,6 +26,6 @@ func NewGRPCServer(c *conf.Server, greeter *service.UserService, logger log.Logg
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterGreeterServer(srv, greeter)
+	v1.RegisterUserServer(srv, greeter)
 	return srv
 }

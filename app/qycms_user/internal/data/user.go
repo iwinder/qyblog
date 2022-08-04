@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/app/qycms-user/internal/biz"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/biz"
 )
 
 type userRepo struct {
@@ -35,7 +35,7 @@ func (r *userRepo) Update(ctx context.Context, g *biz.UserBiz) (*biz.UserBiz, er
 	return g, nil
 }
 
-func (r *userRepo) FindByID(c context.Context, id int64) (*biz.UserBiz, error) {
+func (r *userRepo) FindByID(c context.Context, id uint64) (*biz.UserBiz, error) {
 	user := &biz.UserBiz{}
 	err := r.data.db.Where("id = ?", id).First(&user).Error
 	if err != nil {

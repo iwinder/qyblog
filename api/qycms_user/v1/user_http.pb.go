@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.4.1
 // - protoc             v3.21.1
-// source: helloworld/v1/greeter.proto
+// source: api/qycms_user/v1/user.proto
 
 package v1
 
@@ -19,56 +19,56 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationGreeterSayHello = "/helloworld.v1.Greeter/SayHello"
+const OperationUserGetUser = "/qycms_user.v1.User/GetUser"
 
-type GreeterHTTPServer interface {
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
+type UserHTTPServer interface {
+	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 }
 
-func RegisterGreeterHTTPServer(s *http.Server, srv GreeterHTTPServer) {
+func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r := s.Route("/")
-	r.GET("/helloworld/{name}", _Greeter_SayHello0_HTTP_Handler(srv))
+	r.GET("/admin/user/{uid}", _User_GetUser0_HTTP_Handler(srv))
 }
 
-func _Greeter_SayHello0_HTTP_Handler(srv GreeterHTTPServer) func(ctx http.Context) error {
+func _User_GetUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in HelloRequest
+		var in GetUserRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationGreeterSayHello)
+		http.SetOperation(ctx, OperationUserGetUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SayHello(ctx, req.(*HelloRequest))
+			return srv.GetUser(ctx, req.(*GetUserRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*HelloReply)
+		reply := out.(*GetUserReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-type GreeterHTTPClient interface {
-	SayHello(ctx context.Context, req *HelloRequest, opts ...http.CallOption) (rsp *HelloReply, err error)
+type UserHTTPClient interface {
+	GetUser(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
 }
 
-type GreeterHTTPClientImpl struct {
+type UserHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewGreeterHTTPClient(client *http.Client) GreeterHTTPClient {
-	return &GreeterHTTPClientImpl{client}
+func NewUserHTTPClient(client *http.Client) UserHTTPClient {
+	return &UserHTTPClientImpl{client}
 }
 
-func (c *GreeterHTTPClientImpl) SayHello(ctx context.Context, in *HelloRequest, opts ...http.CallOption) (*HelloReply, error) {
-	var out HelloReply
-	pattern := "/helloworld/{name}"
+func (c *UserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserReply, error) {
+	var out GetUserReply
+	pattern := "/admin/user/{uid}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationGreeterSayHello))
+	opts = append(opts, http.Operation(OperationUserGetUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
