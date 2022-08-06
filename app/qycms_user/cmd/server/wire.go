@@ -11,12 +11,12 @@ import (
 	"github.com/google/wire"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/biz"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/conf"
-	"github.com/iwinder/qingyucms/app/qycms_user/internal/data"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/data/db"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/server"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/service"
 )
 
 // wireApp init kratos application.
-func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+func wireApp(*conf.Server, *conf.Qycms, *conf.Data, log.Logger) (*kratos.App, func(), error) {
+	panic(wire.Build(server.ProviderSet, db.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
 }

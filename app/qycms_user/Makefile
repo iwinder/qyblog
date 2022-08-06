@@ -11,7 +11,7 @@ ifeq ($(GOHOSTOS), windows)
 	API_PROTO_FILES=$(shell $(Git_Bash) -c "find api -name *.proto")
 else
 	INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
-	API_PROTO_FILES=$(shell find api -name *.proto)
+	API_PROTO_FILES=$(shell find ../../api -name *.proto)
 endif
 
 .PHONY: init
@@ -60,6 +60,13 @@ all:
 	make api;
 	make config;
 	make generate;
+
+
+
+.PHONY: wire
+# generate wire
+wire:
+	cd cmd/server && wire
 
 # show help
 help:

@@ -4,50 +4,113 @@ package qycms_user.v1;
 import "google/api/annotations.proto";
 
 
-option go_package = "github.com/iwinder/qingyucms/api/qycms_user/v1;v1";
+option go_package = "github.com/iwinder/qingyucms/api/server/v1;v1";
 option java_multiple_files = true;
-option java_package = "api.qycms_user.v1";
+option java_package = "api.server.v1";
 
+// 用户管理服务
 service User {
-	rpc CreateUser (CreateUserRequest) returns (CreateUserReply);
-	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply);
-	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply);
-	rpc GetUser (GetUserRequest) returns (GetUserReply){
+	// 创建新用户
+	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
 		option (google.api.http) = {
-			get: "/admin/user/{uid}"
+			post: "/api/v1/admin/user",
+			body:"*"
 		};
 	}
-	rpc ListUser (ListUserRequest) returns (ListUserReply);
+	// 更新用户
+	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
+		option (google.api.http) = {
+			put: "/api/v1/admin/user/{uid}",
+			body:"*"
+		};
+	};
+	// 删除
+	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
+		option (google.api.http) = {
+			delete: "/api/v1/admin/user/{uid}"
+		};
+	};
+	// 批量删除
+	rpc DeleteUsers (DeleteUsersRequest) returns (DeleteUsersReply){
+		option (google.api.http) = {
+			delete: "/api/v1/admin/user"
+		};
+	};
+	// 获取用户信息
+	rpc GetUser (GetUserRequest) returns (GetUserReply){
+		option (google.api.http) = {
+			get: "/api/v1/admin/user/{uid}"
+		};
+	}
+	// 批量获取用户
+	rpc ListUser (ListUserRequest) returns (ListUserReply){
+		option (google.api.http) = {
+			get: "/api/v1/admin/user"
+		};
+	};
 }
 
 
 
-message  CreateUserInfo{
 
-}
 
 message UserInfoResponse {
-	string username = 1;
-	string password = 2;
+	uint64 uid = 1;
+	string username = 2;
 	string nickName = 3;
-	uint64 uid = 4;
+	string avatar = 4;
+	string email = 5;
+	string phone = 6;
 }
+
+message PageInfo {
+	uint64 page = 1;
+	uint64 size = 2;
+	uint64 total = 3;
+	uint64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+}
+
+
+
 message CreateUserRequest {
 	string username = 1;
 	string password = 2;
 	string nickName = 3;
-
-
+	string avatar = 4;
+	string email = 5;
+	string phone = 6;
 }
+
 message CreateUserReply {
 	UserInfoResponse user = 1;
 }
 
-message UpdateUserRequest {}
-message UpdateUserReply {}
+message UpdateUserRequest {
+	uint64 uid = 1;
+	string username = 2;
+	string nickName = 3;
+	string avatar = 4;
+	string email = 5;
+	string phone = 6;
+}
+message UpdateUserReply {
+	UserInfoResponse user = 1;
+}
 
-message DeleteUserRequest {}
-message DeleteUserReply {}
+message DeleteUserRequest {
+	uint64 uid = 1;
+}
+message DeleteUserReply {
+	uint64 uid = 1;
+}
+
+message DeleteUsersRequest {
+	repeated uint64 uids = 1;
+}
+message DeleteUsersReply {
+}
 
 message GetUserRequest {
 	uint64 uid = 1;
@@ -56,5 +119,13 @@ message GetUserReply {
 	UserInfoResponse user = 1;
 }
 
-message ListUserRequest {}
-message ListUserReply {}
+message ListUserRequest {
+	PageInfo pageInfo = 1;
+	string username = 2;
+	string nickName = 3;
+}
+
+message ListUserReply {
+	PageInfo pageInfo = 1;
+	repeated UserInfoResponse items = 2;
+}

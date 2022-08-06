@@ -1,11 +1,11 @@
-package data
+package db
 
 import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"github.com/iwinder/qingyucms/app/qycms_user/internal/biz"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/conf"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/data/po"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"strings"
@@ -45,11 +45,16 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 			db:  dbIns,
 			log: l,
 		}
-		dbIns.AutoMigrate(&biz.UserBiz{})
+		AutoMigrateTable(dbIns)
 	})
 	if mysqlDb.db == nil || err != nil {
 		log.Fatalf("failed opening connection to mysql: %v", err)
 	}
 
 	return mysqlDb, cleanup, nil
+}
+
+// AutoMigrateTable 初始化table
+func AutoMigrateTable(dbIns *gorm.DB) {
+	dbIns.AutoMigrate(&po.UserPO{})
 }

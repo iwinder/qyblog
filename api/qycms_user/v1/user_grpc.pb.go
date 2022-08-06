@@ -22,10 +22,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
+	// 创建新用户
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
+	// 更新用户
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserReply, error)
+	// 删除
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error)
+	// 批量删除
+	DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...grpc.CallOption) (*DeleteUsersReply, error)
+	// 获取用户信息
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
+	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
 }
 
@@ -64,6 +71,15 @@ func (c *userClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts
 	return out, nil
 }
 
+func (c *userClient) DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...grpc.CallOption) (*DeleteUsersReply, error) {
+	out := new(DeleteUsersReply)
+	err := c.cc.Invoke(ctx, "/qycms_user.v1.User/DeleteUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
 	out := new(GetUserReply)
 	err := c.cc.Invoke(ctx, "/qycms_user.v1.User/GetUser", in, out, opts...)
@@ -86,10 +102,17 @@ func (c *userClient) ListUser(ctx context.Context, in *ListUserRequest, opts ...
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
+	// 创建新用户
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
+	// 更新用户
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
+	// 删除
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
+	// 批量删除
+	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
+	// 获取用户信息
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
+	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -106,6 +129,9 @@ func (UnimplementedUserServer) UpdateUser(context.Context, *UpdateUserRequest) (
 }
 func (UnimplementedUserServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedUserServer) DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUsers not implemented")
 }
 func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
@@ -180,6 +206,24 @@ func _User_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_DeleteUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).DeleteUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/qycms_user.v1.User/DeleteUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).DeleteUsers(ctx, req.(*DeleteUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserRequest)
 	if err := dec(in); err != nil {
@@ -234,6 +278,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _User_DeleteUser_Handler,
+		},
+		{
+			MethodName: "DeleteUsers",
+			Handler:    _User_DeleteUsers_Handler,
 		},
 		{
 			MethodName: "GetUser",

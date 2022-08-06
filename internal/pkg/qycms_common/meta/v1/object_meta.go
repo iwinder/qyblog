@@ -15,6 +15,7 @@ type ObjectMeta struct {
 	ExtendShadow string         `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
 	CreatedAt    time.Time      `json:"createdAt,omitempty" gorm:"column:created_at"`
 	UpdatedAt    time.Time      `json:"updatedAt,omitempty" gorm:"column:updated_at"`
+	DisabledAt   time.Time      `json:"updatedAt,omitempty" gorm:"column:disabled_at"`
 	DeletedAt    gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`
 }
 
