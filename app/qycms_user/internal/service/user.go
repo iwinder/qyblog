@@ -101,7 +101,7 @@ func (s *UserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1
 		FirstFlag: userList.FirstFlag,
 		LastFlag:  userList.LastFlag,
 	}
-	users := make([]*v1.UserInfoResponse, len(userList.Items))
+	users := make([]*v1.UserInfoResponse, 0, len(userList.Items))
 	for _, user := range userList.Items {
 		users = append(users, &v1.UserInfoResponse{
 			Uid:      user.ID,

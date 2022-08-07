@@ -43,3 +43,8 @@ func (u *UserPO) AfterCreate(tx *gorm.DB) (err error) {
 	u.Sort = int(u.ID)
 	return tx.Save(u).Error
 }
+
+func (u *UserPO) AfterDelete(tx *gorm.DB) (err error) {
+	u.StatusFlag = 2
+	return tx.Save(u).Error
+}

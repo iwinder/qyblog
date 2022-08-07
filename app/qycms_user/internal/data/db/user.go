@@ -2,14 +2,10 @@ package db
 
 import (
 	"context"
-	"fmt"
-	"github.com/go-kratos/kratos/v2/errors"
-	"github.com/iwinder/qingyucms/app/qycms_user/internal/data/po"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
-	"gorm.io/gorm"
-
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/biz"
+	"github.com/iwinder/qingyucms/app/qycms_user/internal/data/po"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
 )
 
 type userRepo struct {
@@ -28,16 +24,16 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 // Save 创建用户
 func (r *userRepo) Save(ctx context.Context, user *biz.UserDO) (*po.UserPO, error) {
 	userPO := &po.UserPO{
-		Username:  user.Username,
-		Nickname:  user.Nickname,
-		Password:  user.Password,
-		Avatar:    user.Avatar,
-		Salt:      user.Salt,
-		Email:     user.Email,
-		Phone:     user.Phone,
-		AdminFlag: user.AdminFlag,
+		ObjectMeta: user.ObjectMeta,
+		Username:   user.Username,
+		Nickname:   user.Nickname,
+		Password:   user.Password,
+		Avatar:     user.Avatar,
+		Salt:       user.Salt,
+		Email:      user.Email,
+		Phone:      user.Phone,
+		AdminFlag:  user.AdminFlag,
 	}
-	userPO.InstanceID = user.InstanceID
 	err := r.data.db.Create(userPO).Error
 	if err != nil {
 		return nil, err
@@ -84,11 +80,7 @@ func (r *userRepo) FindByID(c context.Context, id uint64) (*po.UserPO, error) {
 	user := &po.UserPO{}
 	err := r.data.db.Where("id = ?", id).First(&user).Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, fmt.Errorf("%d,data not found,error is [%s]:", 111, err)
-		}
-
-		return nil, fmt.Errorf("%d,data query error,error is [%s]:", 222, err)
+		return nil, err
 	}
 
 	return user, nil
@@ -104,12 +96,13 @@ func (r *userRepo) FindByUsername(c context.Context, username string) (*po.UserP
 // ListAll 批量查询
 func (r *userRepo) ListAll(c context.Context, opts biz.UserListOption) (*po.UserPOList, error) {
 	ret := &po.UserPOList{}
+
 	where := &po.UserPO{}
 	var err error
 
 	if opts.PageFlag {
 		ol := gormutil.Unpointer(opts.Offset, opts.Limit)
-		d := r.data.db.Where(where).
+		d := r.data.db.Model(where).Where(where).
 			Offset(ol.Offset).
 			Limit(ol.Limit).
 			Order("id desc").
@@ -119,7 +112,8 @@ func (r *userRepo) ListAll(c context.Context, opts biz.UserListOption) (*po.User
 			Count(&ret.TotalCount)
 		err = d.Error
 	} else {
-		d := r.data.db.Where(where).
+		d := r.data.db.Model(where).Where(where).
+			Find(&ret.Items).
 			Count(&ret.TotalCount)
 		err = d.Error
 	}

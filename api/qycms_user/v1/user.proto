@@ -1,12 +1,13 @@
 syntax = "proto3";
 
-package qycms_user.v1;
+package api.qycms_user.v1;
 import "google/api/annotations.proto";
 
 
-option go_package = "github.com/iwinder/qingyucms/api/server/v1;v1";
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_user/v1;v1";
 option java_multiple_files = true;
-option java_package = "api.server.v1";
+option java_package = "api.qycms_user.v1";
 
 // 用户管理服务
 service User {

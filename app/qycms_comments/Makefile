@@ -54,20 +54,6 @@ generate:
 	go get github.com/google/wire/cmd/wire@latest
 	go generate ./...
 
-.PHONY: wire
-# generate wire
-wire:
-	find app -type d -mindepth 2 -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) wire'
-
-.PHONY: swagger
-# generate swagger
-swagger:
-	cd ./api/$(APP_RELATIVE_PATH) && protoc --proto_path=. \
-	        --proto_path=../third_party \
-	        --openapiv2_out . \
-	        --openapiv2_opt logtostderr=true \
-          	qycms_user/v1/user.proto \
-          	qycms_blog/admin/v1/article.proto
 .PHONY: all
 # generate all
 all:

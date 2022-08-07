@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package api.qycms_blog.admin.v1;
+import "google/api/annotations.proto";
+import public "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_blog.admin.v1";
+
+// 文章管理
+service Article {
+	// 新增
+	rpc CreateArticle (CreateArticleRequest) returns (CreateArticleReply){
+		option (google.api.http) = {
+			post: "/api/v1/admin/article",
+			body:"*"
+		};
+	};
+	// 更新
+	rpc UpdateArticle (UpdateArticleRequest) returns (UpdateArticleReply){
+		option (google.api.http) = {
+			put: "/api/v1/admin/article/{uid}",
+			body:"*"
+		};
+	};
+	// 根据ID删除
+	rpc DeleteArticle (DeleteArticleRequest) returns (DeleteArticleReply){
+		option (google.api.http) = {
+			delete: "/api/v1/admin/article/{uid}"
+		};
+	};
+	// 批量删除
+	rpc DeleteArticles (DeleteArticlesRequest) returns (DeleteArticlesReply){
+		option (google.api.http) = {
+			delete: "/api/v1/admin/article"
+		};
+	};
+	// 根据ID获取
+	rpc GetArticle (GetArticleRequest) returns (GetArticleReply){
+		option (google.api.http) = {
+			get: "/api/v1/admin/article/{uid}"
+		};
+	};
+	// 批量获取
+	rpc ListArticle (ListArticleRequest) returns (ListArticleReply){
+		option (google.api.http) = {
+			get: "/api/v1/admin/article"
+		};
+	};
+}
+
+
+
+
+
+message ArticleInfoResponse {
+	uint64 uid = 1;
+	string title= 2;
+	string permaLink= 3;
+	string canonicalLink= 4;
+	string summary= 5;
+	string thumbnail= 6;
+	string password= 7;
+	int32 status = 8;
+	int32 atype = 9;
+	uint64 authorId = 10;
+	uint64 categoryId = 11;
+	uint64 CommentAgentId = 12;
+	bool published = 13;
+	int32 viewCount = 14;
+	int32 likeCount = 15;
+	int32 hateCount = 16;
+	string content = 17;
+	string contentHtml = 18;
+	google.protobuf.Timestamp publishedAt = 19;
+}
+
+message PageInfo {
+	uint64 page = 1;
+	uint64 size = 2;
+	uint64 total = 3;
+	uint64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+}
+
+message CreateArticleRequest {
+	uint64 uid = 1;
+	string title= 2;
+	string permaLink= 3;
+	string canonicalLink= 4;
+	string summary= 5;
+	string thumbnail= 6;
+	string password= 7;
+	int32 status = 8;
+	int32 atype = 9;
+	uint64 authorId = 10;
+	uint64 categoryId = 11;
+	uint64 CommentAgentId = 12;
+	bool published = 13;
+	int32 viewCount = 14;
+	int32 likeCount = 15;
+	int32 hateCount = 16;
+	string content = 17;
+	string contentHtml = 18;
+	google.protobuf.Timestamp publishedAt = 19;
+}
+message CreateArticleReply {
+	ArticleInfoResponse content = 1;
+}
+
+message UpdateArticleRequest {
+	uint64 uid = 1;
+	string title= 2;
+	string permaLink= 3;
+	string canonicalLink= 4;
+	string summary= 5;
+	string thumbnail= 6;
+	string password= 7;
+	int32 status = 8;
+	int32 atype = 9;
+	uint64 authorId = 10;
+	uint64 categoryId = 11;
+	uint64 CommentAgentId = 12;
+	bool published = 13;
+	int32 viewCount = 14;
+	int32 likeCount = 15;
+	int32 hateCount = 16;
+	string content = 17;
+	string contentHtml = 18;
+	google.protobuf.Timestamp publishedAt = 19;
+}
+message UpdateArticleReply {
+	ArticleInfoResponse content = 1;
+}
+
+message DeleteArticleRequest {
+	uint64 uid = 1;
+}
+message DeleteArticleReply {}
+
+
+message DeleteArticlesRequest {
+	repeated uint64 uids = 1;
+}
+message DeleteArticlesReply {
+}
+
+message GetArticleRequest {
+	uint64 uid = 1;
+}
+message GetArticleReply {
+	ArticleInfoResponse content = 1;
+}
+
+message ListArticleRequest {
+	PageInfo pageInfo = 1;
+	string username = 2;
+	string nickName = 3;
+}
+message ListArticleReply {
+	PageInfo pageInfo = 1;
+	repeated ArticleInfoResponse items = 2;
+}

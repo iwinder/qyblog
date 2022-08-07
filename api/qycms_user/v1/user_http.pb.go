@@ -19,12 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserCreateUser = "/qycms_user.v1.User/CreateUser"
-const OperationUserDeleteUser = "/qycms_user.v1.User/DeleteUser"
-const OperationUserDeleteUsers = "/qycms_user.v1.User/DeleteUsers"
-const OperationUserGetUser = "/qycms_user.v1.User/GetUser"
-const OperationUserListUser = "/qycms_user.v1.User/ListUser"
-const OperationUserUpdateUser = "/qycms_user.v1.User/UpdateUser"
+const OperationUserCreateUser = "/api.qycms_user.v1.User/CreateUser"
+const OperationUserDeleteUser = "/api.qycms_user.v1.User/DeleteUser"
+const OperationUserDeleteUsers = "/api.qycms_user.v1.User/DeleteUsers"
+const OperationUserGetUser = "/api.qycms_user.v1.User/GetUser"
+const OperationUserListUser = "/api.qycms_user.v1.User/ListUser"
+const OperationUserUpdateUser = "/api.qycms_user.v1.User/UpdateUser"
 
 type UserHTTPServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)

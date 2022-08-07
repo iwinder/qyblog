@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "qycms_user/v1/user.proto",
+    "title": "qycms_blog/admin/v1/article.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "User"
+      "name": "Article"
     }
   ],
   "consumes": [
@@ -16,15 +16,15 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/admin/user": {
+    "/api/v1/admin/article": {
       "get": {
-        "summary": "批量获取用户",
-        "operationId": "User_ListUser",
+        "summary": "批量获取",
+        "operationId": "Article_ListArticle",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ListUserReply"
+              "$ref": "#/definitions/v1ListArticleReply"
             }
           },
           "default": {
@@ -89,17 +89,17 @@
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       },
       "delete": {
         "summary": "批量删除",
-        "operationId": "User_DeleteUsers",
+        "operationId": "Article_DeleteArticles",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DeleteUsersReply"
+              "$ref": "#/definitions/v1DeleteArticlesReply"
             }
           },
           "default": {
@@ -123,17 +123,17 @@
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       },
       "post": {
-        "summary": "创建新用户",
-        "operationId": "User_CreateUser",
+        "summary": "新增",
+        "operationId": "Article_CreateArticle",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateUserReply"
+              "$ref": "#/definitions/v1CreateArticleReply"
             }
           },
           "default": {
@@ -149,24 +149,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateUserRequest"
+              "$ref": "#/definitions/v1CreateArticleRequest"
             }
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       }
     },
-    "/api/v1/admin/user/{uid}": {
+    "/api/v1/admin/article/{uid}": {
       "get": {
-        "summary": "获取用户信息",
-        "operationId": "User_GetUser",
+        "summary": "根据ID获取",
+        "operationId": "Article_GetArticle",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetUserReply"
+              "$ref": "#/definitions/v1GetArticleReply"
             }
           },
           "default": {
@@ -186,17 +186,17 @@
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       },
       "delete": {
-        "summary": "删除",
-        "operationId": "User_DeleteUser",
+        "summary": "根据ID删除",
+        "operationId": "Article_DeleteArticle",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DeleteUserReply"
+              "$ref": "#/definitions/v1DeleteArticleReply"
             }
           },
           "default": {
@@ -216,17 +216,17 @@
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       },
       "put": {
-        "summary": "更新用户",
-        "operationId": "User_UpdateUser",
+        "summary": "更新",
+        "operationId": "Article_UpdateArticle",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateUserReply"
+              "$ref": "#/definitions/v1UpdateArticleReply"
             }
           },
           "default": {
@@ -251,33 +251,90 @@
             "schema": {
               "type": "object",
               "properties": {
-                "username": {
+                "title": {
                   "type": "string"
                 },
-                "nickName": {
+                "permaLink": {
                   "type": "string"
                 },
-                "avatar": {
+                "canonicalLink": {
                   "type": "string"
                 },
-                "email": {
+                "summary": {
                   "type": "string"
                 },
-                "phone": {
+                "thumbnail": {
                   "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "atype": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "authorId": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "categoryId": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "CommentAgentId": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "published": {
+                  "type": "boolean"
+                },
+                "viewCount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "likeCount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "hateCount": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "contentHtml": {
+                  "type": "string"
+                },
+                "publishedAt": {
+                  "type": "string",
+                  "format": "date-time"
                 }
               }
             }
           }
         ],
         "tags": [
-          "User"
+          "Article"
         ]
       }
     }
   },
   "definitions": {
-    "apiqycms_userv1PageInfo": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "qycms_blogadminv1PageInfo": {
       "type": "object",
       "properties": {
         "page": {
@@ -304,15 +361,6 @@
         }
       }
     },
-    "protobufAny": {
-      "type": "object",
-      "properties": {
-        "@type": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": {}
-    },
     "rpcStatus": {
       "type": "object",
       "properties": {
@@ -331,100 +379,191 @@
         }
       }
     },
-    "v1CreateUserReply": {
+    "v1ArticleInfoResponse": {
       "type": "object",
       "properties": {
-        "user": {
-          "$ref": "#/definitions/v1UserInfoResponse"
-        }
-      }
-    },
-    "v1CreateUserRequest": {
-      "type": "object",
-      "properties": {
-        "username": {
+        "uid": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "permaLink": {
+          "type": "string"
+        },
+        "canonicalLink": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "thumbnail": {
           "type": "string"
         },
         "password": {
           "type": "string"
         },
-        "nickName": {
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "atype": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "authorId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "CommentAgentId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "viewCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "likeCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hateCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "content": {
           "type": "string"
         },
-        "avatar": {
+        "contentHtml": {
           "type": "string"
         },
-        "email": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
+        "publishedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "v1DeleteUserReply": {
+    "v1CreateArticleReply": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/v1ArticleInfoResponse"
+        }
+      }
+    },
+    "v1CreateArticleRequest": {
       "type": "object",
       "properties": {
         "uid": {
           "type": "string",
           "format": "uint64"
+        },
+        "title": {
+          "type": "string"
+        },
+        "permaLink": {
+          "type": "string"
+        },
+        "canonicalLink": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "thumbnail": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "atype": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "authorId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "CommentAgentId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "viewCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "likeCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hateCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "content": {
+          "type": "string"
+        },
+        "contentHtml": {
+          "type": "string"
+        },
+        "publishedAt": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
-    "v1DeleteUsersReply": {
+    "v1DeleteArticleReply": {
       "type": "object"
     },
-    "v1GetUserReply": {
+    "v1DeleteArticlesReply": {
+      "type": "object"
+    },
+    "v1GetArticleReply": {
       "type": "object",
       "properties": {
-        "user": {
-          "$ref": "#/definitions/v1UserInfoResponse"
+        "content": {
+          "$ref": "#/definitions/v1ArticleInfoResponse"
         }
       }
     },
-    "v1ListUserReply": {
+    "v1ListArticleReply": {
       "type": "object",
       "properties": {
         "pageInfo": {
-          "$ref": "#/definitions/apiqycms_userv1PageInfo"
+          "$ref": "#/definitions/qycms_blogadminv1PageInfo"
         },
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v1UserInfoResponse"
+            "$ref": "#/definitions/v1ArticleInfoResponse"
           }
         }
       }
     },
-    "v1UpdateUserReply": {
+    "v1UpdateArticleReply": {
       "type": "object",
       "properties": {
-        "user": {
-          "$ref": "#/definitions/v1UserInfoResponse"
-        }
-      }
-    },
-    "v1UserInfoResponse": {
-      "type": "object",
-      "properties": {
-        "uid": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "username": {
-          "type": "string"
-        },
-        "nickName": {
-          "type": "string"
-        },
-        "avatar": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
+        "content": {
+          "$ref": "#/definitions/v1ArticleInfoResponse"
         }
       }
     }

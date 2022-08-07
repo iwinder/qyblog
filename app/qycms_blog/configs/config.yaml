@@ -8,10 +8,8 @@ server:
 data:
   database:
     driver: mysql
-    source: root:0932@tcp(127.0.0.1:3306)/windcoder_gotest_db
+    source: root:root@tcp(127.0.0.1:3306)/test
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
-qycms:
-  token: SAkSgsuN

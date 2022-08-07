@@ -103,6 +103,9 @@ func (uc *UserUsecase) FindOneByID(ctx context.Context, id uint64) (*UserDO, err
 	uc.log.WithContext(ctx).Infof("FindOneByID: %v", id)
 	user, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
 		return nil, err
 	}
 	userDO := &UserDO{
