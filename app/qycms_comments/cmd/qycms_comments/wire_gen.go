@@ -7,24 +7,24 @@
 package main
 
 import (
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/biz"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/data"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/server"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/biz"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/data/db"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/server"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/service"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
+	dataData, cleanup, err := db.NewData(confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
+	greeterRepo := db.NewGreeterRepo(dataData, logger)
 	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
 	greeterService := service.NewGreeterService(greeterUsecase)
 	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)

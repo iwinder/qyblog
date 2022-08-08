@@ -1,10 +1,9 @@
-package data
+package db
 
 import (
 	"context"
-
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/biz"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/biz"
 )
 
 type greeterRepo struct {

@@ -1,9 +1,9 @@
-package data
+package db
 
 import (
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
 )
 
 // ProviderSet is data providers.
