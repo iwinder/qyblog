@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package api.qycms_comments.admin.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_comments/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_comments.admin.v1";
+
+service CommentAgent {
+	rpc CreateCommentAgent (CreateCommentAgentRequest) returns (CreateCommentAgentReply);
+	rpc UpdateCommentAgent (UpdateCommentAgentRequest) returns (UpdateCommentAgentReply);
+	rpc DeleteCommentAgent (DeleteCommentAgentRequest) returns (DeleteCommentAgentReply);
+	rpc GetCommentAgent (GetCommentAgentRequest) returns (GetCommentAgentReply);
+	rpc ListCommentAgent (ListCommentAgentRequest) returns (ListCommentAgentReply);
+}
+
+message CommentAgentResponse {
+	uint64 Uid      	=1;
+	uint64 ObjId      =2;
+	int32  ObjType    =3;
+	uint64 MemberId   =4;
+	int32  Count      =5;
+	int32  Root_count =6;
+	int32  All_count  =7;
+	int32  State      =8;
+	int32  Attrs      =9;
+}
+message CreateCommentAgentRequest {
+	uint64 Uid      	=1;
+	uint64 ObjId      =2;
+	int32  ObjType    =3;
+	uint64 MemberId   =4;
+	int32  Count      =5;
+	int32  Root_count =6;
+	int32  All_count  =7;
+	int32  State      =8;
+	int32  Attrs      =9;
+}
+message CreateCommentAgentReply {
+		CommentAgentResponse content = 1;
+}
+
+message UpdateCommentAgentRequest {
+	uint64 Uid      	=1;
+	uint64 ObjId      =2;
+	int32  ObjType    =3;
+	uint64 MemberId   =4;
+	int32  Count      =5;
+	int32  Root_count =6;
+	int32  All_count  =7;
+	int32  State      =8;
+	int32  Attrs      =9;
+}
+message UpdateCommentAgentReply {
+	CommentAgentResponse content = 1;
+}
+
+message DeleteCommentAgentRequest {
+	uint64 uid = 1;
+}
+message DeleteCommentAgentReply {}
+
+message GetCommentAgentRequest {
+	uint64 uid = 1;
+}
+message GetCommentAgentReply {
+	CommentAgentResponse content = 1;
+}
+
+message ListCommentAgentRequest {}
+message ListCommentAgentReply {
+
+}

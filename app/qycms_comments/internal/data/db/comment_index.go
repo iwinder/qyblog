@@ -4,33 +4,35 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/app/qycms_comments/internal/biz"
-
 	"github.com/iwinder/qingyucms/app/qycms_comments/internal/data/po"
 )
 
-type CommentAgentRepo struct {
+type CommentIndexRepo struct {
 	data *Data
 	log  *log.Helper
 }
 
 // NewCommentIndexRepo .
-func NewCommentAgentRepo(data *Data, logger log.Logger) biz.CommentAgentRepo {
-	return &CommentAgentRepo{
+func NewCommentIndexRepo(data *Data, logger log.Logger) biz.CommentIndexRepo {
+	return &CommentIndexRepo{
 		data: data,
 		log:  log.NewHelper(logger),
 	}
 }
 
-func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*po.CommentAgentPO, error) {
-	newData := &po.CommentAgentPO{
+func (r *CommentIndexRepo) Save(ctx context.Context, g *biz.CommentIndexDO) (*po.CommentIndexPO, error) {
+	newData := &po.CommentIndexPO{
 		ObjectMeta: g.ObjectMeta,
 		ObjId:      g.ObjId,
 		ObjType:    g.ObjType,
 		MemberId:   g.MemberId,
+		RootId:     g.RootId,
+		OarentId:   g.OarentId,
+		Floor:      g.Floor,
 		Count:      g.Count,
 		RootCount:  g.RootCount,
-		AllCount:   g.AllCount,
-		State:      g.State,
+		LikeCount:  g.LikeCount,
+		HateCount:  g.HateCount,
 		Attrs:      g.Attrs,
 	}
 	err := r.data.db.Create(newData).Error
@@ -40,18 +42,21 @@ func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*po
 	return newData, nil
 }
 
-func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*po.CommentAgentPO, error) {
-	newData := &po.CommentAgentPO{
+func (r *CommentIndexRepo) Update(ctx context.Context, g *biz.CommentIndexDO) (*po.CommentIndexPO, error) {
+	newData := &po.CommentIndexPO{
 		ObjId:     g.ObjId,
 		ObjType:   g.ObjType,
 		MemberId:  g.MemberId,
+		RootId:    g.RootId,
+		OarentId:  g.OarentId,
+		Floor:     g.Floor,
 		Count:     g.Count,
 		RootCount: g.RootCount,
-		AllCount:  g.AllCount,
-		State:     g.State,
+		LikeCount: g.LikeCount,
+		HateCount: g.HateCount,
 		Attrs:     g.Attrs,
 	}
-	tData := &po.CommentAgentPO{}
+	tData := &po.CommentIndexPO{}
 	tData.ID = g.ID
 	err := r.data.db.Model(&tData).Updates(&newData).Error
 	if err != nil {
@@ -60,8 +65,8 @@ func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*
 	return newData, nil
 }
 
-func (r *CommentAgentRepo) FindByID(cxt context.Context, id uint64) (*po.CommentAgentPO, error) {
-	tData := &po.CommentAgentPO{}
+func (r *CommentIndexRepo) FindByID(cxt context.Context, id uint64) (*po.CommentIndexPO, error) {
+	tData := &po.CommentIndexPO{}
 	err := r.data.db.Where("id = ?", id).First(&tData).Error
 	if err != nil {
 		return nil, err

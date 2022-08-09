@@ -1,16 +1,16 @@
 package server
 
 import (
-	v1 "github.com/iwinder/qingyucms/api/helloworld/v1"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
-	"github.com/iwinder/qingyucms/app/qycms_comments/internal/service"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	v1 "github.com/iwinder/qingyucms/api/helloworld/v1"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/conf"
+	"github.com/iwinder/qingyucms/app/qycms_comments/internal/service"
 )
 
 // NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, greeter *service.CommentAgentService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
