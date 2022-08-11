@@ -67,7 +67,9 @@ swagger:
 	        --openapiv2_out . \
 	        --openapiv2_opt logtostderr=true \
           	qycms_user/v1/user.proto \
-          	qycms_blog/admin/v1/article.proto
+          	qycms_blog/admin/v1/article.proto \
+          	qycms_blog/admin/v1/blog_admin.proto
+
 .PHONY: all
 # generate all
 all:

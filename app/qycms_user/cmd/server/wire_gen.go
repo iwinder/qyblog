@@ -14,12 +14,13 @@ import (
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/data/db"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/server"
 	"github.com/iwinder/qingyucms/app/qycms_user/internal/service"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, qycms *conf.Qycms, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, qycms *conf.Qycms, data *conf.Data, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
 	dbData, cleanup, err := db.NewData(data, logger)
 	if err != nil {
 		return nil, nil, err

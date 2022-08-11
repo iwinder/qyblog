@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package api.qycms_blog.admin.v1;
+import "google/api/annotations.proto";
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_blog.admin.v1";
+
+service QyBlogAdmin {
+	rpc Login (LoginReq) returns (LoginReply) {
+		option (google.api.http) = {
+			post: "/api/v1/admin//login"
+			body: "*"
+		};
+	}
+	rpc register (RegisterReq) returns (RegisterReply) {
+		option (google.api.http) = {
+			post: "/api/v1/admin/register"
+			body: "*"
+		};
+	}
+	rpc Logout (LogoutReq) returns (LogoutReply) {
+		option (google.api.http) = {
+			post: "/api/v1/admin/logout"
+			body: "*"
+		};
+	}
+//	rpc CreateQyBlogAdmin (CreateQyBlogAdminRequest) returns (CreateQyBlogAdminReply);
+//	rpc UpdateQyBlogAdmin (UpdateQyBlogAdminRequest) returns (UpdateQyBlogAdminReply);
+//	rpc DeleteQyBlogAdmin (DeleteQyBlogAdminRequest) returns (DeleteQyBlogAdminReply);
+//	rpc GetQyBlogAdmin (GetQyBlogAdminRequest) returns (GetQyBlogAdminReply);
+//	rpc ListQyBlogAdmin (ListQyBlogAdminRequest) returns (ListQyBlogAdminReply);
+}
+
+
+message RegisterReq {
+	string username = 1;
+	string password = 2;
+	string nickname = 3;
+}
+
+message RegisterReply {
+	uint64 uid = 1;
+}
+
+message LoginReq {
+	string username = 1;
+	string password = 2;
+}
+
+message LoginReply {
+	string token = 1;
+}
+
+message LogoutReq {
+
+}
+
+message LogoutReply {
+
+}
+
+message CreateQyBlogAdminRequest {}
+message CreateQyBlogAdminReply {}
+
+message UpdateQyBlogAdminRequest {}
+message UpdateQyBlogAdminReply {}
+
+message DeleteQyBlogAdminRequest {}
+message DeleteQyBlogAdminReply {}
+
+message GetQyBlogAdminRequest {}
+message GetQyBlogAdminReply {}
+
+message ListQyBlogAdminRequest {}
+message ListQyBlogAdminReply {}

@@ -4,20 +4,26 @@ import (
 	"context"
 	v1 "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1"
 	"github.com/iwinder/qingyucms/app/qycms_blog/internal/biz"
+	"github.com/iwinder/qingyucms/app/qycms_blog/internal/conf"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // ArticleService is a greeter service.
 type ArticleService struct {
 	v1.UnimplementedArticleServer
-
-	uc *biz.ArticleUsecase
-	ac *biz.ArticleContentUsecase
+	uc       *biz.UserUseCase
+	auc      *biz.ArticleUsecase
+	ac       *biz.ArticleContentUsecase
+	authConf *conf.Auth
 }
 
 // NewArticleService new a greeter service.
-func NewArticleService(uc *biz.ArticleUsecase) *ArticleService {
-	return &ArticleService{uc: uc}
+func NewArticleService(auc *biz.ArticleUsecase, ac *biz.ArticleContentUsecase, uc *biz.UserUseCase, authConf *conf.Auth) *ArticleService {
+	return &ArticleService{auc: auc,
+		ac:       ac,
+		uc:       uc,
+		authConf: authConf,
+	}
 }
 
 // CreateArticle implements server.CreateArticle. 创建
@@ -40,7 +46,7 @@ func (s *ArticleService) CreateArticle(ctx context.Context, in *v1.CreateArticle
 		HateCount:      in.HateCount,
 		PublishedAt:    in.PublishedAt.AsTime(),
 	}
-	data, err := s.uc.CreateArticle(ctx, data)
+	data, err := s.auc.CreateArticle(ctx, data)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +75,7 @@ func (s *ArticleService) UpdateArticle(ctx context.Context, in *v1.UpdateArticle
 		HateCount:      in.HateCount,
 		PublishedAt:    in.PublishedAt.AsTime(),
 	}
-	data, err := s.uc.Update(ctx, ArticleDO)
+	data, err := s.auc.Update(ctx, ArticleDO)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +85,7 @@ func (s *ArticleService) UpdateArticle(ctx context.Context, in *v1.UpdateArticle
 
 // DeleteArticle 根据ID删除
 func (s *ArticleService) DeleteArticle(ctx context.Context, in *v1.DeleteArticleRequest) (*v1.DeleteArticleReply, error) {
-	err := s.uc.Delete(ctx, in.Uid)
+	err := s.auc.Delete(ctx, in.Uid)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +94,7 @@ func (s *ArticleService) DeleteArticle(ctx context.Context, in *v1.DeleteArticle
 
 // DeleteArticles 根据ID批量删除
 func (s *ArticleService) DeleteArticles(ctx context.Context, in *v1.DeleteArticlesRequest) (*v1.DeleteArticlesReply, error) {
-	err := s.uc.DeleteList(ctx, in.Uids)
+	err := s.auc.DeleteList(ctx, in.Uids)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +103,7 @@ func (s *ArticleService) DeleteArticles(ctx context.Context, in *v1.DeleteArticl
 
 // GetArticle 通过ID获取
 func (s *ArticleService) GetArticle(ctx context.Context, in *v1.GetArticleRequest) (*v1.GetArticleReply, error) {
-	data, err := s.uc.FindOneByID(ctx, in.Uid)
+	data, err := s.auc.FindOneByID(ctx, in.Uid)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +114,10 @@ func (s *ArticleService) GetArticle(ctx context.Context, in *v1.GetArticleReques
 		u.Content = dataContent.Content
 		u.ContentHtml = dataContent.ContentHtml
 	}
+	user, uerr := s.uc.GetUser(ctx, data.AuthorId)
+	if uerr == nil {
+		u.NickName = user.Nickname
+	}
 	return &v1.GetArticleReply{Content: &u}, nil
 }
 
@@ -117,7 +127,7 @@ func (s *ArticleService) ListArticle(ctx context.Context, in *v1.ListArticleRequ
 	opts.ListOptions.Page = int64(in.PageInfo.Page)
 	opts.ListOptions.PageSize = int64(in.PageInfo.Size)
 	opts.ListOptions.Init()
-	ArticleList, err := s.uc.ListAll(ctx, opts)
+	ArticleList, err := s.auc.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
 	}

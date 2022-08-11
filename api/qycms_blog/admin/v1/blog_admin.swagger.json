@@ -1,0 +1,208 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "qycms_blog/admin/v1/blog_admin.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "QyBlogAdmin"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/admin/v1/login": {
+      "post": {
+        "operationId": "QyBlogAdmin_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "QyBlogAdmin"
+        ]
+      }
+    },
+    "/admin/v1/logout": {
+      "post": {
+        "operationId": "QyBlogAdmin_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LogoutReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LogoutReq"
+            }
+          }
+        ],
+        "tags": [
+          "QyBlogAdmin"
+        ]
+      }
+    },
+    "/admin/v1/register": {
+      "post": {
+        "operationId": "QyBlogAdmin_register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterReq"
+            }
+          }
+        ],
+        "tags": [
+          "QyBlogAdmin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateQyBlogAdminReply": {
+      "type": "object"
+    },
+    "v1DeleteQyBlogAdminReply": {
+      "type": "object"
+    },
+    "v1GetQyBlogAdminReply": {
+      "type": "object"
+    },
+    "v1ListQyBlogAdminReply": {
+      "type": "object"
+    },
+    "v1LoginReply": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LogoutReply": {
+      "type": "object"
+    },
+    "v1LogoutReq": {
+      "type": "object"
+    },
+    "v1RegisterReply": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1RegisterReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UpdateQyBlogAdminReply": {
+      "type": "object"
+    }
+  }
+}

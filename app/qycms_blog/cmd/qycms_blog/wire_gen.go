@@ -14,22 +14,29 @@ import (
 	"github.com/iwinder/qingyucms/app/qycms_blog/internal/data/db"
 	"github.com/iwinder/qingyucms/app/qycms_blog/internal/server"
 	"github.com/iwinder/qingyucms/app/qycms_blog/internal/service"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := db.NewData(confData, logger)
+func wireApp(confServer *conf.Server, data *conf.Data, auth *conf.Auth, registry *conf.Registry, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
+	userClient := db.NewUserServiceClient(tracerProvider)
+	dbData, cleanup, err := db.NewData(data, logger, userClient)
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := db.NewArticleRepo(dataData, logger)
-	greeterUsecase := biz.NewArticleUsecase(greeterRepo, logger)
-	greeterService := service.NewArticleService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	articleRepo := db.NewArticleRepo(dbData, logger)
+	articleUsecase := biz.NewArticleUsecase(articleRepo, logger)
+	articleContentRepo := db.NewArticleContentRepo(dbData, logger)
+	articleContentUsecase := biz.NewArticleContentUsecase(articleContentRepo, logger)
+	userRepo := db.NewUserRepo(dbData, logger)
+	userUseCase := biz.NewUserUseCase(userRepo, logger)
+	articleService := service.NewArticleService(articleUsecase, articleContentUsecase, userUseCase, auth)
+	grpcServer := server.NewGRPCServer(confServer, articleService, logger)
+	httpServer := server.NewHTTPServer(confServer, articleService, logger)
+	registrar := db.NewRegistrar(registry)
+	app := newApp(logger, grpcServer, httpServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

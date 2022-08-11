@@ -448,6 +448,9 @@
         "publishedAt": {
           "type": "string",
           "format": "date-time"
+        },
+        "nickName": {
+          "type": "string"
         }
       }
     },

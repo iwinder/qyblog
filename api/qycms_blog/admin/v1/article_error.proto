@@ -12,4 +12,5 @@ enum ErrorReason {
 	DATA_NOT_FOUND = 1;
 	LOGIN_FAILED = 2;
 	REGISTER_FAILED = 3;
+		ErrPasswordWrong = 10;
 }

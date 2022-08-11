@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 package api.qycms_user.v1;
-import "google/api/annotations.proto";
 
 
 
@@ -13,42 +12,47 @@ option java_package = "api.qycms_user.v1";
 service User {
 	// 创建新用户
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
-		option (google.api.http) = {
-			post: "/api/v1/admin/user",
-			body:"*"
-		};
+//		option (google.api.http) = {
+//			post: "/api/v1/admin/user",
+//			body:"*"
+//		};
 	}
 	// 更新用户
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
-		option (google.api.http) = {
-			put: "/api/v1/admin/user/{uid}",
-			body:"*"
-		};
+//		option (google.api.http) = {
+//			put: "/api/v1/admin/user/{uid}",
+//			body:"*"
+//		};
 	};
 	// 删除
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
-		option (google.api.http) = {
-			delete: "/api/v1/admin/user/{uid}"
-		};
+//		option (google.api.http) = {
+//			delete: "/api/v1/admin/user/{uid}"
+//		};
 	};
 	// 批量删除
 	rpc DeleteUsers (DeleteUsersRequest) returns (DeleteUsersReply){
-		option (google.api.http) = {
-			delete: "/api/v1/admin/user"
-		};
+//		option (google.api.http) = {
+//			delete: "/api/v1/admin/user"
+//		};
 	};
 	// 获取用户信息
 	rpc GetUser (GetUserRequest) returns (GetUserReply){
-		option (google.api.http) = {
-			get: "/api/v1/admin/user/{uid}"
-		};
+//		option (google.api.http) = {
+//			get: "/api/v1/admin/user/{uid}"
+//		};
 	}
+
 	// 批量获取用户
 	rpc ListUser (ListUserRequest) returns (ListUserReply){
-		option (google.api.http) = {
-			get: "/api/v1/admin/user"
-		};
+//		option (google.api.http) = {
+//			get: "/api/v1/admin/user"
+//		};
 	};
+
+	// 验证密码用于登录
+	rpc VerifyPassword(VerifyPasswordReq) returns (VerifyPasswordReply) {
+	}
 }
 
 
@@ -129,4 +133,14 @@ message ListUserRequest {
 message ListUserReply {
 	PageInfo pageInfo = 1;
 	repeated UserInfoResponse items = 2;
+}
+
+message VerifyPasswordReq {
+	string username = 1;
+	string password = 2;
+}
+
+message VerifyPasswordReply {
+	bool ok = 1;
+	int64 id = 2;
 }

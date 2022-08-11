@@ -46,6 +46,7 @@ type UserRepo interface {
 	FindByID(context.Context, uint64) (*po.UserPO, error)
 	FindByUsername(c context.Context, username string) (*po.UserPO, error)
 	ListAll(c context.Context, opts UserListOption) (*po.UserPOList, error)
+	VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
 }
 
 // UserUsecase is a UserDO usecase.
@@ -172,4 +173,8 @@ func (uc *UserUsecase) ListAll(ctx context.Context, opts UserListOption) (*UserD
 		})
 	}
 	return &UserDOList{ListMeta: userPOs.ListMeta, Items: infos}, nil
+}
+
+func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO) (bool, error) {
+	return uc.repo.VerifyPassword(ctx, u)
 }

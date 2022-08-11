@@ -115,6 +115,17 @@ func (s *UserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1
 	return &v1.ListUserReply{PageInfo: pageInfo, Items: users}, nil
 }
 
+func (s *UserService) VerifyPassword(ctx context.Context, req *v1.VerifyPasswordReq) (*v1.VerifyPasswordReply, error) {
+	rv, err := s.uc.VerifyPassword(ctx, &biz.UserDO{Username: req.Username, Password: req.Password, Salt: s.conf.Token})
+	if err != nil {
+		return nil, err
+	}
+
+	return &v1.VerifyPasswordReply{
+		Ok: rv,
+	}, nil
+}
+
 func UserResponse(user *biz.UserDO) v1.UserInfoResponse {
 	userInfoRsp := v1.UserInfoResponse{
 		Uid:      user.ID,

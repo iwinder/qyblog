@@ -15,267 +15,7 @@
   "produces": [
     "application/json"
   ],
-  "paths": {
-    "/api/v1/admin/user": {
-      "get": {
-        "summary": "批量获取用户",
-        "operationId": "User_ListUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListUserReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "pageInfo.page",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "uint64"
-          },
-          {
-            "name": "pageInfo.size",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "uint64"
-          },
-          {
-            "name": "pageInfo.total",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "uint64"
-          },
-          {
-            "name": "pageInfo.pages",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "uint64"
-          },
-          {
-            "name": "pageInfo.firstFlag",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "pageInfo.LastFlag",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "username",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "nickName",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      },
-      "delete": {
-        "summary": "批量删除",
-        "operationId": "User_DeleteUsers",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteUsersReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "uids",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uint64"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      },
-      "post": {
-        "summary": "创建新用户",
-        "operationId": "User_CreateUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1CreateUserReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1CreateUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      }
-    },
-    "/api/v1/admin/user/{uid}": {
-      "get": {
-        "summary": "获取用户信息",
-        "operationId": "User_GetUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1GetUserReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "uid",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uint64"
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      },
-      "delete": {
-        "summary": "删除",
-        "operationId": "User_DeleteUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteUserReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "uid",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uint64"
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      },
-      "put": {
-        "summary": "更新用户",
-        "operationId": "User_UpdateUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateUserReply"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "uid",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uint64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "type": "string"
-                },
-                "nickName": {
-                  "type": "string"
-                },
-                "avatar": {
-                  "type": "string"
-                },
-                "email": {
-                  "type": "string"
-                },
-                "phone": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "tags": [
-          "User"
-        ]
-      }
-    }
-  },
+  "paths": {},
   "definitions": {
     "apiqycms_userv1PageInfo": {
       "type": "object",
@@ -336,29 +76,6 @@
       "properties": {
         "user": {
           "$ref": "#/definitions/v1UserInfoResponse"
-        }
-      }
-    },
-    "v1CreateUserRequest": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "nickName": {
-          "type": "string"
-        },
-        "avatar": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "phone": {
-          "type": "string"
         }
       }
     },
@@ -425,6 +142,18 @@
         },
         "phone": {
           "type": "string"
+        }
+      }
+    },
+    "v1VerifyPasswordReply": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     }

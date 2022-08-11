@@ -74,6 +74,7 @@ message ArticleInfoResponse {
 	string content = 17;
 	string contentHtml = 18;
 	google.protobuf.Timestamp publishedAt = 19;
+	string nickName = 20;
 }
 
 message PageInfo {
