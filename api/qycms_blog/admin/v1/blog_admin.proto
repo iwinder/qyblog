@@ -10,19 +10,19 @@ option java_package = "api.qycms_blog.admin.v1";
 service QyBlogAdmin {
 	rpc Login (LoginReq) returns (LoginReply) {
 		option (google.api.http) = {
-			post: "/api/v1/admin//login"
+			post: "/api/admin/v1//login"
 			body: "*"
 		};
 	}
-	rpc register (RegisterReq) returns (RegisterReply) {
-		option (google.api.http) = {
-			post: "/api/v1/admin/register"
-			body: "*"
-		};
-	}
+//	rpc register (RegisterReq) returns (RegisterReply) {
+//		option (google.api.http) = {
+//			post: "/api/v1/admin/register"
+//			body: "*"
+//		};
+//	}
 	rpc Logout (LogoutReq) returns (LogoutReply) {
 		option (google.api.http) = {
-			post: "/api/v1/admin/logout"
+			post: "/api/admin/v1/logout"
 			body: "*"
 		};
 	}

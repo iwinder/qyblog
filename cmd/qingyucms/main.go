@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"os"
 
 	"github.com/go-kratos/kratos/v2"
@@ -11,7 +12,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	"github.com/iwinder/qingyucms/internal/conf"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -71,7 +71,7 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Qycms, bc.Auth, logger)
 	if err != nil {
 		panic(err)
 	}

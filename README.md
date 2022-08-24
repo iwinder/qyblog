@@ -14,14 +14,14 @@
 以用户为例,主要是app中的接口部分以及app中的服务实现部分。
 - api: 所有所用接口均在这里生成，由于基于 grpc，所以也是 dao 所在位置
 - app: 创建并管理所有服务
-  - cmd 用于启动命令等生成
-  - configs 配置文件所在位置
-  - internal 服务实现所在位置
-    - service：dao 与 do 互转层
-    - biz：定义 do,具体业务层，DO 与 PO 互转层
-    - data：定义 PO，数据库连接创建以及增删改查等基本服务， PO服务执行层。
-    - conf: 定义读取配置文件的对象
-    - server: http与grpc协议服务实际注册层，如果需要多个api文件中请求注册到项目中，则需要调整这里面的http或者 grpc 文件，增加类似 `v1.RegisterUserHTTPServer(srv, userService)`的语句。
+    - cmd 用于启动命令等生成
+    - configs 配置文件所在位置
+    - internal 服务实现所在位置
+        - service：dao 与 do 互转层
+        - biz：定义 do,具体业务层，DO 与 PO 互转层
+        - data：定义 PO，数据库连接创建以及增删改查等基本服务， PO服务执行层。
+        - conf: 定义读取配置文件的对象
+        - server: http与grpc协议服务实际注册层，如果需要多个api文件中请求注册到项目中，则需要调整这里面的http或者 grpc 文件，增加类似 `v1.RegisterUserHTTPServer(srv, userService)`的语句。
 
 ## 欲实现方案
 用户评论功能预架构：
@@ -32,7 +32,7 @@
 ## API生成
 
 暂时需要手动在 Makefile 文件中手动配置需要生成 API 的文件，然后执行 `make swagger` 会在对应的文件夹下面生成json文件
- 
+
 暂时将目前配置的部分接口文档复制到了 doc/api 文件夹下面一份。
 
 # Kratos Project Template
