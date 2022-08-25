@@ -21,19 +21,16 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationQyBlogAdminLogin = "/api.qycms_blog.admin.v1.QyBlogAdmin/Login"
 const OperationQyBlogAdminLogout = "/api.qycms_blog.admin.v1.QyBlogAdmin/Logout"
-const OperationQyBlogAdminregister = "/api.qycms_blog.admin.v1.QyBlogAdmin/register"
 
 type QyBlogAdminHTTPServer interface {
 	Login(context.Context, *LoginReq) (*LoginReply, error)
 	Logout(context.Context, *LogoutReq) (*LogoutReply, error)
-	Register(context.Context, *RegisterReq) (*RegisterReply, error)
 }
 
 func RegisterQyBlogAdminHTTPServer(s *http.Server, srv QyBlogAdminHTTPServer) {
 	r := s.Route("/")
-	r.POST("/api/v1/admin//login", _QyBlogAdmin_Login0_HTTP_Handler(srv))
-	r.POST("/api/v1/admin/register", _QyBlogAdmin_Register0_HTTP_Handler(srv))
-	r.POST("/api/v1/admin/logout", _QyBlogAdmin_Logout0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/login", _QyBlogAdmin_Login0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/logout", _QyBlogAdmin_Logout0_HTTP_Handler(srv))
 }
 
 func _QyBlogAdmin_Login0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.Context) error {
@@ -51,25 +48,6 @@ func _QyBlogAdmin_Login0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.C
 			return err
 		}
 		reply := out.(*LoginReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _QyBlogAdmin_Register0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in RegisterReq
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationQyBlogAdminregister)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Register(ctx, req.(*RegisterReq))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*RegisterReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -96,7 +74,6 @@ func _QyBlogAdmin_Logout0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.
 type QyBlogAdminHTTPClient interface {
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginReply, err error)
 	Logout(ctx context.Context, req *LogoutReq, opts ...http.CallOption) (rsp *LogoutReply, err error)
-	Register(ctx context.Context, req *RegisterReq, opts ...http.CallOption) (rsp *RegisterReply, err error)
 }
 
 type QyBlogAdminHTTPClientImpl struct {
@@ -109,7 +86,7 @@ func NewQyBlogAdminHTTPClient(client *http.Client) QyBlogAdminHTTPClient {
 
 func (c *QyBlogAdminHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginReply, error) {
 	var out LoginReply
-	pattern := "/api/v1/admin//login"
+	pattern := "/api/admin/v1/login"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyBlogAdminLogin))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -122,22 +99,9 @@ func (c *QyBlogAdminHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opt
 
 func (c *QyBlogAdminHTTPClientImpl) Logout(ctx context.Context, in *LogoutReq, opts ...http.CallOption) (*LogoutReply, error) {
 	var out LogoutReply
-	pattern := "/api/v1/admin/logout"
+	pattern := "/api/admin/v1/logout"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyBlogAdminLogout))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *QyBlogAdminHTTPClientImpl) Register(ctx context.Context, in *RegisterReq, opts ...http.CallOption) (*RegisterReply, error) {
-	var out RegisterReply
-	pattern := "/api/v1/admin/register"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationQyBlogAdminregister))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

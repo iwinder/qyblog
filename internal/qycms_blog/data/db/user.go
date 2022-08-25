@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
@@ -90,6 +89,7 @@ func (r *userRepo) FindByID(ctx context.Context, id uint64) (*po.UserPO, error) 
 	if err != nil {
 		user = &po.UserPO{}
 		err := r.data.Db.Where("id = ?", id).First(&user).Error
+		user.Password = ""
 		if err != nil {
 			return nil, biz.ErrUserNotFound
 		}
@@ -106,7 +106,7 @@ func (r *userRepo) FindByID(ctx context.Context, id uint64) (*po.UserPO, error) 
 // FindByUsername 根据用户名查询用户
 func (r *userRepo) FindByUsername(c context.Context, username string) (*po.UserPO, error) {
 	user := &po.UserPO{}
-	err := r.data.Db.Where("id = ?", username).First(&user).Error
+	err := r.data.Db.Where("username = ?", username).First(&user).Error
 	return user, err
 }
 
@@ -143,18 +143,18 @@ func (r *userRepo) ListAll(c context.Context, opts biz.UserListOption) (*po.User
 	return ret, err
 }
 
-func (r *userRepo) VerifyPassword(ctx context.Context, u *biz.UserDO) (bool, error) {
-	user := &po.UserPO{}
-	err := r.data.Db.Where("username=?", u.Username).First(&user).Error
-	if err != nil {
-		return false, err
-	}
-	aerr := auth.Compare(user.Password, u.Password+u.Salt)
-	if aerr == nil {
-		return true, nil
-	}
-	return false, aerr
-}
+//func (r *userRepo) VerifyPassword(ctx context.Context, u *biz.UserDO) (bool, error) {
+//	user := &po.UserPO{}
+//	err := r.data.Db.Where("username=?", u.Username).First(&user).Error
+//	if err != nil {
+//		return false, err
+//	}
+//	aerr := auth.Compare(user.Password, u.Password+u.Salt)
+//	if aerr == nil {
+//		return true, nil
+//	}
+//	return false, aerr
+//}
 
 func (r *userRepo) getUserFromCache(ctx context.Context, key string) (*po.UserPO, error) {
 	result, err := r.data.RedisCli.Get(ctx, key).Result()

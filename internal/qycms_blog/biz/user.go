@@ -2,11 +2,10 @@ package biz
 
 import (
 	"context"
-	"fmt"
-	"github.com/go-kratos/kratos/v2/errors"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
-	v1 "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
@@ -50,7 +49,7 @@ type UserRepo interface {
 	FindByID(context.Context, uint64) (*po.UserPO, error)
 	FindByUsername(c context.Context, username string) (*po.UserPO, error)
 	ListAll(c context.Context, opts UserListOption) (*po.UserPOList, error)
-	VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
+	//VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
 }
 
 // UserUsecase is a UserDO usecase.
@@ -179,23 +178,27 @@ func (uc *UserUsecase) ListAll(ctx context.Context, opts UserListOption) (*UserD
 	return &UserDOList{ListMeta: userPOs.ListMeta, Items: infos}, nil
 }
 
-func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO) (bool, error) {
-	return uc.repo.VerifyPassword(ctx, u)
-}
-
-func (uc *UserUsecase) VerifyPasswordToken(ctx context.Context, u *UserDO, authConf *conf.Auth) (string, error) {
-	reply, err := uc.VerifyPassword(ctx, u)
-	if !reply || err != nil {
-		return "", fmt.Errorf("登录失败:%w", v1.ErrorReason_ErrPasswordWrong)
+func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *conf.Auth) (string, error) {
+	userInfo, err := uc.FindOneByUsername(ctx, u.Username)
+	if err != nil {
+		return "", errors.New("登录失败" + err.Error())
+	}
+	aerr := auth.Compare(userInfo.Password, u.Password+u.Salt)
+	if aerr != nil {
+		return "", errors.New("登录失败" + aerr.Error())
+	}
+	claims := auth.CustomClaims{
+		ID:       userInfo.ID,
+		NickName: userInfo.Nickname,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.ExpireDuration.AsDuration())), // 设置token的过期时间
+		},
 	}
 	// 生成token
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.ExpireDuration.AsDuration())), // 设置token的过期时间
-	})
-	token, err := claims.SignedString([]byte(authConf.JwtSecret))
+	token, err := auth.CreateToken(claims, authConf.JwtSecret)
 	if err != nil {
 		log.Errorf("登录失败，生成token失败：%v", err)
-		return "", fmt.Errorf("登录失败")
+		return "", errors.New("登录失败" + err.Error())
 	}
 	return token, err
 }

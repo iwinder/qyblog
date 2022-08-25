@@ -32,6 +32,8 @@ type UserClient interface {
 	DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...grpc.CallOption) (*DeleteUsersReply, error)
 	// 获取用户信息
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
+	// 获取用户信息
+	GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
 	// 验证密码用于登录
@@ -91,6 +93,15 @@ func (c *userClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...gr
 	return out, nil
 }
 
+func (c *userClient) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
+	out := new(GetUserReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_user.v1.User/GetMyInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error) {
 	out := new(ListUserReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_user.v1.User/ListUser", in, out, opts...)
@@ -123,6 +134,8 @@ type UserServer interface {
 	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
 	// 获取用户信息
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
+	// 获取用户信息
+	GetMyInfo(context.Context, *GetMyInfoRequest) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	// 验证密码用于登录
@@ -148,6 +161,9 @@ func (UnimplementedUserServer) DeleteUsers(context.Context, *DeleteUsersRequest)
 }
 func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServer) GetMyInfo(context.Context, *GetMyInfoRequest) (*GetUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMyInfo not implemented")
 }
 func (UnimplementedUserServer) ListUser(context.Context, *ListUserRequest) (*ListUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
@@ -258,6 +274,24 @@ func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetMyInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetMyInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_user.v1.User/GetMyInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetMyInfo(ctx, req.(*GetMyInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_ListUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListUserRequest)
 	if err := dec(in); err != nil {
@@ -320,6 +354,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _User_GetUser_Handler,
+		},
+		{
+			MethodName: "GetMyInfo",
+			Handler:    _User_GetMyInfo_Handler,
 		},
 		{
 			MethodName: "ListUser",

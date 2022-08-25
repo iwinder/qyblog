@@ -10,7 +10,7 @@ option java_package = "api.qycms_blog.admin.v1";
 service QyBlogAdmin {
 	rpc Login (LoginReq) returns (LoginReply) {
 		option (google.api.http) = {
-			post: "/api/admin/v1//login"
+			post: "/api/admin/v1/login"
 			body: "*"
 		};
 	}

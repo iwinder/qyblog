@@ -8,5 +8,5 @@ import (
 var ProviderSet = wire.NewSet(NewGreeterService,
 	NewUserService,
 	NewArticleService, NewArticleContentService,
-	NewCommentAgentService,
+	NewCommentAgentService, NewBlogAdminService,
 )

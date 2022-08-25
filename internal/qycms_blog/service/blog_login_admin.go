@@ -20,7 +20,7 @@ func NewBlogAdminService(uc *biz.UserUsecase, conf *conf.Qycms, authConf *conf.A
 
 func (s *BlogAdminService) Login(ctx context.Context, req *v1.LoginReq) (*v1.LoginReply, error) {
 	//req.Username
-	token, err := s.uc.VerifyPasswordToken(ctx, &biz.UserDO{Username: req.Username, Password: req.Password}, s.authConf)
+	token, err := s.uc.VerifyPassword(ctx, &biz.UserDO{Username: req.Username, Password: req.Password, Salt: s.conf.Token}, s.authConf)
 	if err != nil {
 		return nil, err
 	}

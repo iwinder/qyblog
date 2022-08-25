@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.qycms_user.v1;
 
-
+import "google/api/annotations.proto";
 
 option go_package = "github.com/iwinder/qingyucms/api/qycms_user/v1;v1";
 option java_multiple_files = true;
@@ -12,10 +12,10 @@ option java_package = "api.qycms_user.v1";
 service User {
 	// 创建新用户
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
-//		option (google.api.http) = {
-//			post: "/api/v1/admin/user",
-//			body:"*"
-//		};
+		option (google.api.http) = {
+			post: "/api/v1/admin/user",
+			body:"*"
+		};
 	}
 	// 更新用户
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
@@ -43,11 +43,18 @@ service User {
 //		};
 	}
 
+	// 获取用户信息
+	rpc GetMyInfo (GetMyInfoRequest) returns (GetUserReply){
+				option (google.api.http) = {
+					get: "/api/v1/admin/myInfo"
+				};
+	}
+
 	// 批量获取用户
 	rpc ListUser (ListUserRequest) returns (ListUserReply){
-//		option (google.api.http) = {
-//			get: "/api/v1/admin/user"
-//		};
+		option (google.api.http) = {
+			get: "/api/v1/admin/user"
+		};
 	};
 
 	// 验证密码用于登录
@@ -123,6 +130,10 @@ message GetUserRequest {
 message GetUserReply {
 	UserInfoResponse user = 1;
 }
+
+message		GetMyInfoRequest {
+
+	}
 
 message ListUserRequest {
 	PageInfo pageInfo = 1;

@@ -23,7 +23,12 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyBlogAdminClient interface {
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginReply, error)
-	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterReply, error)
+	//	rpc register (RegisterReq) returns (RegisterReply) {
+	//		option (google.api.http) = {
+	//			post: "/api/v1/admin/register"
+	//			body: "*"
+	//		};
+	//	}
 	Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutReply, error)
 }
 
@@ -44,15 +49,6 @@ func (c *qyBlogAdminClient) Login(ctx context.Context, in *LoginReq, opts ...grp
 	return out, nil
 }
 
-func (c *qyBlogAdminClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterReply, error) {
-	out := new(RegisterReply)
-	err := c.cc.Invoke(ctx, "/api.qycms_blog.admin.v1.QyBlogAdmin/register", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *qyBlogAdminClient) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutReply, error) {
 	out := new(LogoutReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_blog.admin.v1.QyBlogAdmin/Logout", in, out, opts...)
@@ -67,7 +63,12 @@ func (c *qyBlogAdminClient) Logout(ctx context.Context, in *LogoutReq, opts ...g
 // for forward compatibility
 type QyBlogAdminServer interface {
 	Login(context.Context, *LoginReq) (*LoginReply, error)
-	Register(context.Context, *RegisterReq) (*RegisterReply, error)
+	//	rpc register (RegisterReq) returns (RegisterReply) {
+	//		option (google.api.http) = {
+	//			post: "/api/v1/admin/register"
+	//			body: "*"
+	//		};
+	//	}
 	Logout(context.Context, *LogoutReq) (*LogoutReply, error)
 	mustEmbedUnimplementedQyBlogAdminServer()
 }
@@ -78,9 +79,6 @@ type UnimplementedQyBlogAdminServer struct {
 
 func (UnimplementedQyBlogAdminServer) Login(context.Context, *LoginReq) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
-}
-func (UnimplementedQyBlogAdminServer) Register(context.Context, *RegisterReq) (*RegisterReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
 func (UnimplementedQyBlogAdminServer) Logout(context.Context, *LogoutReq) (*LogoutReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
@@ -116,24 +114,6 @@ func _QyBlogAdmin_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _QyBlogAdmin_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QyBlogAdminServer).Register(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.qycms_blog.admin.v1.QyBlogAdmin/register",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QyBlogAdminServer).Register(ctx, req.(*RegisterReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _QyBlogAdmin_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LogoutReq)
 	if err := dec(in); err != nil {
@@ -162,10 +142,6 @@ var QyBlogAdmin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _QyBlogAdmin_Login_Handler,
-		},
-		{
-			MethodName: "register",
-			Handler:    _QyBlogAdmin_Register_Handler,
 		},
 		{
 			MethodName: "Logout",
