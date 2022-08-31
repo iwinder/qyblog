@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+import "google/api/annotations.proto";
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminRole {
+	rpc CreateQyAdminRole (CreateQyAdminRoleRequest) returns (CreateQyAdminRoleReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/role",
+			body:"*"
+		};
+	}
+	rpc UpdateQyAdminRole (UpdateQyAdminRoleRequest) returns (UpdateQyAdminRoleReply){
+		option (google.api.http) = {
+			put: "/api/admin/v1/role/{uid}",
+			body:"*"
+		};
+	}
+	rpc DeleteQyAdminRole (DeleteQyAdminRoleRequest) returns (DeleteQyAdminRoleReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/role/{uid}",
+		};
+	}
+	rpc DeleteQyAdminRoles (DeleteQyAdminRolesRequest) returns (DeleteQyAdminRolesReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/role",
+			body:"*"
+		};
+	}
+	rpc GetQyAdminRole (GetQyAdminRoleRequest) returns (GetQyAdminRoleReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/role/{uid}"
+		};
+	}
+	rpc ListQyAdminRole (ListQyAdminRoleRequest) returns (ListQyAdminRoleReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/role",
+			body:"*"
+		};
+	}
+}
+
+message PageInfo {
+	uint64 page = 1;
+	uint64 size = 2;
+	uint64 total = 3;
+	uint64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+}
+
+message		RoleInfoResponse {
+	uint64 uid = 1;
+	string name = 2;
+	string identifier =3;
+}
+
+message MenusAdminInfoResponse {
+	uint64 uid = 1;
+	string Name    =2;
+	string Identifier    =3;
+	uint64 ParentId         =4;
+	string Path             =5;
+	bool Hidden               =6;
+	string Component         =7;
+	int32 Sort                =8;
+	uint32 Level             =9;
+	repeated MenusAdminInfoResponse children =10;
+}
+
+message CreateQyAdminRoleRequest {
+	string name = 1;
+	string identifier =2;
+}
+message CreateQyAdminRoleReply {
+	uint64 uid = 1;
+}
+
+message UpdateQyAdminRoleRequest {
+	uint64 uid = 1;
+	string name = 2;
+	string identifier =3;
+	repeated	MenusAdminInfoResponse menusAdmin = 4;
+	repeated	MenusAdminInfoResponse apis = 5;
+}
+message UpdateQyAdminRoleReply {
+	uint64 uid = 1;
+}
+
+message DeleteQyAdminRoleRequest {
+	uint64 uid = 1;
+}
+message DeleteQyAdminRoleReply {}
+
+
+message DeleteQyAdminRolesRequest {
+	repeated uint64 uids = 1;
+}
+message DeleteQyAdminRolesReply {}
+
+message GetQyAdminRoleRequest {
+	uint64 uid = 1;
+}
+message GetQyAdminRoleReply {
+		RoleInfoResponse info = 1;
+}
+
+message ListQyAdminRoleRequest {
+	PageInfo pageInfo = 1;
+}
+message ListQyAdminRoleReply {
+	PageInfo pageInfo = 1;
+	repeated RoleInfoResponse items = 2;
+}

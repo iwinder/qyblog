@@ -1,38 +1,26 @@
 syntax = "proto3";
 
-package api.qycms_blog.admin.v1;
+package api.qycms_bff.admin.v1;
 import "google/api/annotations.proto";
 
-option go_package = "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1;v1";
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
-option java_package = "api.qycms_blog.admin.v1";
+option java_package = "api.qycms_bff.admin.v1";
 
-service QyBlogAdmin {
+service QyAdminLogin {
 	rpc Login (LoginReq) returns (LoginReply) {
 		option (google.api.http) = {
 			post: "/api/admin/v1/login"
 			body: "*"
 		};
 	}
-//	rpc register (RegisterReq) returns (RegisterReply) {
-//		option (google.api.http) = {
-//			post: "/api/v1/admin/register"
-//			body: "*"
-//		};
-//	}
 	rpc Logout (LogoutReq) returns (LogoutReply) {
 		option (google.api.http) = {
 			post: "/api/admin/v1/logout"
 			body: "*"
 		};
 	}
-//	rpc CreateQyBlogAdmin (CreateQyBlogAdminRequest) returns (CreateQyBlogAdminReply);
-//	rpc UpdateQyBlogAdmin (UpdateQyBlogAdminRequest) returns (UpdateQyBlogAdminReply);
-//	rpc DeleteQyBlogAdmin (DeleteQyBlogAdminRequest) returns (DeleteQyBlogAdminReply);
-//	rpc GetQyBlogAdmin (GetQyBlogAdminRequest) returns (GetQyBlogAdminReply);
-//	rpc ListQyBlogAdmin (ListQyBlogAdminRequest) returns (ListQyBlogAdminReply);
 }
-
 
 message RegisterReq {
 	string username = 1;

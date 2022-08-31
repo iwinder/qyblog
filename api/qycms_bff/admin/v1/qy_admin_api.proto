@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+import "google/api/annotations.proto";
+
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminApi {
+	rpc CreateQyAdminApi (CreateQyAdminApiRequest) returns (CreateQyAdminApiReply);
+	rpc UpdateQyAdminApi (UpdateQyAdminApiRequest) returns (UpdateQyAdminApiReply);
+	rpc DeleteQyAdminApi (DeleteQyAdminApiRequest) returns (DeleteQyAdminApiReply);
+	rpc GetQyAdminApi (GetQyAdminApiRequest) returns (GetQyAdminApiReply);
+	rpc ListQyAdminApi (ListQyAdminApiRequest) returns (ListQyAdminApiReply);
+}
+
+message	ApiInfoResponse {
+	uint64 uid = 1;
+	string	ApiGroup    =2;
+	string Method          =3;
+	string Path              =4;
+	string Description        =5;
+}
+
+message PageInfo {
+	uint64 page = 1;
+	uint64 size = 2;
+	uint64 total = 3;
+	uint64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+}
+
+
+message CreateQyAdminApiRequest {
+	string	ApiGroup    =1;
+	string Method          =2;
+	string Path              =3;
+		string Description        =4;
+}
+message CreateQyAdminApiReply {
+	uint64 uid = 1;
+}
+
+message UpdateQyAdminApiRequest {
+	uint64 uid = 1;
+	string	ApiGroup    =2;
+	string Method          =3;
+	string Path              =4;
+	string Description        =5;
+}
+message UpdateQyAdminApiReply {
+	uint64 uid = 1;
+}
+
+message DeleteQyAdminApiRequest {
+	uint64 uid = 1;
+}
+message DeleteQyAdminApiReply {}
+
+message GetQyAdminApiRequest {
+	uint64 uid = 1;
+}
+message GetQyAdminApiReply {
+	ApiInfoResponse info = 1;
+}
+
+message ListQyAdminApiRequest {
+	PageInfo pageInfo = 1;
+}
+message ListQyAdminApiReply {
+	PageInfo pageInfo = 1;
+	repeated ApiInfoResponse items = 2;
+}

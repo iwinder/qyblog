@@ -12,18 +12,18 @@ const (
 	ClaimAuthorityId = "authorityId"
 )
 
-type SecurityUser struct {
-	Path        string
-	Method      string
-	AuthorityId string
+type ASecurityUser struct {
+	Path          string
+	Method        string
+	AuthorityName string
 }
 
-func NewSecurityUser() *SecurityUser {
-	return &SecurityUser{}
+func NewSecurityUser() *ASecurityUser {
+	return &ASecurityUser{}
 }
-func (su *SecurityUser) ParseFromContext(ctx context.Context) error {
+func (su *ASecurityUser) ParseFromContext(ctx context.Context) error {
 	if claims, ok := jwt.FromContext(ctx); ok {
-		su.AuthorityId = claims.(jwtV4.MapClaims)[ClaimAuthorityId].(string)
+		su.AuthorityName = claims.(jwtV4.MapClaims)[ClaimAuthorityId].(string)
 	} else {
 		return errors.New("jwt claim missing")
 	}
@@ -36,19 +36,19 @@ func (su *SecurityUser) ParseFromContext(ctx context.Context) error {
 
 	return nil
 }
-func (su *SecurityUser) GetSubject() string {
-	return su.AuthorityId
+func (su *ASecurityUser) GetSubject() string {
+	return su.AuthorityName
 }
-func (su *SecurityUser) GetObject() string {
+func (su *ASecurityUser) GetObject() string {
 	return su.Path
 }
-func (su *SecurityUser) GetAction() string {
+func (su *ASecurityUser) GetAction() string {
 	return su.Method
 }
-func (su *SecurityUser) CreateAccessJwtToken(secretKey []byte) string {
+func (su *ASecurityUser) CreateAccessJwtToken(secretKey []byte) string {
 	claims := jwtV4.NewWithClaims(jwtV4.SigningMethodHS256,
 		jwtV4.MapClaims{
-			ClaimAuthorityId: su.AuthorityId,
+			ClaimAuthorityId: su.AuthorityName,
 		})
 
 	signedToken, err := claims.SignedString(secretKey)
@@ -58,7 +58,7 @@ func (su *SecurityUser) CreateAccessJwtToken(secretKey []byte) string {
 
 	return signedToken
 }
-func (su *SecurityUser) ParseAccessJwtTokenFromContext(ctx context.Context) error {
+func (su *ASecurityUser) ParseAccessJwtTokenFromContext(ctx context.Context) error {
 	claims, ok := jwt.FromContext(ctx)
 	if !ok {
 		return errors.New("no jwt token in context")
@@ -68,7 +68,7 @@ func (su *SecurityUser) ParseAccessJwtTokenFromContext(ctx context.Context) erro
 	}
 	return nil
 }
-func (su *SecurityUser) ParseAccessJwtTokenFromString(token string, secretKey []byte) error {
+func (su *ASecurityUser) ParseAccessJwtTokenFromString(token string, secretKey []byte) error {
 	parseAuth, err := jwtV4.Parse(token, func(*jwtV4.Token) (interface{}, error) {
 		return secretKey, nil
 	})
@@ -86,7 +86,7 @@ func (su *SecurityUser) ParseAccessJwtTokenFromString(token string, secretKey []
 
 	return nil
 }
-func (su *SecurityUser) ParseAccessJwtToken(claims jwtV4.Claims) error {
+func (su *ASecurityUser) ParseAccessJwtToken(claims jwtV4.Claims) error {
 	if claims == nil {
 		return errors.New("claims is nil")
 	}
@@ -98,7 +98,7 @@ func (su *SecurityUser) ParseAccessJwtToken(claims jwtV4.Claims) error {
 
 	strAuthorityId, ok := mc[ClaimAuthorityId]
 	if ok {
-		su.AuthorityId = strAuthorityId.(string)
+		su.AuthorityName = strAuthorityId.(string)
 	}
 
 	return nil

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.4.1
 // - protoc             v3.21.1
-// source: api/qycms_blog/admin/v1/blog_admin.proto
+// source: api/qycms_blog/admin/v1/blog_admin_login.proto
 
 package v1
 
@@ -19,27 +19,27 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationQyBlogAdminLogin = "/api.qycms_blog.admin.v1.QyBlogAdmin/Login"
-const OperationQyBlogAdminLogout = "/api.qycms_blog.admin.v1.QyBlogAdmin/Logout"
+const OperationQyBlogAdminLoginLogin = "/api.qycms_blog.admin.v1.QyBlogAdminLogin/Login"
+const OperationQyBlogAdminLoginLogout = "/api.qycms_blog.admin.v1.QyBlogAdminLogin/Logout"
 
-type QyBlogAdminHTTPServer interface {
+type QyBlogAdminLoginHTTPServer interface {
 	Login(context.Context, *LoginReq) (*LoginReply, error)
 	Logout(context.Context, *LogoutReq) (*LogoutReply, error)
 }
 
-func RegisterQyBlogAdminHTTPServer(s *http.Server, srv QyBlogAdminHTTPServer) {
+func RegisterQyBlogAdminLoginHTTPServer(s *http.Server, srv QyBlogAdminLoginHTTPServer) {
 	r := s.Route("/")
-	r.POST("/api/admin/v1/login", _QyBlogAdmin_Login0_HTTP_Handler(srv))
-	r.POST("/api/admin/v1/logout", _QyBlogAdmin_Logout0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/login", _QyBlogAdminLogin_Login0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/logout", _QyBlogAdminLogin_Logout0_HTTP_Handler(srv))
 }
 
-func _QyBlogAdmin_Login0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.Context) error {
+func _QyBlogAdminLogin_Login0_HTTP_Handler(srv QyBlogAdminLoginHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LoginReq
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationQyBlogAdminLogin)
+		http.SetOperation(ctx, OperationQyBlogAdminLoginLogin)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Login(ctx, req.(*LoginReq))
 		})
@@ -52,13 +52,13 @@ func _QyBlogAdmin_Login0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.C
 	}
 }
 
-func _QyBlogAdmin_Logout0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.Context) error {
+func _QyBlogAdminLogin_Logout0_HTTP_Handler(srv QyBlogAdminLoginHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LogoutReq
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationQyBlogAdminLogout)
+		http.SetOperation(ctx, OperationQyBlogAdminLoginLogout)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Logout(ctx, req.(*LogoutReq))
 		})
@@ -71,24 +71,24 @@ func _QyBlogAdmin_Logout0_HTTP_Handler(srv QyBlogAdminHTTPServer) func(ctx http.
 	}
 }
 
-type QyBlogAdminHTTPClient interface {
+type QyBlogAdminLoginHTTPClient interface {
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginReply, err error)
 	Logout(ctx context.Context, req *LogoutReq, opts ...http.CallOption) (rsp *LogoutReply, err error)
 }
 
-type QyBlogAdminHTTPClientImpl struct {
+type QyBlogAdminLoginHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewQyBlogAdminHTTPClient(client *http.Client) QyBlogAdminHTTPClient {
-	return &QyBlogAdminHTTPClientImpl{client}
+func NewQyBlogAdminLoginHTTPClient(client *http.Client) QyBlogAdminLoginHTTPClient {
+	return &QyBlogAdminLoginHTTPClientImpl{client}
 }
 
-func (c *QyBlogAdminHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginReply, error) {
+func (c *QyBlogAdminLoginHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginReply, error) {
 	var out LoginReply
 	pattern := "/api/admin/v1/login"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationQyBlogAdminLogin))
+	opts = append(opts, http.Operation(OperationQyBlogAdminLoginLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -97,11 +97,11 @@ func (c *QyBlogAdminHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opt
 	return &out, err
 }
 
-func (c *QyBlogAdminHTTPClientImpl) Logout(ctx context.Context, in *LogoutReq, opts ...http.CallOption) (*LogoutReply, error) {
+func (c *QyBlogAdminLoginHTTPClientImpl) Logout(ctx context.Context, in *LogoutReq, opts ...http.CallOption) (*LogoutReply, error) {
 	var out LogoutReply
 	pattern := "/api/admin/v1/logout"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationQyBlogAdminLogout))
+	opts = append(opts, http.Operation(OperationQyBlogAdminLoginLogout))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

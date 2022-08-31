@@ -8,7 +8,7 @@ import (
 )
 
 type BlogAdminService struct {
-	v1.UnimplementedQyBlogAdminServer
+	v1.UnimplementedQyBlogAdminLoginServer
 	conf     *conf.Qycms
 	authConf *conf.Auth
 	uc       *biz.UserUsecase

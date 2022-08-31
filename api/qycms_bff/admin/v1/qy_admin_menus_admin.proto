@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+import "google/api/annotations.proto";
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminMenusAdmin {
+	rpc CreateQyAdminMenusAdmin (CreateQyAdminMenusAdminRequest) returns (CreateQyAdminMenusAdminReply);
+	rpc UpdateQyAdminMenusAdmin (UpdateQyAdminMenusAdminRequest) returns (UpdateQyAdminMenusAdminReply);
+	rpc DeleteQyAdminMenusAdmin (DeleteQyAdminMenusAdminRequest) returns (DeleteQyAdminMenusAdminReply);
+	rpc DeleteQyAdminMenusAdmins (DeleteQyAdminMenusAdminsRequest) returns (DeleteQyAdminMenusAdminsReply);
+	rpc GetQyAdminMenusAdmin (GetQyAdminMenusAdminRequest) returns (GetQyAdminMenusAdminReply);
+	rpc ListQyAdminMenusAdmin (ListQyAdminMenusAdminRequest) returns (ListQyAdminMenusAdminReply);
+}
+
+message MenusAdminInfoResponse {
+	uint64 uid = 1;
+	string Name    =2;
+	string Identifier    =3;
+	uint64 ParentId         =4;
+	string Path             =5;
+	bool Hidden               =6;
+	string Component         =7;
+	int32 Sort                =8;
+	uint32 Level             =9;
+	repeated MenusAdminInfoResponse children =10;
+}
+
+message PageInfo {
+	uint64 page = 1;
+	uint64 size = 2;
+	uint64 total = 3;
+	uint64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+}
+
+message CreateQyAdminMenusAdminRequest {
+		string Name    =1;
+		string Identifier    =2;
+		uint64 ParentId         =3;
+		string Path             =4;
+		bool Hidden               =5;
+		string Component         =6;
+		int32 Sort                =7;
+		uint32 Level             =8;
+}
+message CreateQyAdminMenusAdminReply {
+	uint64 uid = 1;
+}
+
+message UpdateQyAdminMenusAdminRequest {
+	uint64 uid = 1;
+	string Name    =2;
+	string Identifier    =3;
+	uint64 ParentId         =4;
+	string Path             =5;
+	bool Hidden               =6;
+	string Component         =7;
+	int32 Sort                =8;
+	uint32 Level             =9;
+}
+message UpdateQyAdminMenusAdminReply {
+	uint64 uid = 1;
+}
+
+message DeleteQyAdminMenusAdminRequest {
+	uint64 uid = 1;
+}
+message DeleteQyAdminMenusAdminReply {}
+
+message DeleteQyAdminMenusAdminsRequest {
+	repeated uint64 uids = 1;
+}
+message DeleteQyAdminMenusAdminsReply {}
+
+message GetQyAdminMenusAdminRequest {
+	uint64 uid = 1;
+}
+message GetQyAdminMenusAdminReply {
+	MenusAdminInfoResponse info = 1;
+}
+
+message ListQyAdminMenusAdminRequest {
+	PageInfo pageInfo = 1;
+}
+message ListQyAdminMenusAdminReply {
+	PageInfo pageInfo = 1;
+	repeated MenusAdminInfoResponse items = 2;
+}

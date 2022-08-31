@@ -46,8 +46,17 @@ message Data {
 }
 
 message Auth {
+    Jwt jwt = 1;
+  Casbin casbin = 2;
+}
+
+message Jwt {
   string jwt_secret = 1;
   google.protobuf.Duration expire_duration = 2;
+}
+
+message Casbin {
+  string model_path = 1;
 }
 
 message Trace {

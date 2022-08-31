@@ -28,11 +28,16 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	articleUsecase := biz.NewArticleUsecase(articleRepo, logger)
 	articleService := service.NewArticleService(articleUsecase, auth)
 	grpcServer := server.NewGRPCServer(confServer, articleService, logger)
+	casbinData, err := db.NewCasbinData(dbData, auth, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	userRepo := db.NewUserRepo(dbData, logger)
 	userUsecase := biz.NewUserUsecase(userRepo, logger)
 	blogAdminService := service.NewBlogAdminService(userUsecase, qycms, auth)
 	userService := service.NewUserService(userUsecase, qycms)
-	httpServer := server.NewHTTPServer(confServer, auth, blogAdminService, userService, logger)
+	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminService, userService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

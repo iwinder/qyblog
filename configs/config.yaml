@@ -13,10 +13,13 @@ data:
     addr: 127.0.0.1:6379
     password: "0932"
     read_timeout: 0.2s
-    write_timeout: 1.2s
+    write_timeout: 0.2s
 # 认证配置
 auth:
-  jwt_secret: "secret"
-  expire_duration: 3600s
+  jwt:
+    jwt_secret: "secret"
+    expire_duration: 3600s
+  casbin:
+    model_path: "/home/wind/Work/program/go/src/github.com/iwinder/qingyucms/configs/authz_model.conf"
 qycms:
   token: SAkSgsuN

@@ -2,32 +2,14 @@ package service
 
 import (
 	"context"
-	"errors"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/api/qycms_user/v1"
+	v1 "github.com/iwinder/qingyucms/api/qycms_user/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 )
 
-var (
-	ErrAuthFailed = errors.New("authentication failed")
-)
-
-// UserService is a greeter service. 可用于后期拆分单个微服务
-type UserService struct {
-	v1.UnimplementedUserServer
-	conf *conf.Qycms
-	uc   *biz.UserUsecase
-}
-
-// NewUserService new a greeter service.
-func NewUserService(uc *biz.UserUsecase, conf *conf.Qycms) *UserService {
-	return &UserService{uc: uc, conf: conf}
-}
-
-// CreateUser implements server.CreateUser. 创建用户
-func (s *UserService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserReply, error) {
+// CreateUser 创建用户
+func (s *BlogAdminService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
 		Nickname: in.NickName,
@@ -46,7 +28,7 @@ func (s *UserService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) 
 }
 
 // UpdateUser 更新用户
-func (s *UserService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) (*v1.UpdateUserReply, error) {
+func (s *BlogAdminService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) (*v1.UpdateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
 		Nickname: in.NickName,
@@ -63,7 +45,7 @@ func (s *UserService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) 
 }
 
 // DeleteUser 根据ID删除用户
-func (s *UserService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequest) (*v1.DeleteUserReply, error) {
+func (s *BlogAdminService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequest) (*v1.DeleteUserReply, error) {
 	err := s.uc.Delete(ctx, in.Uid)
 	if err != nil {
 		return nil, err
@@ -72,7 +54,7 @@ func (s *UserService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequest) 
 }
 
 // DeleteUsers 根据ID批量删除用户
-func (s *UserService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest) (*v1.DeleteUsersReply, error) {
+func (s *BlogAdminService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest) (*v1.DeleteUsersReply, error) {
 	err := s.uc.DeleteList(ctx, in.Uids)
 	if err != nil {
 		return nil, err
@@ -80,8 +62,8 @@ func (s *UserService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest
 	return &v1.DeleteUsersReply{}, nil
 }
 
-// GetUser 通过ID获取用户
-func (s *UserService) GetUser(ctx context.Context, in *v1.GetUserRequest) (*v1.GetUserReply, error) {
+// GetUser 根据ID获取用户信息
+func (s *BlogAdminService) GetUser(ctx context.Context, in *v1.GetUserRequest) (*v1.GetUserReply, error) {
 	user, err := s.uc.FindOneByID(ctx, in.Uid)
 	if err != nil {
 		return nil, err
@@ -90,7 +72,8 @@ func (s *UserService) GetUser(ctx context.Context, in *v1.GetUserRequest) (*v1.G
 	return &v1.GetUserReply{User: &u}, nil
 }
 
-func (s *UserService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*v1.GetUserReply, error) {
+// GetMyInfo 获取用户个人信息
+func (s *BlogAdminService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*v1.GetUserReply, error) {
 	var uId uint64
 	if claims, ok := jwt.FromContext(ctx); ok {
 		c := claims.(jwtV4.MapClaims)
@@ -108,7 +91,8 @@ func (s *UserService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*
 	return &v1.GetUserReply{User: &u}, nil
 }
 
-func (s *UserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
+// ListUser 获取用户列表
+func (s *BlogAdminService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
 	opts := biz.UserDOListOption{}
 	opts.ListOptions.Pages = 0
 	opts.ListOptions.Page = -1
@@ -144,27 +128,4 @@ func (s *UserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1
 		})
 	}
 	return &v1.ListUserReply{PageInfo: pageInfo, Items: users}, nil
-}
-
-//func (s *UserService) VerifyPassword(ctx context.Context, req *v1.VerifyPasswordReq) (*v1.VerifyPasswordReply, error) {
-//	rv, err := s.uc.VerifyPassword(ctx, &biz.UserDO{Username: req.Username, Password: req.Password, Salt: s.conf.Token})
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return &v1.VerifyPasswordReply{
-//		Ok: rv,
-//	}, nil
-//}
-
-func UserResponse(user *biz.UserDO) v1.UserInfoResponse {
-	userInfoRsp := v1.UserInfoResponse{
-		Uid:      user.ID,
-		Username: user.Username,
-		NickName: user.Nickname,
-		Avatar:   user.Avatar,
-		Email:    user.Email,
-	}
-
-	return userInfoRsp
 }

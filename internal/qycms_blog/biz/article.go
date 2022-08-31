@@ -44,7 +44,7 @@ type ArticleDOList struct {
 
 type ArticleDOListOption struct {
 	metaV1.ListOptions `json:"page"`
-	ArticleDO          `json:"article"`
+	ArticleDO          `json:"item"`
 }
 
 // ArticleRepo is a Greater repo.

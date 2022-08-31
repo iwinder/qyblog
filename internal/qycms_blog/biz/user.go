@@ -5,8 +5,9 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
+	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
@@ -29,15 +30,16 @@ type UserDO struct {
 	Email     string
 	Phone     string
 	AdminFlag bool
+	Roles     []*RoleDO
 }
 type UserDOList struct {
 	metaV1.ListMeta `json:",inline"`
 	Items           []*UserDO `json:"items"`
 }
 
-type UserListOption struct {
+type UserDOListOption struct {
 	metaV1.ListOptions `json:"page"`
-	UserDO             `json:"user"`
+	UserDO             `json:"item"`
 }
 
 // UserRepo is a Greater repo.
@@ -48,7 +50,7 @@ type UserRepo interface {
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*po.UserPO, error)
 	FindByUsername(c context.Context, username string) (*po.UserPO, error)
-	ListAll(c context.Context, opts UserListOption) (*po.UserPOList, error)
+	ListAll(c context.Context, opts UserDOListOption) (*po.UserPOList, error)
 	//VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
 }
 
@@ -58,7 +60,7 @@ type UserUsecase struct {
 	log  *log.Helper
 }
 
-// NewGreeterUsecase new a UserDO usecase.
+// NewUserUsecase new a UserDO usecase.
 func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 	return &UserUsecase{repo: repo, log: log.NewHelper(logger)}
 }
@@ -148,7 +150,7 @@ func (uc *UserUsecase) FindOneByUsername(ctx context.Context, username string) (
 }
 
 // ListAll 批量查询
-func (uc *UserUsecase) ListAll(ctx context.Context, opts UserListOption) (*UserDOList, error) {
+func (uc *UserUsecase) ListAll(ctx context.Context, opts UserDOListOption) (*UserDOList, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")
 	userPOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
@@ -183,19 +185,20 @@ func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *
 	if err != nil {
 		return "", errors.New("登录失败" + err.Error())
 	}
-	aerr := auth.Compare(userInfo.Password, u.Password+u.Salt)
+	aerr := bcryptUtil.Compare(userInfo.Password, u.Password+u.Salt)
 	if aerr != nil {
 		return "", errors.New("登录失败" + aerr.Error())
 	}
-	claims := auth.CustomClaims{
+	// 获取角色信息
+	claims := jwt2.SecurityUser{
 		ID:       userInfo.ID,
 		NickName: userInfo.Nickname,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.ExpireDuration.AsDuration())), // 设置token的过期时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.Jwt.ExpireDuration.AsDuration())), // 设置token的过期时间
 		},
 	}
 	// 生成token
-	token, err := auth.CreateToken(claims, authConf.JwtSecret)
+	token, err := jwt2.CreateToken(claims, authConf.Jwt.JwtSecret)
 	if err != nil {
 		log.Errorf("登录失败，生成token失败：%v", err)
 		return "", errors.New("登录失败" + err.Error())

@@ -16,7 +16,9 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo, NewUserRepo,
+var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewGreeterRepo,
+	NewUserRepo, NewRoleRepo,
+	NewMenusAdminRepo, NewApiRepo,
 	NewArticleRepo, NewArticleContentRepo,
 	NewCommentAgentRepo, NewCommentIndexRepo, NewCommentContentRepo,
 )
@@ -90,7 +92,10 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 
 // AutoMigrateTable 初始化table
 func AutoMigrateTable(dbIns *gorm.DB) {
-	dbIns.AutoMigrate(&blogPo.ArticlePO{}) //&userPo.UserPO{},
+	dbIns.AutoMigrate(&blogPo.ArticlePO{},
+		&blogPo.UserPO{}, &blogPo.RolePO{},
+		&blogPo.ApiPO{}, &blogPo.MenusAdminPO{},
+	) //&userPo.UserPO{},
 	//&commentsPo.CommentAgentPO{}, &commentsPo.CommentIndexPO{}, &commentsPo.CommentContentPO{},
 
 }

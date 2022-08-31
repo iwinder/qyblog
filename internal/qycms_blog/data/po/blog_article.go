@@ -44,5 +44,5 @@ type ArticlePOList struct {
 
 type ArticlePOListOption struct {
 	metaV1.ListOptions `json:"page"`
-	ArticlePO          `json:"article"`
+	ArticlePO          `json:"item"`
 }

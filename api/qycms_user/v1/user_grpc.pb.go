@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.1
-// source: api/qycms_user/v1/user.proto
+// source: api/qycms_user/v1/qy_admin_user.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type UserClient interface {
 	DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...grpc.CallOption) (*DeleteUsersReply, error)
 	// 获取用户信息
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
-	// 获取用户信息
+	// 获取用户个人信息
 	GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
@@ -134,7 +134,7 @@ type UserServer interface {
 	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
 	// 获取用户信息
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
-	// 获取用户信息
+	// 获取用户个人信息
 	GetMyInfo(context.Context, *GetMyInfoRequest) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
@@ -369,5 +369,5 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/qycms_user/v1/user.proto",
+	Metadata: "api/qycms_user/v1/qy_admin_user.proto",
 }

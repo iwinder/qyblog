@@ -1,15 +1,12 @@
 syntax = "proto3";
 
-package api.qycms_user.v1;
+package api.qycms_bff.admin.v1;
 
-import "google/api/annotations.proto";
-
-option go_package = "github.com/iwinder/qingyucms/api/qycms_user/v1;v1";
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
-option java_package = "api.qycms_user.v1";
+option java_package = "api.qycms_bff.admin.v1";
 
-// 用户管理服务
-service User {
+service QyAdminUser {
 	// 创建新用户
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
 		option (google.api.http) = {
@@ -33,7 +30,8 @@ service User {
 	// 批量删除
 	rpc DeleteUsers (DeleteUsersRequest) returns (DeleteUsersReply){
 		option (google.api.http) = {
-			delete: "/api/admin/v1/user"
+			delete: "/api/admin/v1/user",
+			body:"*"
 		};
 	};
 	// 获取用户信息
@@ -45,9 +43,9 @@ service User {
 
 	// 获取用户个人信息
 	rpc GetMyInfo (GetMyInfoRequest) returns (GetUserReply){
-				option (google.api.http) = {
-					get: "/api/admin/v1/myInfo"
-				};
+		option (google.api.http) = {
+			get: "/api/admin/v1/myInfo"
+		};
 	}
 
 	// 批量获取用户
@@ -61,10 +59,6 @@ service User {
 	rpc VerifyPassword(VerifyPasswordReq) returns (VerifyPasswordReply) {
 	}
 }
-
-
-
-
 
 message UserInfoResponse {
 	uint64 uid = 1;
@@ -85,6 +79,11 @@ message PageInfo {
 }
 
 
+message RoleInfo {
+	uint64 uid = 1;
+	string name = 2;
+	string identifier =3;
+}
 
 message CreateUserRequest {
 	string username = 1;
@@ -106,6 +105,7 @@ message UpdateUserRequest {
 	string avatar = 4;
 	string email = 5;
 	string phone = 6;
+	repeated RoleInfo roles = 7;
 }
 message UpdateUserReply {
 	UserInfoResponse user = 1;
@@ -132,8 +132,8 @@ message GetUserReply {
 }
 
 message		GetMyInfoRequest {
-
-	}
+	UserInfoResponse user = 1;
+}
 
 message ListUserRequest {
 	PageInfo pageInfo = 1;

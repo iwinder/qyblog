@@ -215,8 +215,8 @@ type Auth struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	JwtSecret      string               `protobuf:"bytes,1,opt,name=jwt_secret,json=jwtSecret,proto3" json:"jwt_secret,omitempty"`
-	ExpireDuration *durationpb.Duration `protobuf:"bytes,2,opt,name=expire_duration,json=expireDuration,proto3" json:"expire_duration,omitempty"`
+	Jwt    *Jwt    `protobuf:"bytes,1,opt,name=jwt,proto3" json:"jwt,omitempty"`
+	Casbin *Casbin `protobuf:"bytes,2,opt,name=casbin,proto3" json:"casbin,omitempty"`
 }
 
 func (x *Auth) Reset() {
@@ -251,18 +251,120 @@ func (*Auth) Descriptor() ([]byte, []int) {
 	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *Auth) GetJwtSecret() string {
+func (x *Auth) GetJwt() *Jwt {
+	if x != nil {
+		return x.Jwt
+	}
+	return nil
+}
+
+func (x *Auth) GetCasbin() *Casbin {
+	if x != nil {
+		return x.Casbin
+	}
+	return nil
+}
+
+type Jwt struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	JwtSecret      string               `protobuf:"bytes,1,opt,name=jwt_secret,json=jwtSecret,proto3" json:"jwt_secret,omitempty"`
+	ExpireDuration *durationpb.Duration `protobuf:"bytes,2,opt,name=expire_duration,json=expireDuration,proto3" json:"expire_duration,omitempty"`
+}
+
+func (x *Jwt) Reset() {
+	*x = Jwt{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Jwt) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Jwt) ProtoMessage() {}
+
+func (x *Jwt) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Jwt.ProtoReflect.Descriptor instead.
+func (*Jwt) Descriptor() ([]byte, []int) {
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Jwt) GetJwtSecret() string {
 	if x != nil {
 		return x.JwtSecret
 	}
 	return ""
 }
 
-func (x *Auth) GetExpireDuration() *durationpb.Duration {
+func (x *Jwt) GetExpireDuration() *durationpb.Duration {
 	if x != nil {
 		return x.ExpireDuration
 	}
 	return nil
+}
+
+type Casbin struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ModelPath string `protobuf:"bytes,1,opt,name=model_path,json=modelPath,proto3" json:"model_path,omitempty"`
+}
+
+func (x *Casbin) Reset() {
+	*x = Casbin{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Casbin) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Casbin) ProtoMessage() {}
+
+func (x *Casbin) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Casbin.ProtoReflect.Descriptor instead.
+func (*Casbin) Descriptor() ([]byte, []int) {
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Casbin) GetModelPath() string {
+	if x != nil {
+		return x.ModelPath
+	}
+	return ""
 }
 
 type Trace struct {
@@ -276,7 +378,7 @@ type Trace struct {
 func (x *Trace) Reset() {
 	*x = Trace{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[4]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -289,7 +391,7 @@ func (x *Trace) String() string {
 func (*Trace) ProtoMessage() {}
 
 func (x *Trace) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[4]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -302,7 +404,7 @@ func (x *Trace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Trace.ProtoReflect.Descriptor instead.
 func (*Trace) Descriptor() ([]byte, []int) {
-	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{4}
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Trace) GetEndpoint() string {
@@ -323,7 +425,7 @@ type Registry struct {
 func (x *Registry) Reset() {
 	*x = Registry{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[5]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -336,7 +438,7 @@ func (x *Registry) String() string {
 func (*Registry) ProtoMessage() {}
 
 func (x *Registry) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[5]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -349,7 +451,7 @@ func (x *Registry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Registry.ProtoReflect.Descriptor instead.
 func (*Registry) Descriptor() ([]byte, []int) {
-	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{5}
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Registry) GetEtcd() *Registry_Etcd {
@@ -370,7 +472,7 @@ type Qycms struct {
 func (x *Qycms) Reset() {
 	*x = Qycms{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[6]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -383,7 +485,7 @@ func (x *Qycms) String() string {
 func (*Qycms) ProtoMessage() {}
 
 func (x *Qycms) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[6]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -396,7 +498,7 @@ func (x *Qycms) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Qycms.ProtoReflect.Descriptor instead.
 func (*Qycms) Descriptor() ([]byte, []int) {
-	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{6}
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Qycms) GetToken() string {
@@ -419,7 +521,7 @@ type Server_HTTP struct {
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[7]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -432,7 +534,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[7]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -482,7 +584,7 @@ type Server_GRPC struct {
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[8]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -495,7 +597,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[8]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -544,7 +646,7 @@ type Data_Database struct {
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -557,7 +659,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -602,7 +704,7 @@ type Data_Redis struct {
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -615,7 +717,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -677,7 +779,7 @@ type Registry_Etcd struct {
 func (x *Registry_Etcd) Reset() {
 	*x = Registry_Etcd{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -690,7 +792,7 @@ func (x *Registry_Etcd) String() string {
 func (*Registry_Etcd) ProtoMessage() {}
 
 func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -703,7 +805,7 @@ func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Registry_Etcd.ProtoReflect.Descriptor instead.
 func (*Registry_Etcd) Descriptor() ([]byte, []int) {
-	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{5, 0}
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{7, 0}
 }
 
 func (x *Registry_Etcd) GetAddress() string {
@@ -778,28 +880,36 @@ var file_internal_qycms_blog_conf_conf_proto_rawDesc = []byte{
 	0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x0c, 0x77, 0x72, 0x69, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74,
-	0x22, 0x69, 0x0a, 0x04, 0x41, 0x75, 0x74, 0x68, 0x12, 0x1d, 0x0a, 0x0a, 0x6a, 0x77, 0x74, 0x5f,
-	0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6a, 0x77,
-	0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x42, 0x0a, 0x0f, 0x65, 0x78, 0x70, 0x69, 0x72,
-	0x65, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0e, 0x65, 0x78, 0x70,
-	0x69, 0x72, 0x65, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x23, 0x0a, 0x05, 0x54,
-	0x72, 0x61, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74,
-	0x22, 0x5b, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x2d, 0x0a, 0x04,
-	0x65, 0x74, 0x63, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x6b, 0x72, 0x61,
-	0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79,
-	0x2e, 0x45, 0x74, 0x63, 0x64, 0x52, 0x04, 0x65, 0x74, 0x63, 0x64, 0x1a, 0x20, 0x0a, 0x04, 0x45,
-	0x74, 0x63, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x1d, 0x0a,
-	0x05, 0x51, 0x79, 0x63, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x40, 0x5a, 0x3e,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x77, 0x69, 0x6e, 0x64,
-	0x65, 0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73, 0x2f, 0x61, 0x70, 0x70,
-	0x2f, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f, 0x69, 0x6e, 0x74, 0x65,
-	0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x22, 0x55, 0x0a, 0x04, 0x41, 0x75, 0x74, 0x68, 0x12, 0x21, 0x0a, 0x03, 0x6a, 0x77, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x4a, 0x77, 0x74, 0x52, 0x03, 0x6a, 0x77, 0x74, 0x12, 0x2a, 0x0a, 0x06, 0x63,
+	0x61, 0x73, 0x62, 0x69, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b, 0x72,
+	0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x61, 0x73, 0x62, 0x69, 0x6e, 0x52,
+	0x06, 0x63, 0x61, 0x73, 0x62, 0x69, 0x6e, 0x22, 0x68, 0x0a, 0x03, 0x4a, 0x77, 0x74, 0x12, 0x1d,
+	0x0a, 0x0a, 0x6a, 0x77, 0x74, 0x5f, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x09, 0x6a, 0x77, 0x74, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x42, 0x0a,
+	0x0f, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x0e, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x22, 0x27, 0x0a, 0x06, 0x43, 0x61, 0x73, 0x62, 0x69, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x6d,
+	0x6f, 0x64, 0x65, 0x6c, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x50, 0x61, 0x74, 0x68, 0x22, 0x23, 0x0a, 0x05, 0x54, 0x72,
+	0x61, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x65, 0x6e, 0x64, 0x70, 0x6f, 0x69, 0x6e, 0x74, 0x22,
+	0x5b, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x12, 0x2d, 0x0a, 0x04, 0x65,
+	0x74, 0x63, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x6b, 0x72, 0x61, 0x74,
+	0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e,
+	0x45, 0x74, 0x63, 0x64, 0x52, 0x04, 0x65, 0x74, 0x63, 0x64, 0x1a, 0x20, 0x0a, 0x04, 0x45, 0x74,
+	0x63, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x1d, 0x0a, 0x05,
+	0x51, 0x79, 0x63, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x40, 0x5a, 0x3e, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x77, 0x69, 0x6e, 0x64, 0x65,
+	0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73, 0x2f, 0x61, 0x70, 0x70, 0x2f,
+	0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72,
+	0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -814,43 +924,47 @@ func file_internal_qycms_blog_conf_conf_proto_rawDescGZIP() []byte {
 	return file_internal_qycms_blog_conf_conf_proto_rawDescData
 }
 
-var file_internal_qycms_blog_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_internal_qycms_blog_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_internal_qycms_blog_conf_conf_proto_goTypes = []interface{}{
 	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.Server
 	(*Data)(nil),                // 2: kratos.api.Data
 	(*Auth)(nil),                // 3: kratos.api.Auth
-	(*Trace)(nil),               // 4: kratos.api.Trace
-	(*Registry)(nil),            // 5: kratos.api.Registry
-	(*Qycms)(nil),               // 6: kratos.api.Qycms
-	(*Server_HTTP)(nil),         // 7: kratos.api.Server.HTTP
-	(*Server_GRPC)(nil),         // 8: kratos.api.Server.GRPC
-	(*Data_Database)(nil),       // 9: kratos.api.Data.Database
-	(*Data_Redis)(nil),          // 10: kratos.api.Data.Redis
-	(*Registry_Etcd)(nil),       // 11: kratos.api.Registry.Etcd
-	(*durationpb.Duration)(nil), // 12: google.protobuf.Duration
+	(*Jwt)(nil),                 // 4: kratos.api.Jwt
+	(*Casbin)(nil),              // 5: kratos.api.Casbin
+	(*Trace)(nil),               // 6: kratos.api.Trace
+	(*Registry)(nil),            // 7: kratos.api.Registry
+	(*Qycms)(nil),               // 8: kratos.api.Qycms
+	(*Server_HTTP)(nil),         // 9: kratos.api.Server.HTTP
+	(*Server_GRPC)(nil),         // 10: kratos.api.Server.GRPC
+	(*Data_Database)(nil),       // 11: kratos.api.Data.Database
+	(*Data_Redis)(nil),          // 12: kratos.api.Data.Redis
+	(*Registry_Etcd)(nil),       // 13: kratos.api.Registry.Etcd
+	(*durationpb.Duration)(nil), // 14: google.protobuf.Duration
 }
 var file_internal_qycms_blog_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
 	2,  // 1: kratos.api.Bootstrap.data:type_name -> kratos.api.Data
-	6,  // 2: kratos.api.Bootstrap.qycms:type_name -> kratos.api.Qycms
+	8,  // 2: kratos.api.Bootstrap.qycms:type_name -> kratos.api.Qycms
 	3,  // 3: kratos.api.Bootstrap.auth:type_name -> kratos.api.Auth
-	4,  // 4: kratos.api.Bootstrap.trace:type_name -> kratos.api.Trace
-	7,  // 5: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
-	8,  // 6: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
-	9,  // 7: kratos.api.Data.database:type_name -> kratos.api.Data.Database
-	10, // 8: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
-	12, // 9: kratos.api.Auth.expire_duration:type_name -> google.protobuf.Duration
-	11, // 10: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
-	12, // 11: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	12, // 12: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	12, // 13: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	12, // 14: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	6,  // 4: kratos.api.Bootstrap.trace:type_name -> kratos.api.Trace
+	9,  // 5: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
+	10, // 6: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
+	11, // 7: kratos.api.Data.database:type_name -> kratos.api.Data.Database
+	12, // 8: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
+	4,  // 9: kratos.api.Auth.jwt:type_name -> kratos.api.Jwt
+	5,  // 10: kratos.api.Auth.casbin:type_name -> kratos.api.Casbin
+	14, // 11: kratos.api.Jwt.expire_duration:type_name -> google.protobuf.Duration
+	13, // 12: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
+	14, // 13: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	14, // 14: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	14, // 15: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	14, // 16: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_internal_qycms_blog_conf_conf_proto_init() }
@@ -908,7 +1022,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Trace); i {
+			switch v := v.(*Jwt); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -920,7 +1034,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Registry); i {
+			switch v := v.(*Casbin); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -932,7 +1046,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Qycms); i {
+			switch v := v.(*Trace); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -944,7 +1058,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_HTTP); i {
+			switch v := v.(*Registry); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -956,7 +1070,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_GRPC); i {
+			switch v := v.(*Qycms); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -968,7 +1082,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Data_Database); i {
+			switch v := v.(*Server_HTTP); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -980,7 +1094,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Data_Redis); i {
+			switch v := v.(*Server_GRPC); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -992,6 +1106,30 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Data_Database); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_qycms_blog_conf_conf_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Data_Redis); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_qycms_blog_conf_conf_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Registry_Etcd); i {
 			case 0:
 				return &v.state
@@ -1010,7 +1148,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_qycms_blog_conf_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

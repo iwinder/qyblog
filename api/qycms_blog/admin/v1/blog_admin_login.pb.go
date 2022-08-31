@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.26.0
 // 	protoc        v3.21.1
-// source: api/qycms_blog/admin/v1/blog_admin.proto
+// source: api/qycms_blog/admin/v1/blog_admin_login.proto
 
 package v1
 
@@ -34,7 +34,7 @@ type RegisterReq struct {
 func (x *RegisterReq) Reset() {
 	*x = RegisterReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[0]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -47,7 +47,7 @@ func (x *RegisterReq) String() string {
 func (*RegisterReq) ProtoMessage() {}
 
 func (x *RegisterReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[0]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -60,7 +60,7 @@ func (x *RegisterReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterReq.ProtoReflect.Descriptor instead.
 func (*RegisterReq) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{0}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *RegisterReq) GetUsername() string {
@@ -95,7 +95,7 @@ type RegisterReply struct {
 func (x *RegisterReply) Reset() {
 	*x = RegisterReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[1]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -108,7 +108,7 @@ func (x *RegisterReply) String() string {
 func (*RegisterReply) ProtoMessage() {}
 
 func (x *RegisterReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[1]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -121,7 +121,7 @@ func (x *RegisterReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterReply.ProtoReflect.Descriptor instead.
 func (*RegisterReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{1}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RegisterReply) GetUid() uint64 {
@@ -143,7 +143,7 @@ type LoginReq struct {
 func (x *LoginReq) Reset() {
 	*x = LoginReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[2]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -156,7 +156,7 @@ func (x *LoginReq) String() string {
 func (*LoginReq) ProtoMessage() {}
 
 func (x *LoginReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[2]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -169,7 +169,7 @@ func (x *LoginReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginReq.ProtoReflect.Descriptor instead.
 func (*LoginReq) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{2}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoginReq) GetUsername() string {
@@ -197,7 +197,7 @@ type LoginReply struct {
 func (x *LoginReply) Reset() {
 	*x = LoginReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[3]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -210,7 +210,7 @@ func (x *LoginReply) String() string {
 func (*LoginReply) ProtoMessage() {}
 
 func (x *LoginReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[3]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -223,7 +223,7 @@ func (x *LoginReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginReply.ProtoReflect.Descriptor instead.
 func (*LoginReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{3}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LoginReply) GetToken() string {
@@ -242,7 +242,7 @@ type LogoutReq struct {
 func (x *LogoutReq) Reset() {
 	*x = LogoutReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[4]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -255,7 +255,7 @@ func (x *LogoutReq) String() string {
 func (*LogoutReq) ProtoMessage() {}
 
 func (x *LogoutReq) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[4]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -268,7 +268,7 @@ func (x *LogoutReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutReq.ProtoReflect.Descriptor instead.
 func (*LogoutReq) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{4}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{4}
 }
 
 type LogoutReply struct {
@@ -280,7 +280,7 @@ type LogoutReply struct {
 func (x *LogoutReply) Reset() {
 	*x = LogoutReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[5]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -293,7 +293,7 @@ func (x *LogoutReply) String() string {
 func (*LogoutReply) ProtoMessage() {}
 
 func (x *LogoutReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[5]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -306,7 +306,7 @@ func (x *LogoutReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutReply.ProtoReflect.Descriptor instead.
 func (*LogoutReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{5}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{5}
 }
 
 type CreateQyBlogAdminRequest struct {
@@ -318,7 +318,7 @@ type CreateQyBlogAdminRequest struct {
 func (x *CreateQyBlogAdminRequest) Reset() {
 	*x = CreateQyBlogAdminRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[6]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -331,7 +331,7 @@ func (x *CreateQyBlogAdminRequest) String() string {
 func (*CreateQyBlogAdminRequest) ProtoMessage() {}
 
 func (x *CreateQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[6]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +344,7 @@ func (x *CreateQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateQyBlogAdminRequest.ProtoReflect.Descriptor instead.
 func (*CreateQyBlogAdminRequest) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{6}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{6}
 }
 
 type CreateQyBlogAdminReply struct {
@@ -356,7 +356,7 @@ type CreateQyBlogAdminReply struct {
 func (x *CreateQyBlogAdminReply) Reset() {
 	*x = CreateQyBlogAdminReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[7]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -369,7 +369,7 @@ func (x *CreateQyBlogAdminReply) String() string {
 func (*CreateQyBlogAdminReply) ProtoMessage() {}
 
 func (x *CreateQyBlogAdminReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[7]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -382,7 +382,7 @@ func (x *CreateQyBlogAdminReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateQyBlogAdminReply.ProtoReflect.Descriptor instead.
 func (*CreateQyBlogAdminReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{7}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{7}
 }
 
 type UpdateQyBlogAdminRequest struct {
@@ -394,7 +394,7 @@ type UpdateQyBlogAdminRequest struct {
 func (x *UpdateQyBlogAdminRequest) Reset() {
 	*x = UpdateQyBlogAdminRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[8]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -407,7 +407,7 @@ func (x *UpdateQyBlogAdminRequest) String() string {
 func (*UpdateQyBlogAdminRequest) ProtoMessage() {}
 
 func (x *UpdateQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[8]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -420,7 +420,7 @@ func (x *UpdateQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateQyBlogAdminRequest.ProtoReflect.Descriptor instead.
 func (*UpdateQyBlogAdminRequest) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{8}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{8}
 }
 
 type UpdateQyBlogAdminReply struct {
@@ -432,7 +432,7 @@ type UpdateQyBlogAdminReply struct {
 func (x *UpdateQyBlogAdminReply) Reset() {
 	*x = UpdateQyBlogAdminReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[9]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -445,7 +445,7 @@ func (x *UpdateQyBlogAdminReply) String() string {
 func (*UpdateQyBlogAdminReply) ProtoMessage() {}
 
 func (x *UpdateQyBlogAdminReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[9]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -458,7 +458,7 @@ func (x *UpdateQyBlogAdminReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateQyBlogAdminReply.ProtoReflect.Descriptor instead.
 func (*UpdateQyBlogAdminReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{9}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{9}
 }
 
 type DeleteQyBlogAdminRequest struct {
@@ -470,7 +470,7 @@ type DeleteQyBlogAdminRequest struct {
 func (x *DeleteQyBlogAdminRequest) Reset() {
 	*x = DeleteQyBlogAdminRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[10]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -483,7 +483,7 @@ func (x *DeleteQyBlogAdminRequest) String() string {
 func (*DeleteQyBlogAdminRequest) ProtoMessage() {}
 
 func (x *DeleteQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[10]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -496,7 +496,7 @@ func (x *DeleteQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteQyBlogAdminRequest.ProtoReflect.Descriptor instead.
 func (*DeleteQyBlogAdminRequest) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{10}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{10}
 }
 
 type DeleteQyBlogAdminReply struct {
@@ -508,7 +508,7 @@ type DeleteQyBlogAdminReply struct {
 func (x *DeleteQyBlogAdminReply) Reset() {
 	*x = DeleteQyBlogAdminReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[11]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -521,7 +521,7 @@ func (x *DeleteQyBlogAdminReply) String() string {
 func (*DeleteQyBlogAdminReply) ProtoMessage() {}
 
 func (x *DeleteQyBlogAdminReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[11]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -534,7 +534,7 @@ func (x *DeleteQyBlogAdminReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteQyBlogAdminReply.ProtoReflect.Descriptor instead.
 func (*DeleteQyBlogAdminReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{11}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{11}
 }
 
 type GetQyBlogAdminRequest struct {
@@ -546,7 +546,7 @@ type GetQyBlogAdminRequest struct {
 func (x *GetQyBlogAdminRequest) Reset() {
 	*x = GetQyBlogAdminRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[12]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -559,7 +559,7 @@ func (x *GetQyBlogAdminRequest) String() string {
 func (*GetQyBlogAdminRequest) ProtoMessage() {}
 
 func (x *GetQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[12]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +572,7 @@ func (x *GetQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetQyBlogAdminRequest.ProtoReflect.Descriptor instead.
 func (*GetQyBlogAdminRequest) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{12}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{12}
 }
 
 type GetQyBlogAdminReply struct {
@@ -584,7 +584,7 @@ type GetQyBlogAdminReply struct {
 func (x *GetQyBlogAdminReply) Reset() {
 	*x = GetQyBlogAdminReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[13]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -597,7 +597,7 @@ func (x *GetQyBlogAdminReply) String() string {
 func (*GetQyBlogAdminReply) ProtoMessage() {}
 
 func (x *GetQyBlogAdminReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[13]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -610,7 +610,7 @@ func (x *GetQyBlogAdminReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetQyBlogAdminReply.ProtoReflect.Descriptor instead.
 func (*GetQyBlogAdminReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{13}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{13}
 }
 
 type ListQyBlogAdminRequest struct {
@@ -622,7 +622,7 @@ type ListQyBlogAdminRequest struct {
 func (x *ListQyBlogAdminRequest) Reset() {
 	*x = ListQyBlogAdminRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[14]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -635,7 +635,7 @@ func (x *ListQyBlogAdminRequest) String() string {
 func (*ListQyBlogAdminRequest) ProtoMessage() {}
 
 func (x *ListQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[14]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -648,7 +648,7 @@ func (x *ListQyBlogAdminRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListQyBlogAdminRequest.ProtoReflect.Descriptor instead.
 func (*ListQyBlogAdminRequest) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{14}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{14}
 }
 
 type ListQyBlogAdminReply struct {
@@ -660,7 +660,7 @@ type ListQyBlogAdminReply struct {
 func (x *ListQyBlogAdminReply) Reset() {
 	*x = ListQyBlogAdminReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[15]
+		mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -673,7 +673,7 @@ func (x *ListQyBlogAdminReply) String() string {
 func (*ListQyBlogAdminReply) ProtoMessage() {}
 
 func (x *ListQyBlogAdminReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[15]
+	mi := &file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -686,89 +686,89 @@ func (x *ListQyBlogAdminReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListQyBlogAdminReply.ProtoReflect.Descriptor instead.
 func (*ListQyBlogAdminReply) Descriptor() ([]byte, []int) {
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP(), []int{15}
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP(), []int{15}
 }
 
-var File_api_qycms_blog_admin_v1_blog_admin_proto protoreflect.FileDescriptor
+var File_api_qycms_blog_admin_v1_blog_admin_login_proto protoreflect.FileDescriptor
 
-var file_api_qycms_blog_admin_v1_blog_admin_proto_rawDesc = []byte{
-	0x0a, 0x28, 0x61, 0x70, 0x69, 0x2f, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67,
+var file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDesc = []byte{
+	0x0a, 0x2e, 0x61, 0x70, 0x69, 0x2f, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67,
 	0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x2f, 0x62, 0x6c, 0x6f, 0x67, 0x5f, 0x61,
-	0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x17, 0x61, 0x70, 0x69, 0x2e,
-	0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e,
-	0x2e, 0x76, 0x31, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x22, 0x61, 0x0a, 0x0b, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71,
-	0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08,
-	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
-	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b,
-	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b,
-	0x6e, 0x61, 0x6d, 0x65, 0x22, 0x21, 0x0a, 0x0d, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x04, 0x52, 0x03, 0x75, 0x69, 0x64, 0x22, 0x42, 0x0a, 0x08, 0x4c, 0x6f, 0x67, 0x69, 0x6e,
-	0x52, 0x65, 0x71, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12,
-	0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x22, 0x0a, 0x0a, 0x4c,
-	0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b,
-	0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22,
-	0x0b, 0x0a, 0x09, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x22, 0x0d, 0x0a, 0x0b,
-	0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x0a, 0x18, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x18, 0x0a, 0x16, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c,
-	0x79, 0x22, 0x1a, 0x0a, 0x18, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f,
+	0x64, 0x6d, 0x69, 0x6e, 0x5f, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x12, 0x17, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67,
+	0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x1a, 0x1c, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x61, 0x0a, 0x0b, 0x52, 0x65, 0x67, 0x69, 0x73,
+	0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x21, 0x0a, 0x0d, 0x52, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x75,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x03, 0x75, 0x69, 0x64, 0x22, 0x42, 0x0a,
+	0x08, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65,
+	0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65,
+	0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
+	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
+	0x64, 0x22, 0x22, 0x0a, 0x0a, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12,
+	0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
+	0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x0b, 0x0a, 0x09, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52,
+	0x65, 0x71, 0x22, 0x0d, 0x0a, 0x0b, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x22, 0x1a, 0x0a, 0x18, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f,
 	0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x18, 0x0a,
-	0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d,
-	0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x0a, 0x18, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x16, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d,
+	0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x0a, 0x18, 0x55, 0x70, 0x64, 0x61, 0x74,
 	0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x22, 0x18, 0x0a, 0x16, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x51, 0x79, 0x42,
-	0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x17, 0x0a,
-	0x15, 0x47, 0x65, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x51, 0x79, 0x42,
-	0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x18, 0x0a,
-	0x16, 0x4c, 0x69, 0x73, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x51,
-	0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x32,
-	0xf3, 0x01, 0x0a, 0x0b, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x12,
-	0x6f, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x21, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x71,
-	0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e,
-	0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x1a, 0x23, 0x2e, 0x61, 0x70,
-	0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d,
-	0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18, 0x22, 0x13, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61,
-	0x64, 0x6d, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x2f, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x3a, 0x01, 0x2a,
-	0x12, 0x73, 0x0a, 0x06, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69,
-	0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69,
-	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x24,
-	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e,
-	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52,
-	0x65, 0x70, 0x6c, 0x79, 0x22, 0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x22, 0x14, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x2f, 0x6c, 0x6f, 0x67, 0x6f,
-	0x75, 0x74, 0x3a, 0x01, 0x2a, 0x42, 0x54, 0x0a, 0x17, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63,
+	0x65, 0x73, 0x74, 0x22, 0x18, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x51, 0x79, 0x42,
+	0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1a, 0x0a,
+	0x18, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d,
+	0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x18, 0x0a, 0x16, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x22, 0x17, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67,
+	0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13,
+	0x47, 0x65, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x22, 0x18, 0x0a, 0x16, 0x4c, 0x69, 0x73, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f,
+	0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x16, 0x0a,
+	0x14, 0x4c, 0x69, 0x73, 0x74, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67, 0x41, 0x64, 0x6d, 0x69, 0x6e,
+	0x52, 0x65, 0x70, 0x6c, 0x79, 0x32, 0xf8, 0x01, 0x0a, 0x10, 0x51, 0x79, 0x42, 0x6c, 0x6f, 0x67,
+	0x41, 0x64, 0x6d, 0x69, 0x6e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x6f, 0x0a, 0x05, 0x4c, 0x6f,
+	0x67, 0x69, 0x6e, 0x12, 0x21, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f,
+	0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f,
+	0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x1a, 0x23, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63,
 	0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31,
-	0x50, 0x01, 0x5a, 0x37, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69,
-	0x77, 0x69, 0x6e, 0x64, 0x65, 0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f,
-	0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x1e, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x18, 0x22, 0x13, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2f,
+	0x76, 0x31, 0x2f, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x3a, 0x01, 0x2a, 0x12, 0x73, 0x0a, 0x06, 0x4c,
+	0x6f, 0x67, 0x6f, 0x75, 0x74, 0x12, 0x22, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d,
+	0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x24, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e,
+	0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
+	0x1f, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x19, 0x22, 0x14, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x64,
+	0x6d, 0x69, 0x6e, 0x2f, 0x76, 0x31, 0x2f, 0x6c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x3a, 0x01, 0x2a,
+	0x42, 0x54, 0x0a, 0x17, 0x61, 0x70, 0x69, 0x2e, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c,
+	0x6f, 0x67, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x76, 0x31, 0x50, 0x01, 0x5a, 0x37, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x77, 0x69, 0x6e, 0x64, 0x65,
+	0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f, 0x61, 0x64, 0x6d, 0x69, 0x6e,
+	0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescOnce sync.Once
-	file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescData = file_api_qycms_blog_admin_v1_blog_admin_proto_rawDesc
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescOnce sync.Once
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescData = file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDesc
 )
 
-func file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescGZIP() []byte {
-	file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescOnce.Do(func() {
-		file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescData = protoimpl.X.CompressGZIP(file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescData)
+func file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescGZIP() []byte {
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescOnce.Do(func() {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescData = protoimpl.X.CompressGZIP(file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescData)
 	})
-	return file_api_qycms_blog_admin_v1_blog_admin_proto_rawDescData
+	return file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDescData
 }
 
-var file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
-var file_api_qycms_blog_admin_v1_blog_admin_proto_goTypes = []interface{}{
+var file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_api_qycms_blog_admin_v1_blog_admin_login_proto_goTypes = []interface{}{
 	(*RegisterReq)(nil),              // 0: api.qycms_blog.admin.v1.RegisterReq
 	(*RegisterReply)(nil),            // 1: api.qycms_blog.admin.v1.RegisterReply
 	(*LoginReq)(nil),                 // 2: api.qycms_blog.admin.v1.LoginReq
@@ -786,11 +786,11 @@ var file_api_qycms_blog_admin_v1_blog_admin_proto_goTypes = []interface{}{
 	(*ListQyBlogAdminRequest)(nil),   // 14: api.qycms_blog.admin.v1.ListQyBlogAdminRequest
 	(*ListQyBlogAdminReply)(nil),     // 15: api.qycms_blog.admin.v1.ListQyBlogAdminReply
 }
-var file_api_qycms_blog_admin_v1_blog_admin_proto_depIdxs = []int32{
-	2, // 0: api.qycms_blog.admin.v1.QyBlogAdmin.Login:input_type -> api.qycms_blog.admin.v1.LoginReq
-	4, // 1: api.qycms_blog.admin.v1.QyBlogAdmin.Logout:input_type -> api.qycms_blog.admin.v1.LogoutReq
-	3, // 2: api.qycms_blog.admin.v1.QyBlogAdmin.Login:output_type -> api.qycms_blog.admin.v1.LoginReply
-	5, // 3: api.qycms_blog.admin.v1.QyBlogAdmin.Logout:output_type -> api.qycms_blog.admin.v1.LogoutReply
+var file_api_qycms_blog_admin_v1_blog_admin_login_proto_depIdxs = []int32{
+	2, // 0: api.qycms_blog.admin.v1.QyBlogAdminLogin.Login:input_type -> api.qycms_blog.admin.v1.LoginReq
+	4, // 1: api.qycms_blog.admin.v1.QyBlogAdminLogin.Logout:input_type -> api.qycms_blog.admin.v1.LogoutReq
+	3, // 2: api.qycms_blog.admin.v1.QyBlogAdminLogin.Login:output_type -> api.qycms_blog.admin.v1.LoginReply
+	5, // 3: api.qycms_blog.admin.v1.QyBlogAdminLogin.Logout:output_type -> api.qycms_blog.admin.v1.LogoutReply
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -798,13 +798,13 @@ var file_api_qycms_blog_admin_v1_blog_admin_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_qycms_blog_admin_v1_blog_admin_proto_init() }
-func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
-	if File_api_qycms_blog_admin_v1_blog_admin_proto != nil {
+func init() { file_api_qycms_blog_admin_v1_blog_admin_login_proto_init() }
+func file_api_qycms_blog_admin_v1_blog_admin_login_proto_init() {
+	if File_api_qycms_blog_admin_v1_blog_admin_login_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterReq); i {
 			case 0:
 				return &v.state
@@ -816,7 +816,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterReply); i {
 			case 0:
 				return &v.state
@@ -828,7 +828,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginReq); i {
 			case 0:
 				return &v.state
@@ -840,7 +840,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginReply); i {
 			case 0:
 				return &v.state
@@ -852,7 +852,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LogoutReq); i {
 			case 0:
 				return &v.state
@@ -864,7 +864,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LogoutReply); i {
 			case 0:
 				return &v.state
@@ -876,7 +876,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateQyBlogAdminRequest); i {
 			case 0:
 				return &v.state
@@ -888,7 +888,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateQyBlogAdminReply); i {
 			case 0:
 				return &v.state
@@ -900,7 +900,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateQyBlogAdminRequest); i {
 			case 0:
 				return &v.state
@@ -912,7 +912,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateQyBlogAdminReply); i {
 			case 0:
 				return &v.state
@@ -924,7 +924,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteQyBlogAdminRequest); i {
 			case 0:
 				return &v.state
@@ -936,7 +936,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeleteQyBlogAdminReply); i {
 			case 0:
 				return &v.state
@@ -948,7 +948,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetQyBlogAdminRequest); i {
 			case 0:
 				return &v.state
@@ -960,7 +960,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetQyBlogAdminReply); i {
 			case 0:
 				return &v.state
@@ -972,7 +972,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListQyBlogAdminRequest); i {
 			case 0:
 				return &v.state
@@ -984,7 +984,7 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 				return nil
 			}
 		}
-		file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListQyBlogAdminReply); i {
 			case 0:
 				return &v.state
@@ -1001,18 +1001,18 @@ func file_api_qycms_blog_admin_v1_blog_admin_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_api_qycms_blog_admin_v1_blog_admin_proto_rawDesc,
+			RawDescriptor: file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_qycms_blog_admin_v1_blog_admin_proto_goTypes,
-		DependencyIndexes: file_api_qycms_blog_admin_v1_blog_admin_proto_depIdxs,
-		MessageInfos:      file_api_qycms_blog_admin_v1_blog_admin_proto_msgTypes,
+		GoTypes:           file_api_qycms_blog_admin_v1_blog_admin_login_proto_goTypes,
+		DependencyIndexes: file_api_qycms_blog_admin_v1_blog_admin_login_proto_depIdxs,
+		MessageInfos:      file_api_qycms_blog_admin_v1_blog_admin_login_proto_msgTypes,
 	}.Build()
-	File_api_qycms_blog_admin_v1_blog_admin_proto = out.File
-	file_api_qycms_blog_admin_v1_blog_admin_proto_rawDesc = nil
-	file_api_qycms_blog_admin_v1_blog_admin_proto_goTypes = nil
-	file_api_qycms_blog_admin_v1_blog_admin_proto_depIdxs = nil
+	File_api_qycms_blog_admin_v1_blog_admin_login_proto = out.File
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_rawDesc = nil
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_goTypes = nil
+	file_api_qycms_blog_admin_v1_blog_admin_login_proto_depIdxs = nil
 }

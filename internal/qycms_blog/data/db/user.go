@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
+	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"time"
@@ -58,6 +59,16 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*po.UserPO, er
 		Phone:     user.Phone,
 		AdminFlag: user.AdminFlag,
 	}
+	if user.Roles != nil && len(user.Roles) > 0 {
+		userPos := make([]*po.RolePO, len(user.Roles))
+		for _, obj := range user.Roles {
+			userPos = append(userPos, &po.RolePO{ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.ID,
+			}})
+		}
+		userPO.Roles = userPos
+	}
+
 	tUser := &po.UserPO{}
 	tUser.ID = user.ID
 	err := r.data.Db.Model(&tUser).Updates(&userPO).Error
@@ -111,7 +122,7 @@ func (r *userRepo) FindByUsername(c context.Context, username string) (*po.UserP
 }
 
 // ListAll 批量查询
-func (r *userRepo) ListAll(c context.Context, opts biz.UserListOption) (*po.UserPOList, error) {
+func (r *userRepo) ListAll(c context.Context, opts biz.UserDOListOption) (*po.UserPOList, error) {
 	ret := &po.UserPOList{}
 
 	where := &po.UserPO{}

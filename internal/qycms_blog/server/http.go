@@ -5,15 +5,16 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	v1 "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1"
 	userV1 "github.com/iwinder/qingyucms/api/qycms_user/v1"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
+	mid "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/middleware"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
+	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
 )
 
 // NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, authConf *conf.Auth, greeter *service.BlogAdminService, user *service.UserService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinData, greeter *service.BlogAdminService, user *service.UserService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
-		auth.NewMiddleware(authConf, logger),
+		mid.NewMiddleware(authConf, casbinData, logger),
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))
@@ -25,7 +26,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, greeter *service.BlogAdm
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterQyBlogAdminHTTPServer(srv, greeter)
+	v1.RegisterQyBlogAdminLoginHTTPServer(srv, greeter)
 	userV1.RegisterUserHTTPServer(srv, user)
 	return srv
 }
