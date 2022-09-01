@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.1
-// source: api/qycms_user/v1/qy_admin_user.proto
+// source: api/qycms_user/v1/user.proto
 
 package v1
 
@@ -369,5 +369,5 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/qycms_user/v1/qy_admin_user.proto",
+	Metadata: "api/qycms_user/v1/user.proto",
 }

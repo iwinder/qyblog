@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/casbin"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
@@ -28,8 +29,8 @@ type RoleDOListOption struct {
 }
 
 type RoleRepo interface {
-	Save(context.Context, *RoleDO) (*po.RolePO, error)
-	Update(context.Context, *RoleDO) (*po.RolePO, error)
+	Save(context.Context, *RoleDO) (*RoleDO, error)
+	Update(context.Context, *RoleDO) (*RoleDO, error)
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*po.RolePO, error)
@@ -38,53 +39,62 @@ type RoleRepo interface {
 }
 
 type RoleUsecase struct {
-	repo RoleRepo
-	log  *log.Helper
+	repo      RoleRepo
+	cabinRepo CasbinRuleRepo
+	log       *log.Helper
 }
 
-func NewRoleUsecase(repo RoleRepo, logger log.Logger) *RoleUsecase {
-	return &RoleUsecase{repo: repo, log: log.NewHelper(logger)}
+func NewRoleUsecase(repo RoleRepo, cabinRepo CasbinRuleRepo, logger log.Logger) *RoleUsecase {
+	return &RoleUsecase{repo: repo, cabinRepo: cabinRepo, log: log.NewHelper(logger)}
 }
 
 func (uc *RoleUsecase) Create(ctx context.Context, obj *RoleDO) (*RoleDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", obj.Name)
-	objPO, err := uc.repo.Save(ctx, obj)
+	objDO, err := uc.repo.Save(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
-	objDO := &RoleDO{Name: objPO.Name}
-	objDO.ID = objPO.ID
+
 	return objDO, nil
 }
 
-// Update 更新用户
+// Update 更新
 func (uc *RoleUsecase) Update(ctx context.Context, obj *RoleDO) (*RoleDO, error) {
 	uc.log.WithContext(ctx).Infof("Update: %v", obj.Name)
-	objPO, err := uc.repo.Update(ctx, obj)
+	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-	objDO := &RoleDO{Name: objPO.Name}
-	objDO.ID = objPO.ID
+	if obj.Apis != nil && len(obj.Apis) > 0 {
+		rules := [][]string{}
+		for _, aobj := range obj.Apis {
+			rules = append(rules, []string{casbin.PrefixRole + obj.Identifier, aobj.ApiGroup, aobj.Path, aobj.Method})
+		}
+		uc.cabinRepo.CleanPolicy(ctx, casbin.PrefixRole+obj.Identifier)
+		_, cerr := uc.cabinRepo.SavePolicies(ctx, rules)
+		if cerr != nil {
+			return nil, cerr
+		}
+	}
 	return objDO, nil
 }
 
-// Delete 根据ID删除用户
+// Delete 根据ID删除
 func (uc *RoleUsecase) Delete(ctx context.Context, id uint64) error {
 	uc.log.WithContext(ctx).Infof("Delete: %v", id)
 	return uc.repo.Delete(ctx, id)
 }
 
-// DeleteList 根据ID批量删除用户
+// DeleteList 根据ID批量删除
 func (uc *RoleUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
 	return uc.repo.DeleteList(ctx, ids)
 }
 
-// FindOneByID 根据ID查询用户信息
+// FindOneByID 根据ID查询信息
 func (uc *RoleUsecase) FindOneByID(ctx context.Context, id uint64) (*RoleDO, error) {
 	uc.log.WithContext(ctx).Infof("FindOneByID: %v", id)
 	obj, err := uc.repo.FindByID(ctx, id)
@@ -102,7 +112,7 @@ func (uc *RoleUsecase) FindOneByID(ctx context.Context, id uint64) (*RoleDO, err
 	return objDO, nil
 }
 
-// FindByKey 根据用户名查询用户信息
+// FindByKey 根据用户名查询信息
 func (uc *RoleUsecase) FindByKey(ctx context.Context, objname string) (*RoleDO, error) {
 	uc.log.WithContext(ctx).Infof("FindByKey: %v", objname)
 	obj, err := uc.repo.FindByKey(ctx, objname)

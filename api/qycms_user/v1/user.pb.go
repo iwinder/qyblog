@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.26.0
 // 	protoc        v3.21.1
-// source: api/qycms_user/v1/qy_admin_user.proto
+// source: api/qycms_user/v1/user.proto
 
 package v1
 

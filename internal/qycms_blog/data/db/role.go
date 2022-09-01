@@ -25,7 +25,7 @@ func NewRoleRepo(data *Data, logger log.Logger) biz.RoleRepo {
 }
 
 // Save 创建用户
-func (r *roleRepo) Save(ctx context.Context, obj *biz.RoleDO) (*po.RolePO, error) {
+func (r *roleRepo) Save(ctx context.Context, obj *biz.RoleDO) (*biz.RoleDO, error) {
 	objPO := &po.RolePO{
 		ObjectMeta: obj.ObjectMeta,
 		Name:       obj.Name,
@@ -35,11 +35,13 @@ func (r *roleRepo) Save(ctx context.Context, obj *biz.RoleDO) (*po.RolePO, error
 	if err != nil {
 		return nil, err
 	}
-	return objPO, nil
+	objDO := &biz.RoleDO{Name: objPO.Name}
+	objDO.ID = objPO.ID
+	return objDO, nil
 }
 
 // Update 更新
-func (r *roleRepo) Update(ctx context.Context, obj *biz.RoleDO) (*po.RolePO, error) {
+func (r *roleRepo) Update(ctx context.Context, obj *biz.RoleDO) (*biz.RoleDO, error) {
 	objPO := &po.RolePO{
 		Name:       obj.Name,
 		Identifier: obj.Identifier,
@@ -68,7 +70,9 @@ func (r *roleRepo) Update(ctx context.Context, obj *biz.RoleDO) (*po.RolePO, err
 	if err != nil {
 		return nil, err
 	}
-	return objPO, nil
+	objDO := &biz.RoleDO{Name: objPO.Name}
+	objDO.ID = objPO.ID
+	return objDO, nil
 }
 
 // Delete 根据ID删除

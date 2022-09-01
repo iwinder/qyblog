@@ -4,7 +4,8 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
-	v1 "github.com/iwinder/qingyucms/api/qycms_user/v1"
+	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
+	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 )
 
@@ -23,7 +24,7 @@ func (s *BlogAdminService) CreateUser(ctx context.Context, in *v1.CreateUserRequ
 	if err != nil {
 		return nil, err
 	}
-	u := UserResponse(user)
+	u := bizToUserResponse(user)
 	return &v1.CreateUserReply{User: &u}, nil
 }
 
@@ -36,11 +37,24 @@ func (s *BlogAdminService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequ
 		Email:    in.Email,
 		Phone:    in.Phone,
 	}
+	if in.Roles != nil && len(in.Roles) > 0 {
+		roles := make([]*biz.RoleDO, 0, len(in.Roles))
+		for _, obj := range in.Roles {
+			roles = append(roles, &biz.RoleDO{
+				ObjectMeta: metaV1.ObjectMeta{
+					ID: obj.Uid,
+				},
+				Name:       obj.Name,
+				Identifier: obj.Identifier,
+			})
+		}
+		userDO.Roles = roles
+	}
 	user, err := s.uc.Update(ctx, userDO)
 	if err != nil {
 		return nil, err
 	}
-	u := UserResponse(user)
+	u := bizToUserResponse(user)
 	return &v1.UpdateUserReply{User: &u}, nil
 }
 
@@ -68,7 +82,7 @@ func (s *BlogAdminService) GetUser(ctx context.Context, in *v1.GetUserRequest) (
 	if err != nil {
 		return nil, err
 	}
-	u := UserResponse(user)
+	u := bizToUserResponse(user)
 	return &v1.GetUserReply{User: &u}, nil
 }
 
@@ -87,7 +101,7 @@ func (s *BlogAdminService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoReques
 	if err != nil {
 		return nil, err
 	}
-	u := UserResponse(user)
+	u := bizToUserResponse(user)
 	return &v1.GetUserReply{User: &u}, nil
 }
 
@@ -128,4 +142,15 @@ func (s *BlogAdminService) ListUser(ctx context.Context, in *v1.ListUserRequest)
 		})
 	}
 	return &v1.ListUserReply{PageInfo: pageInfo, Items: users}, nil
+}
+func bizToUserResponse(user *biz.UserDO) v1.UserInfoResponse {
+	userInfoRsp := v1.UserInfoResponse{
+		Uid:      user.ID,
+		Username: user.Username,
+		NickName: user.Nickname,
+		Avatar:   user.Avatar,
+		Email:    user.Email,
+	}
+
+	return userInfoRsp
 }

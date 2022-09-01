@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.4.1
 // - protoc             v3.21.1
-// source: api/qycms_user/v1/user.proto
+// source: api/qycms_bff/admin/v1/qy_admin_user.proto
 
 package v1
 
@@ -19,15 +19,15 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserCreateUser = "/api.qycms_user.v1.User/CreateUser"
-const OperationUserDeleteUser = "/api.qycms_user.v1.User/DeleteUser"
-const OperationUserDeleteUsers = "/api.qycms_user.v1.User/DeleteUsers"
-const OperationUserGetMyInfo = "/api.qycms_user.v1.User/GetMyInfo"
-const OperationUserGetUser = "/api.qycms_user.v1.User/GetUser"
-const OperationUserListUser = "/api.qycms_user.v1.User/ListUser"
-const OperationUserUpdateUser = "/api.qycms_user.v1.User/UpdateUser"
+const OperationQyAdminUserCreateUser = "/api.qycms_bff.admin.v1.QyAdminUser/CreateUser"
+const OperationQyAdminUserDeleteUser = "/api.qycms_bff.admin.v1.QyAdminUser/DeleteUser"
+const OperationQyAdminUserDeleteUsers = "/api.qycms_bff.admin.v1.QyAdminUser/DeleteUsers"
+const OperationQyAdminUserGetMyInfo = "/api.qycms_bff.admin.v1.QyAdminUser/GetMyInfo"
+const OperationQyAdminUserGetUser = "/api.qycms_bff.admin.v1.QyAdminUser/GetUser"
+const OperationQyAdminUserListUser = "/api.qycms_bff.admin.v1.QyAdminUser/ListUser"
+const OperationQyAdminUserUpdateUser = "/api.qycms_bff.admin.v1.QyAdminUser/UpdateUser"
 
-type UserHTTPServer interface {
+type QyAdminUserHTTPServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
@@ -37,24 +37,24 @@ type UserHTTPServer interface {
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
 }
 
-func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
+func RegisterQyAdminUserHTTPServer(s *http.Server, srv QyAdminUserHTTPServer) {
 	r := s.Route("/")
-	r.POST("/api/admin/v1/user", _User_CreateUser0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/user/{uid}", _User_UpdateUser0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/user/{uid}", _User_DeleteUser0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/user", _User_DeleteUsers0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/user/{uid}", _User_GetUser0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/myInfo", _User_GetMyInfo0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/user", _User_ListUser0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/user", _QyAdminUser_CreateUser0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/user/{uid}", _QyAdminUser_UpdateUser0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/user/{uid}", _QyAdminUser_DeleteUser0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/user", _QyAdminUser_DeleteUsers0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/user/{uid}", _QyAdminUser_GetUser0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/myInfo", _QyAdminUser_GetMyInfo0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/user", _QyAdminUser_ListUser0_HTTP_Handler(srv))
 }
 
-func _User_CreateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_CreateUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateUserRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserCreateUser)
+		http.SetOperation(ctx, OperationQyAdminUserCreateUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateUser(ctx, req.(*CreateUserRequest))
 		})
@@ -67,7 +67,7 @@ func _User_CreateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _User_UpdateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_UpdateUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateUserRequest
 		if err := ctx.Bind(&in); err != nil {
@@ -76,7 +76,7 @@ func _User_UpdateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserUpdateUser)
+		http.SetOperation(ctx, OperationQyAdminUserUpdateUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.UpdateUser(ctx, req.(*UpdateUserRequest))
 		})
@@ -89,7 +89,7 @@ func _User_UpdateUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _User_DeleteUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_DeleteUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteUserRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -98,7 +98,7 @@ func _User_DeleteUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserDeleteUser)
+		http.SetOperation(ctx, OperationQyAdminUserDeleteUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.DeleteUser(ctx, req.(*DeleteUserRequest))
 		})
@@ -111,13 +111,13 @@ func _User_DeleteUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) e
 	}
 }
 
-func _User_DeleteUsers0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_DeleteUsers0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteUsersRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserDeleteUsers)
+		http.SetOperation(ctx, OperationQyAdminUserDeleteUsers)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.DeleteUsers(ctx, req.(*DeleteUsersRequest))
 		})
@@ -130,7 +130,7 @@ func _User_DeleteUsers0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) 
 	}
 }
 
-func _User_GetUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_GetUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetUserRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -139,7 +139,7 @@ func _User_GetUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) erro
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserGetUser)
+		http.SetOperation(ctx, OperationQyAdminUserGetUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetUser(ctx, req.(*GetUserRequest))
 		})
@@ -152,13 +152,13 @@ func _User_GetUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) erro
 	}
 }
 
-func _User_GetMyInfo0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_GetMyInfo0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetMyInfoRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserGetMyInfo)
+		http.SetOperation(ctx, OperationQyAdminUserGetMyInfo)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetMyInfo(ctx, req.(*GetMyInfoRequest))
 		})
@@ -171,13 +171,13 @@ func _User_GetMyInfo0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) er
 	}
 }
 
-func _User_ListUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+func _QyAdminUser_ListUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ListUserRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserListUser)
+		http.SetOperation(ctx, OperationQyAdminUserListUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.ListUser(ctx, req.(*ListUserRequest))
 		})
@@ -190,7 +190,7 @@ func _User_ListUser0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) err
 	}
 }
 
-type UserHTTPClient interface {
+type QyAdminUserHTTPClient interface {
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
 	DeleteUser(ctx context.Context, req *DeleteUserRequest, opts ...http.CallOption) (rsp *DeleteUserReply, err error)
 	DeleteUsers(ctx context.Context, req *DeleteUsersRequest, opts ...http.CallOption) (rsp *DeleteUsersReply, err error)
@@ -200,19 +200,19 @@ type UserHTTPClient interface {
 	UpdateUser(ctx context.Context, req *UpdateUserRequest, opts ...http.CallOption) (rsp *UpdateUserReply, err error)
 }
 
-type UserHTTPClientImpl struct {
+type QyAdminUserHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewUserHTTPClient(client *http.Client) UserHTTPClient {
-	return &UserHTTPClientImpl{client}
+func NewQyAdminUserHTTPClient(client *http.Client) QyAdminUserHTTPClient {
+	return &QyAdminUserHTTPClientImpl{client}
 }
 
-func (c *UserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...http.CallOption) (*CreateUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...http.CallOption) (*CreateUserReply, error) {
 	var out CreateUserReply
 	pattern := "/api/admin/v1/user"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserCreateUser))
+	opts = append(opts, http.Operation(OperationQyAdminUserCreateUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -221,11 +221,11 @@ func (c *UserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserReque
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...http.CallOption) (*DeleteUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...http.CallOption) (*DeleteUserReply, error) {
 	var out DeleteUserReply
 	pattern := "/api/admin/v1/user/{uid}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserDeleteUser))
+	opts = append(opts, http.Operation(OperationQyAdminUserDeleteUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
@@ -234,11 +234,11 @@ func (c *UserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUserReque
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...http.CallOption) (*DeleteUsersReply, error) {
+func (c *QyAdminUserHTTPClientImpl) DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...http.CallOption) (*DeleteUsersReply, error) {
 	var out DeleteUsersReply
 	pattern := "/api/admin/v1/user"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserDeleteUsers))
+	opts = append(opts, http.Operation(OperationQyAdminUserDeleteUsers))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
 	if err != nil {
@@ -247,11 +247,11 @@ func (c *UserHTTPClientImpl) DeleteUsers(ctx context.Context, in *DeleteUsersReq
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...http.CallOption) (*GetUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...http.CallOption) (*GetUserReply, error) {
 	var out GetUserReply
 	pattern := "/api/admin/v1/myInfo"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserGetMyInfo))
+	opts = append(opts, http.Operation(OperationQyAdminUserGetMyInfo))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -260,11 +260,11 @@ func (c *UserHTTPClientImpl) GetMyInfo(ctx context.Context, in *GetMyInfoRequest
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserReply, error) {
 	var out GetUserReply
 	pattern := "/api/admin/v1/user/{uid}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserGetUser))
+	opts = append(opts, http.Operation(OperationQyAdminUserGetUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -273,11 +273,11 @@ func (c *UserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, op
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) ListUser(ctx context.Context, in *ListUserRequest, opts ...http.CallOption) (*ListUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) ListUser(ctx context.Context, in *ListUserRequest, opts ...http.CallOption) (*ListUserReply, error) {
 	var out ListUserReply
 	pattern := "/api/admin/v1/user"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationUserListUser))
+	opts = append(opts, http.Operation(OperationQyAdminUserListUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -286,11 +286,11 @@ func (c *UserHTTPClientImpl) ListUser(ctx context.Context, in *ListUserRequest, 
 	return &out, err
 }
 
-func (c *UserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...http.CallOption) (*UpdateUserReply, error) {
+func (c *QyAdminUserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...http.CallOption) (*UpdateUserReply, error) {
 	var out UpdateUserReply
 	pattern := "/api/admin/v1/user/{uid}"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserUpdateUser))
+	opts = append(opts, http.Operation(OperationQyAdminUserUpdateUser))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {

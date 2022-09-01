@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/casbin"
 	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
@@ -44,11 +45,11 @@ type UserDOListOption struct {
 
 // UserRepo is a Greater repo.
 type UserRepo interface {
-	Save(context.Context, *UserDO) (*po.UserPO, error)
-	Update(context.Context, *UserDO) (*po.UserPO, error)
+	Save(context.Context, *UserDO) (*UserDO, error)
+	Update(context.Context, *UserDO) (*UserDO, error)
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
-	FindByID(context.Context, uint64) (*po.UserPO, error)
+	FindByID(context.Context, uint64) (*UserDO, error)
 	FindByUsername(c context.Context, username string) (*po.UserPO, error)
 	ListAll(c context.Context, opts UserDOListOption) (*po.UserPOList, error)
 	//VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
@@ -56,8 +57,9 @@ type UserRepo interface {
 
 // UserUsecase is a UserDO usecase.
 type UserUsecase struct {
-	repo UserRepo
-	log  *log.Helper
+	repo      UserRepo
+	cabinRepo CasbinRuleRepo
+	log       *log.Helper
 }
 
 // NewUserUsecase new a UserDO usecase.
@@ -68,27 +70,46 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 // CreateUser creates a UserDO, and returns the new UserDO.
 func (uc *UserUsecase) CreateUser(ctx context.Context, user *UserDO) (*UserDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", user.Username)
-	userPO, err := uc.repo.Save(ctx, user)
+	userDO, err := uc.repo.Save(ctx, user)
 	if err != nil {
 		return nil, err
 	}
-	userDO := &UserDO{Username: userPO.Username}
-	userDO.ID = userPO.ID
+	if user.Roles != nil && len(user.Roles) > 0 {
+		roleIdfStrs := make([]string, 0)
+		for _, obj := range user.Roles {
+			roleIdfStrs = append(roleIdfStrs, casbin.PrefixRole+obj.Identifier)
+		}
+		// 权限
+		if len(roleIdfStrs) > 0 {
+			uc.cabinRepo.SaveRoleForUser(ctx, casbin.PrefixUser+user.Username, roleIdfStrs, "*")
+		}
+	}
+
 	return userDO, nil
 }
 
 // Update 更新用户
 func (uc *UserUsecase) Update(ctx context.Context, user *UserDO) (*UserDO, error) {
 	uc.log.WithContext(ctx).Infof("Update: %v", user.Username)
-	userPO, err := uc.repo.Update(ctx, user)
+	userDO, err := uc.repo.Update(ctx, user)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-	userDO := &UserDO{Username: userPO.Username}
-	userDO.ID = userPO.ID
+
+	if user.Roles != nil && len(user.Roles) > 0 {
+		roleIdfStrs := make([]string, 0)
+		for _, obj := range user.Roles {
+			roleIdfStrs = append(roleIdfStrs, casbin.PrefixRole+obj.Identifier)
+		}
+		// 权限
+		if len(roleIdfStrs) > 0 {
+			uc.cabinRepo.UpdateRoleForUser(ctx, casbin.PrefixUser+user.Username, roleIdfStrs, "*")
+		}
+	}
+
 	return userDO, nil
 }
 
@@ -114,18 +135,8 @@ func (uc *UserUsecase) FindOneByID(ctx context.Context, id uint64) (*UserDO, err
 		}
 		return nil, err
 	}
-	userDO := &UserDO{
-		ObjectMeta: user.ObjectMeta,
-		Username:   user.Username,
-		Nickname:   user.Nickname,
-		Avatar:     user.Avatar,
-		//Password:   user.Password,
-		//Salt:       user.Salt,
-		Email:     user.Email,
-		Phone:     user.Phone,
-		AdminFlag: user.AdminFlag,
-	}
-	return userDO, nil
+
+	return user, nil
 }
 
 // FindOneByUsername 根据用户名查询用户信息

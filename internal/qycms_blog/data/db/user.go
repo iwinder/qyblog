@@ -30,7 +30,7 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 }
 
 // Save 创建用户
-func (r *userRepo) Save(ctx context.Context, user *biz.UserDO) (*po.UserPO, error) {
+func (r *userRepo) Save(ctx context.Context, user *biz.UserDO) (*biz.UserDO, error) {
 	userPO := &po.UserPO{
 		ObjectMeta: user.ObjectMeta,
 		Username:   user.Username,
@@ -42,15 +42,28 @@ func (r *userRepo) Save(ctx context.Context, user *biz.UserDO) (*po.UserPO, erro
 		Phone:      user.Phone,
 		AdminFlag:  user.AdminFlag,
 	}
+
+	if user.Roles != nil && len(user.Roles) > 0 {
+		userPos := make([]*po.RolePO, len(user.Roles))
+		for _, obj := range user.Roles {
+			userPos = append(userPos, &po.RolePO{ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.ID,
+			}})
+		}
+		userPO.Roles = userPos
+	}
 	err := r.data.Db.Create(userPO).Error
 	if err != nil {
 		return nil, err
 	}
-	return userPO, nil
+
+	userDO := &biz.UserDO{Username: userPO.Username}
+	userDO.ID = userPO.ID
+	return userDO, nil
 }
 
 // Update 更新用户
-func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*po.UserPO, error) {
+func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*biz.UserDO, error) {
 	userPO := &po.UserPO{
 		Username:  user.Username,
 		Nickname:  user.Nickname,
@@ -59,6 +72,7 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*po.UserPO, er
 		Phone:     user.Phone,
 		AdminFlag: user.AdminFlag,
 	}
+
 	if user.Roles != nil && len(user.Roles) > 0 {
 		userPos := make([]*po.RolePO, len(user.Roles))
 		for _, obj := range user.Roles {
@@ -75,7 +89,10 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*po.UserPO, er
 	if err != nil {
 		return nil, err
 	}
-	return userPO, nil
+
+	userDO := &biz.UserDO{Username: userPO.Username}
+	userDO.ID = userPO.ID
+	return userDO, nil
 }
 
 // Delete 根据ID删除用户
@@ -94,12 +111,12 @@ func (r *userRepo) DeleteList(c context.Context, ids []uint64) error {
 }
 
 // FindByID 根据ID查询用户信息
-func (r *userRepo) FindByID(ctx context.Context, id uint64) (*po.UserPO, error) {
+func (r *userRepo) FindByID(ctx context.Context, id uint64) (*biz.UserDO, error) {
 	cacheKey := userCacheKey(fmt.Sprintf("%d", id))
 	user, err := r.getUserFromCache(ctx, cacheKey)
 	if err != nil {
 		user = &po.UserPO{}
-		err := r.data.Db.Where("id = ?", id).First(&user).Error
+		err := r.data.Db.Where("id = ?", id).Preload("Roles").First(&user).Error
 		user.Password = ""
 		if err != nil {
 			return nil, biz.ErrUserNotFound
@@ -111,7 +128,28 @@ func (r *userRepo) FindByID(ctx context.Context, id uint64) (*po.UserPO, error) 
 		return nil, err
 	}
 
-	return user, nil
+	userDO := &biz.UserDO{
+		ObjectMeta: user.ObjectMeta,
+		Username:   user.Username,
+		Nickname:   user.Nickname,
+		Avatar:     user.Avatar,
+		Email:      user.Email,
+		Phone:      user.Phone,
+		AdminFlag:  user.AdminFlag,
+	}
+	if user.Roles != nil && len(user.Roles) > 0 {
+		userPos := make([]*biz.RoleDO, len(user.Roles))
+		for _, obj := range user.Roles {
+			userPos = append(userPos, &biz.RoleDO{ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.ID,
+			},
+				Name:       obj.Name,
+				Identifier: obj.Identifier,
+			})
+		}
+		userDO.Roles = userPos
+	}
+	return userDO, nil
 }
 
 // FindByUsername 根据用户名查询用户
@@ -130,7 +168,7 @@ func (r *userRepo) ListAll(c context.Context, opts biz.UserDOListOption) (*po.Us
 
 	if opts.PageFlag {
 		ol := gormutil.Unpointer(opts.Offset, opts.Limit)
-		d := r.data.Db.Model(where).Where(where).
+		d := r.data.Db.Model(where).Preload("Roles").Where(where).
 			Offset(ol.Offset).
 			Limit(ol.Limit).
 			Order("id desc").
@@ -140,7 +178,7 @@ func (r *userRepo) ListAll(c context.Context, opts biz.UserDOListOption) (*po.Us
 			Count(&ret.TotalCount)
 		err = d.Error
 	} else {
-		d := r.data.Db.Model(where).Where(where).
+		d := r.data.Db.Model(where).Preload("Roles").Where(where).
 			Find(&ret.Items).
 			Count(&ret.TotalCount)
 		err = d.Error

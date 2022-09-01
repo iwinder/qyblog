@@ -8,12 +8,38 @@ option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
 service QyAdminMenusAdmin {
-	rpc CreateQyAdminMenusAdmin (CreateQyAdminMenusAdminRequest) returns (CreateQyAdminMenusAdminReply);
-	rpc UpdateQyAdminMenusAdmin (UpdateQyAdminMenusAdminRequest) returns (UpdateQyAdminMenusAdminReply);
-	rpc DeleteQyAdminMenusAdmin (DeleteQyAdminMenusAdminRequest) returns (DeleteQyAdminMenusAdminReply);
-	rpc DeleteQyAdminMenusAdmins (DeleteQyAdminMenusAdminsRequest) returns (DeleteQyAdminMenusAdminsReply);
-	rpc GetQyAdminMenusAdmin (GetQyAdminMenusAdminRequest) returns (GetQyAdminMenusAdminReply);
-	rpc ListQyAdminMenusAdmin (ListQyAdminMenusAdminRequest) returns (ListQyAdminMenusAdminReply);
+	rpc CreateQyAdminMenusAdmin (CreateQyAdminMenusAdminRequest) returns (CreateQyAdminMenusAdminReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/menusAdmin",
+			body:"*"
+		};
+	}
+	rpc UpdateQyAdminMenusAdmin (UpdateQyAdminMenusAdminRequest) returns (UpdateQyAdminMenusAdminReply){
+		option (google.api.http) = {
+			put: "/api/admin/v1/menusAdmin/{uid}",
+			body:"*"
+		};
+	}
+	rpc DeleteQyAdminMenusAdmin (DeleteQyAdminMenusAdminRequest) returns (DeleteQyAdminMenusAdminReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/menusAdmin/{uid}",
+		};
+	}
+	rpc DeleteQyAdminMenusAdmins (DeleteQyAdminMenusAdminsRequest) returns (DeleteQyAdminMenusAdminsReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/menusAdmin",
+		};
+	}
+	rpc GetQyAdminMenusAdmin (GetQyAdminMenusAdminRequest) returns (GetQyAdminMenusAdminReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/menusAdmin/{uid}",
+		};
+	}
+	rpc ListQyAdminMenusAdmin (ListQyAdminMenusAdminRequest) returns (ListQyAdminMenusAdminReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/menusAdmin",
+		};
+	}
 }
 
 message MenusAdminInfoResponse {
@@ -29,7 +55,8 @@ message MenusAdminInfoResponse {
 	repeated MenusAdminInfoResponse children =10;
 }
 
-message PageInfo {
+
+message MenusAdmPageInfo {
 	uint64 page = 1;
 	uint64 size = 2;
 	uint64 total = 3;
@@ -85,9 +112,9 @@ message GetQyAdminMenusAdminReply {
 }
 
 message ListQyAdminMenusAdminRequest {
-	PageInfo pageInfo = 1;
+	MenusAdmPageInfo pageInfo = 1;
 }
 message ListQyAdminMenusAdminReply {
-	PageInfo pageInfo = 1;
+	MenusAdmPageInfo pageInfo = 1;
 	repeated MenusAdminInfoResponse items = 2;
 }

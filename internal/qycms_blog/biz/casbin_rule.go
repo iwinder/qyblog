@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 )
@@ -12,7 +13,10 @@ type CasbinRuleDO struct {
 }
 
 type CasbinRuleRepo interface {
-	//Save(context.Context, *RoleDO) (*po.RolePO, error)
+	SaveRoleForUser(ctx context.Context, user string, roles []string, domain ...string) (bool, error)
+	UpdateRoleForUser(ctx context.Context, user string, roles []string, domain ...string) (bool, error)
+	SavePolicies(ctx context.Context, rules [][]string) (bool, error)
+	CleanPolicy(ctx context.Context, p ...string) bool
 	//Update(context.Context, *RoleDO) (*po.RolePO, error)
 	//Delete(context.Context, uint64) error
 	//DeleteList(c context.Context, uids []uint64) error

@@ -7,6 +7,7 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+
 service QyAdminRole {
 	rpc CreateQyAdminRole (CreateQyAdminRoleRequest) returns (CreateQyAdminRoleReply){
 		option (google.api.http) = {
@@ -28,7 +29,6 @@ service QyAdminRole {
 	rpc DeleteQyAdminRoles (DeleteQyAdminRolesRequest) returns (DeleteQyAdminRolesReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/role",
-			body:"*"
 		};
 	}
 	rpc GetQyAdminRole (GetQyAdminRoleRequest) returns (GetQyAdminRoleReply){
@@ -39,12 +39,19 @@ service QyAdminRole {
 	rpc ListQyAdminRole (ListQyAdminRoleRequest) returns (ListQyAdminRoleReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/role",
-			body:"*"
 		};
 	}
 }
 
-message PageInfo {
+
+
+message		RoleInfoResponse {
+	uint64 uid = 1;
+	string name = 2;
+	string identifier =3;
+}
+
+message RolePageInfo {
 	uint64 page = 1;
 	uint64 size = 2;
 	uint64 total = 3;
@@ -53,13 +60,7 @@ message PageInfo {
 	bool LastFlag = 6;
 }
 
-message		RoleInfoResponse {
-	uint64 uid = 1;
-	string name = 2;
-	string identifier =3;
-}
-
-message MenusAdminInfoResponse {
+message RMenusAdminInfoResponse {
 	uint64 uid = 1;
 	string Name    =2;
 	string Identifier    =3;
@@ -69,8 +70,16 @@ message MenusAdminInfoResponse {
 	string Component         =7;
 	int32 Sort                =8;
 	uint32 Level             =9;
-	repeated MenusAdminInfoResponse children =10;
 }
+
+message	RApiInfoResponse {
+	uint64 uid = 1;
+	string	ApiGroup    =2;
+	string Method          =3;
+	string Path              =4;
+	string Description        =5;
+}
+
 
 message CreateQyAdminRoleRequest {
 	string name = 1;
@@ -84,8 +93,8 @@ message UpdateQyAdminRoleRequest {
 	uint64 uid = 1;
 	string name = 2;
 	string identifier =3;
-	repeated	MenusAdminInfoResponse menusAdmin = 4;
-	repeated	MenusAdminInfoResponse apis = 5;
+	repeated	RMenusAdminInfoResponse menusAdmin = 4;
+	repeated	RApiInfoResponse apis = 5;
 }
 message UpdateQyAdminRoleReply {
 	uint64 uid = 1;
@@ -110,9 +119,9 @@ message GetQyAdminRoleReply {
 }
 
 message ListQyAdminRoleRequest {
-	PageInfo pageInfo = 1;
+	RolePageInfo pageInfo = 1;
 }
 message ListQyAdminRoleReply {
-	PageInfo pageInfo = 1;
+	RolePageInfo pageInfo = 1;
 	repeated RoleInfoResponse items = 2;
 }

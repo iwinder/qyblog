@@ -9,11 +9,38 @@ option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
 service QyAdminApi {
-	rpc CreateQyAdminApi (CreateQyAdminApiRequest) returns (CreateQyAdminApiReply);
-	rpc UpdateQyAdminApi (UpdateQyAdminApiRequest) returns (UpdateQyAdminApiReply);
-	rpc DeleteQyAdminApi (DeleteQyAdminApiRequest) returns (DeleteQyAdminApiReply);
-	rpc GetQyAdminApi (GetQyAdminApiRequest) returns (GetQyAdminApiReply);
-	rpc ListQyAdminApi (ListQyAdminApiRequest) returns (ListQyAdminApiReply);
+	rpc CreateQyAdminApi (CreateQyAdminApiRequest) returns (CreateQyAdminApiReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/sysapi",
+			body:"*"
+		};
+	}
+	rpc UpdateQyAdminApi (UpdateQyAdminApiRequest) returns (UpdateQyAdminApiReply){
+		option (google.api.http) = {
+			put: "/api/admin/v1/sysapi/{uid}",
+			body:"*"
+		};
+	}
+	rpc DeleteQyAdminApi (DeleteQyAdminApiRequest) returns (DeleteQyAdminApiReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/sysapi/{uid}",
+		};
+	}
+	rpc DeleteQyAdminApis (DeleteQyAdminApisRequest) returns (DeleteQyAdminApisReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/sysapi",
+		};
+	}
+	rpc GetQyAdminApi (GetQyAdminApiRequest) returns (GetQyAdminApiReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/sysapi/{uid}",
+		};
+	}
+	rpc ListQyAdminApi (ListQyAdminApiRequest) returns (ListQyAdminApiReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/sysapi",
+		};
+	}
 }
 
 message	ApiInfoResponse {
@@ -24,7 +51,7 @@ message	ApiInfoResponse {
 	string Description        =5;
 }
 
-message PageInfo {
+message APIPageInfo {
 	uint64 page = 1;
 	uint64 size = 2;
 	uint64 total = 3;
@@ -60,6 +87,11 @@ message DeleteQyAdminApiRequest {
 }
 message DeleteQyAdminApiReply {}
 
+message DeleteQyAdminApisRequest {
+	repeated uint64 uids = 1;
+}
+message DeleteQyAdminApisReply {}
+
 message GetQyAdminApiRequest {
 	uint64 uid = 1;
 }
@@ -68,9 +100,9 @@ message GetQyAdminApiReply {
 }
 
 message ListQyAdminApiRequest {
-	PageInfo pageInfo = 1;
+	APIPageInfo pageInfo = 1;
 }
 message ListQyAdminApiReply {
-	PageInfo pageInfo = 1;
+	APIPageInfo pageInfo = 1;
 	repeated ApiInfoResponse items = 2;
 }

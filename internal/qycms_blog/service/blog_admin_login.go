@@ -2,13 +2,17 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1"
+	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 )
 
 type BlogAdminService struct {
-	v1.UnimplementedQyBlogAdminLoginServer
+	v1.UnimplementedQyAdminLoginServer
+	v1.UnimplementedQyAdminUserServer
+	v1.UnimplementedQyAdminRoleServer
+	v1.UnimplementedQyAdminMenusAdminServer
+	v1.UnimplementedQyAdminApiServer
 	conf     *conf.Qycms
 	authConf *conf.Auth
 	uc       *biz.UserUsecase
