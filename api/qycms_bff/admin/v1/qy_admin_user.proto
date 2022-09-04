@@ -7,7 +7,7 @@ option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
 service QyAdminUser {
-	// 创建新用户
+	// 新增用户
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/user",
@@ -17,14 +17,14 @@ service QyAdminUser {
 	// 更新用户
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
 		option (google.api.http) = {
-			put: "/api/admin/v1/user/{uid}",
+			put: "/api/admin/v1/user/{id}",
 			body:"*"
 		};
 	};
 	// 删除
 	rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply){
 		option (google.api.http) = {
-			delete: "/api/admin/v1/user/{uid}"
+			delete: "/api/admin/v1/user/{id}"
 		};
 	};
 	// 批量删除
@@ -33,19 +33,21 @@ service QyAdminUser {
 			delete: "/api/admin/v1/user",
 		};
 	};
-	// 获取用户信息
-	rpc GetUser (GetUserRequest) returns (GetUserReply){
-		option (google.api.http) = {
-			get: "/api/admin/v1/user/{uid}"
-		};
-	}
 
 	// 获取用户个人信息
 	rpc GetMyInfo (GetMyInfoRequest) returns (GetUserReply){
 		option (google.api.http) = {
-			get: "/api/admin/v1/myInfo"
+			get: "/api/admin/v1/user/myInfo"
 		};
 	}
+	// 获取用户信息
+	rpc GetUser (GetUserRequest) returns (GetUserReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/user/{id}"
+		};
+	}
+
+
 
 	// 批量获取用户
 	rpc ListUser (ListUserRequest) returns (ListUserReply){
@@ -60,7 +62,7 @@ service QyAdminUser {
 }
 
 message UserInfoResponse {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string username = 2;
 	string nickName = 3;
 	string avatar = 4;
@@ -79,7 +81,7 @@ message PageInfo {
 
 
 message URoleInfo {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string name = 2;
 	string identifier =3;
 }
@@ -99,7 +101,7 @@ message CreateUserReply {
 }
 
 message UpdateUserRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string username = 2;
 	string nickName = 3;
 	string avatar = 4;
@@ -112,27 +114,26 @@ message UpdateUserReply {
 }
 
 message DeleteUserRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message DeleteUserReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message DeleteUsersRequest {
-	repeated uint64 uids = 1;
+	repeated uint64 ids = 1;
 }
 message DeleteUsersReply {
 }
 
 message GetUserRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message GetUserReply {
 	UserInfoResponse user = 1;
 }
 
 message		GetMyInfoRequest {
-	UserInfoResponse user = 1;
 }
 
 message ListUserRequest {

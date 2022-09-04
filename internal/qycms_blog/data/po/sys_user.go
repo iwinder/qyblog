@@ -16,7 +16,7 @@ type UserPO struct {
 	Salt              string    `json:"-" gorm:"-" validate:"omitempty"`
 	Email             string    `json:"email" gorm:"column:email" validate:"required,email,min=1,max=100"`
 	Phone             string    `json:"phone" gorm:"column:phone" validate:"omitempty"`
-	AdminFlag         bool      `json:"adminFlag,omitempty" gorm:"column:admin_flag;default 0;" validate:"omitempty"`
+	AdminFlag         bool      `json:"adminFlag,omitempty" gorm:"column:admin_flag;default: 0;" validate:"omitempty"`
 	Roles             []*RolePO `gorm:"many2many:qy_sys_user_role;"`
 }
 

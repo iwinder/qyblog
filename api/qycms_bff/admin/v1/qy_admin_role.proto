@@ -17,13 +17,13 @@ service QyAdminRole {
 	}
 	rpc UpdateQyAdminRole (UpdateQyAdminRoleRequest) returns (UpdateQyAdminRoleReply){
 		option (google.api.http) = {
-			put: "/api/admin/v1/role/{uid}",
+			put: "/api/admin/v1/role/{id}",
 			body:"*"
 		};
 	}
 	rpc DeleteQyAdminRole (DeleteQyAdminRoleRequest) returns (DeleteQyAdminRoleReply){
 		option (google.api.http) = {
-			delete: "/api/admin/v1/role/{uid}",
+			delete: "/api/admin/v1/role/{id}",
 		};
 	}
 	rpc DeleteQyAdminRoles (DeleteQyAdminRolesRequest) returns (DeleteQyAdminRolesReply){
@@ -33,7 +33,7 @@ service QyAdminRole {
 	}
 	rpc GetQyAdminRole (GetQyAdminRoleRequest) returns (GetQyAdminRoleReply){
 		option (google.api.http) = {
-			get: "/api/admin/v1/role/{uid}"
+			get: "/api/admin/v1/role/{id}"
 		};
 	}
 	rpc ListQyAdminRole (ListQyAdminRoleRequest) returns (ListQyAdminRoleReply){
@@ -46,9 +46,11 @@ service QyAdminRole {
 
 
 message		RoleInfoResponse {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string name = 2;
 	string identifier =3;
+	repeated	RMenusAdminInfoResponse menusAdmin = 4;
+	repeated	RApiInfoResponse apis = 5;
 }
 
 message RolePageInfo {
@@ -61,7 +63,7 @@ message RolePageInfo {
 }
 
 message RMenusAdminInfoResponse {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string Name    =2;
 	string Identifier    =3;
 	uint64 ParentId         =4;
@@ -73,11 +75,12 @@ message RMenusAdminInfoResponse {
 }
 
 message	RApiInfoResponse {
-	uint64 uid = 1;
-	string	ApiGroup    =2;
-	string Method          =3;
-	string Path              =4;
-	string Description        =5;
+	uint64 id = 1;
+	string	apiGroup    =2;
+	string method          =3;
+	string path              =4;
+	string description        =5;
+		string identifier  = 6;
 }
 
 
@@ -86,33 +89,33 @@ message CreateQyAdminRoleRequest {
 	string identifier =2;
 }
 message CreateQyAdminRoleReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message UpdateQyAdminRoleRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string name = 2;
 	string identifier =3;
 	repeated	RMenusAdminInfoResponse menusAdmin = 4;
 	repeated	RApiInfoResponse apis = 5;
 }
 message UpdateQyAdminRoleReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message DeleteQyAdminRoleRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message DeleteQyAdminRoleReply {}
 
 
 message DeleteQyAdminRolesRequest {
-	repeated uint64 uids = 1;
+	repeated uint64 ids = 1;
 }
 message DeleteQyAdminRolesReply {}
 
 message GetQyAdminRoleRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message GetQyAdminRoleReply {
 		RoleInfoResponse info = 1;

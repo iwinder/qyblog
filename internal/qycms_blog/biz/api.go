@@ -15,6 +15,7 @@ type ApiDO struct {
 	Method      string
 	Path        string
 	Description string
+	Identifier  string
 }
 
 type ApiDOList struct {
@@ -37,12 +38,13 @@ type ApiRepo interface {
 }
 
 type ApiUsecase struct {
-	repo ApiRepo
-	log  *log.Helper
+	repo     ApiRepo
+	casbRepo CasbinRuleRepo
+	log      *log.Helper
 }
 
-func NewApiUsecase(repo ApiRepo, logger log.Logger) *ApiUsecase {
-	return &ApiUsecase{repo: repo, log: log.NewHelper(logger)}
+func NewApiUsecase(repo ApiRepo, casbRepo CasbinRuleRepo, logger log.Logger) *ApiUsecase {
+	return &ApiUsecase{repo: repo, casbRepo: casbRepo, log: log.NewHelper(logger)}
 }
 
 func (uc *ApiUsecase) Create(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
@@ -59,6 +61,15 @@ func (uc *ApiUsecase) Create(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 // Update 更新用户
 func (uc *ApiUsecase) Update(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 	uc.log.WithContext(ctx).Infof("Update: %v", obj.Path)
+	oldDO, err := uc.FindOneByID(ctx, obj.ID)
+	if err != nil {
+		return nil, err
+	}
+	_, cerr := uc.casbRepo.UpdatePolicies(ctx, oldDO, obj)
+	if cerr != nil {
+		return nil, err
+	}
+
 	objPO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -66,6 +77,7 @@ func (uc *ApiUsecase) Update(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 		}
 		return nil, err
 	}
+	// 更新权限
 	objDO := &ApiDO{Path: objPO.Path}
 	objDO.ID = objPO.ID
 	return objDO, nil
@@ -96,6 +108,7 @@ func (uc *ApiUsecase) FindOneByID(ctx context.Context, id uint64) (*ApiDO, error
 	objDO := &ApiDO{
 		ObjectMeta:  obj.ObjectMeta,
 		ApiGroup:    obj.ApiGroup,
+		Identifier:  obj.Identifier,
 		Method:      obj.Method,
 		Path:        obj.Path,
 		Description: obj.Description,
@@ -125,6 +138,7 @@ func (uc *ApiUsecase) ListAll(ctx context.Context, opts ApiDOListOption) (*ApiDO
 				UpdatedAt:  obj.UpdatedAt,
 			},
 			ApiGroup:    obj.ApiGroup,
+			Identifier:  obj.Identifier,
 			Method:      obj.Method,
 			Path:        obj.Path,
 			Description: obj.Description,

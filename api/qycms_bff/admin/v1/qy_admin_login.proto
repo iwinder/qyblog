@@ -29,7 +29,7 @@ message RegisterReq {
 }
 
 message RegisterReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message LoginReq {

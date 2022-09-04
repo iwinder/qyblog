@@ -8,22 +8,25 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+//  API接口管理
 service QyAdminApi {
+	// API接口-新增
 	rpc CreateQyAdminApi (CreateQyAdminApiRequest) returns (CreateQyAdminApiReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/sysapi",
 			body:"*"
 		};
 	}
+	//
 	rpc UpdateQyAdminApi (UpdateQyAdminApiRequest) returns (UpdateQyAdminApiReply){
 		option (google.api.http) = {
-			put: "/api/admin/v1/sysapi/{uid}",
+			put: "/api/admin/v1/sysapi/{id}",
 			body:"*"
 		};
 	}
 	rpc DeleteQyAdminApi (DeleteQyAdminApiRequest) returns (DeleteQyAdminApiReply){
 		option (google.api.http) = {
-			delete: "/api/admin/v1/sysapi/{uid}",
+			delete: "/api/admin/v1/sysapi/{id}",
 		};
 	}
 	rpc DeleteQyAdminApis (DeleteQyAdminApisRequest) returns (DeleteQyAdminApisReply){
@@ -33,7 +36,7 @@ service QyAdminApi {
 	}
 	rpc GetQyAdminApi (GetQyAdminApiRequest) returns (GetQyAdminApiReply){
 		option (google.api.http) = {
-			get: "/api/admin/v1/sysapi/{uid}",
+			get: "/api/admin/v1/sysapi/{id}",
 		};
 	}
 	rpc ListQyAdminApi (ListQyAdminApiRequest) returns (ListQyAdminApiReply){
@@ -44,11 +47,12 @@ service QyAdminApi {
 }
 
 message	ApiInfoResponse {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string	ApiGroup    =2;
 	string Method          =3;
 	string Path              =4;
 	string Description        =5;
+	string Identifier = 6;
 }
 
 message APIPageInfo {
@@ -66,34 +70,36 @@ message CreateQyAdminApiRequest {
 	string Method          =2;
 	string Path              =3;
 		string Description        =4;
+		string Identifier = 5;
 }
 message CreateQyAdminApiReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message UpdateQyAdminApiRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string	ApiGroup    =2;
 	string Method          =3;
 	string Path              =4;
 	string Description        =5;
+	string Identifier = 6;
 }
 message UpdateQyAdminApiReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message DeleteQyAdminApiRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message DeleteQyAdminApiReply {}
 
 message DeleteQyAdminApisRequest {
-	repeated uint64 uids = 1;
+	repeated uint64 ids = 1;
 }
 message DeleteQyAdminApisReply {}
 
 message GetQyAdminApiRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message GetQyAdminApiReply {
 	ApiInfoResponse info = 1;

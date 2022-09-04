@@ -22,7 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminApiClient interface {
+	// API接口-新增
 	CreateQyAdminApi(ctx context.Context, in *CreateQyAdminApiRequest, opts ...grpc.CallOption) (*CreateQyAdminApiReply, error)
+	//
 	UpdateQyAdminApi(ctx context.Context, in *UpdateQyAdminApiRequest, opts ...grpc.CallOption) (*UpdateQyAdminApiReply, error)
 	DeleteQyAdminApi(ctx context.Context, in *DeleteQyAdminApiRequest, opts ...grpc.CallOption) (*DeleteQyAdminApiReply, error)
 	DeleteQyAdminApis(ctx context.Context, in *DeleteQyAdminApisRequest, opts ...grpc.CallOption) (*DeleteQyAdminApisReply, error)
@@ -96,7 +98,9 @@ func (c *qyAdminApiClient) ListQyAdminApi(ctx context.Context, in *ListQyAdminAp
 // All implementations must embed UnimplementedQyAdminApiServer
 // for forward compatibility
 type QyAdminApiServer interface {
+	// API接口-新增
 	CreateQyAdminApi(context.Context, *CreateQyAdminApiRequest) (*CreateQyAdminApiReply, error)
+	//
 	UpdateQyAdminApi(context.Context, *UpdateQyAdminApiRequest) (*UpdateQyAdminApiReply, error)
 	DeleteQyAdminApi(context.Context, *DeleteQyAdminApiRequest) (*DeleteQyAdminApiReply, error)
 	DeleteQyAdminApis(context.Context, *DeleteQyAdminApisRequest) (*DeleteQyAdminApisReply, error)

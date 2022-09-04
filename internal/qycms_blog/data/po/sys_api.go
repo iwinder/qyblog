@@ -10,10 +10,11 @@ import (
 type ApiPO struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
 	ApiGroup          string    `json:"name" gorm:"column:api_group;comment:API分组""`
+	Identifier        string    `json:"identifier" gorm:"column:identifier;comment:路由名称，唯一英文"`
 	Method            string    `json:"method" gorm:"column:method;comment:请求方法"`
 	Path              string    `json:"identifier" gorm:"path;comment:API路径"`
 	Description       string    `json:"description" gorm:"description;comment:API简介"`
-	Roles             []*RolePO `gorm:"many2many:qy_sys_user_role;"`
+	Roles             []*RolePO `gorm:"many2many:qy_sys_role_api;"`
 }
 
 type ApiPOList struct {

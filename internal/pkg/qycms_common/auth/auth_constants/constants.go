@@ -1,4 +1,4 @@
-package casbin
+package auth_constants
 
 const (
 	PrefixUser    = "U_"

@@ -24,21 +24,23 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	if err != nil {
 		return nil, nil, err
 	}
-	articleRepo := db.NewArticleRepo(dbData, logger)
-	articleUsecase := biz.NewArticleUsecase(articleRepo, logger)
-	articleService := service.NewArticleService(articleUsecase, auth)
-	grpcServer := server.NewGRPCServer(confServer, articleService, logger)
 	casbinData, err := db.NewCasbinData(dbData, auth, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
 	userRepo := db.NewUserRepo(dbData, logger)
-	userUsecase := biz.NewUserUsecase(userRepo, logger)
-	blogAdminService := service.NewBlogAdminService(userUsecase, qycms, auth)
-	userService := service.NewUserService(userUsecase, qycms)
-	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminService, userService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	casbinRuleRepo := db.NewCasbinRuleRepo(casbinData, logger)
+	userUsecase := biz.NewUserUsecase(userRepo, casbinRuleRepo, logger)
+	roleRepo := db.NewRoleRepo(dbData, logger)
+	roleUsecase := biz.NewRoleUsecase(roleRepo, casbinRuleRepo, logger)
+	apiRepo := db.NewApiRepo(dbData, logger)
+	apiUsecase := biz.NewApiUsecase(apiRepo, casbinRuleRepo, logger)
+	menusAdminRepo := db.NewMenusAdminRepo(dbData, logger)
+	menusAdminUsecase := biz.NewMenusAdminUsecase(menusAdminRepo, logger)
+	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, menusAdminUsecase, qycms, auth)
+	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, logger)
+	app := newApp(logger, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

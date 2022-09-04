@@ -10,7 +10,7 @@ import (
 )
 
 // CreateUser 创建用户
-func (s *BlogAdminService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserReply, error) {
+func (s *BlogAdminUserService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
 		Nickname: in.NickName,
@@ -29,7 +29,7 @@ func (s *BlogAdminService) CreateUser(ctx context.Context, in *v1.CreateUserRequ
 }
 
 // UpdateUser 更新用户
-func (s *BlogAdminService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) (*v1.UpdateUserReply, error) {
+func (s *BlogAdminUserService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) (*v1.UpdateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
 		Nickname: in.NickName,
@@ -42,7 +42,7 @@ func (s *BlogAdminService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequ
 		for _, obj := range in.Roles {
 			roles = append(roles, &biz.RoleDO{
 				ObjectMeta: metaV1.ObjectMeta{
-					ID: obj.Uid,
+					ID: obj.Id,
 				},
 				Name:       obj.Name,
 				Identifier: obj.Identifier,
@@ -59,8 +59,8 @@ func (s *BlogAdminService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequ
 }
 
 // DeleteUser 根据ID删除用户
-func (s *BlogAdminService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequest) (*v1.DeleteUserReply, error) {
-	err := s.uc.Delete(ctx, in.Uid)
+func (s *BlogAdminUserService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequest) (*v1.DeleteUserReply, error) {
+	err := s.uc.Delete(ctx, in.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -68,8 +68,8 @@ func (s *BlogAdminService) DeleteUser(ctx context.Context, in *v1.DeleteUserRequ
 }
 
 // DeleteUsers 根据ID批量删除用户
-func (s *BlogAdminService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest) (*v1.DeleteUsersReply, error) {
-	err := s.uc.DeleteList(ctx, in.Uids)
+func (s *BlogAdminUserService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest) (*v1.DeleteUsersReply, error) {
+	err := s.uc.DeleteList(ctx, in.Ids)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +77,8 @@ func (s *BlogAdminService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRe
 }
 
 // GetUser 根据ID获取用户信息
-func (s *BlogAdminService) GetUser(ctx context.Context, in *v1.GetUserRequest) (*v1.GetUserReply, error) {
-	user, err := s.uc.FindOneByID(ctx, in.Uid)
+func (s *BlogAdminUserService) GetUser(ctx context.Context, in *v1.GetUserRequest) (*v1.GetUserReply, error) {
+	user, err := s.uc.FindOneByID(ctx, in.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (s *BlogAdminService) GetUser(ctx context.Context, in *v1.GetUserRequest) (
 }
 
 // GetMyInfo 获取用户个人信息
-func (s *BlogAdminService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*v1.GetUserReply, error) {
+func (s *BlogAdminUserService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*v1.GetUserReply, error) {
 	var uId uint64
 	if claims, ok := jwt.FromContext(ctx); ok {
 		c := claims.(jwtV4.MapClaims)
@@ -106,7 +106,7 @@ func (s *BlogAdminService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoReques
 }
 
 // ListUser 获取用户列表
-func (s *BlogAdminService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
+func (s *BlogAdminUserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
 	opts := biz.UserDOListOption{}
 	opts.ListOptions.Pages = 0
 	opts.ListOptions.Page = -1
@@ -133,7 +133,7 @@ func (s *BlogAdminService) ListUser(ctx context.Context, in *v1.ListUserRequest)
 	users := make([]*v1.UserInfoResponse, 0, len(userList.Items))
 	for _, user := range userList.Items {
 		users = append(users, &v1.UserInfoResponse{
-			Uid:      user.ID,
+			Id:       user.ID,
 			Username: user.Username,
 			NickName: user.Nickname,
 			Avatar:   user.Avatar,
@@ -145,7 +145,7 @@ func (s *BlogAdminService) ListUser(ctx context.Context, in *v1.ListUserRequest)
 }
 func bizToUserResponse(user *biz.UserDO) v1.UserInfoResponse {
 	userInfoRsp := v1.UserInfoResponse{
-		Uid:      user.ID,
+		Id:       user.ID,
 		Username: user.Username,
 		NickName: user.Nickname,
 		Avatar:   user.Avatar,

@@ -40,11 +40,11 @@ type QyAdminUserHTTPServer interface {
 func RegisterQyAdminUserHTTPServer(s *http.Server, srv QyAdminUserHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/user", _QyAdminUser_CreateUser0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/user/{uid}", _QyAdminUser_UpdateUser0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/user/{uid}", _QyAdminUser_DeleteUser0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/user/{id}", _QyAdminUser_UpdateUser0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/user/{id}", _QyAdminUser_DeleteUser0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/user", _QyAdminUser_DeleteUsers0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/user/{uid}", _QyAdminUser_GetUser0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/myInfo", _QyAdminUser_GetMyInfo0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/user/myInfo", _QyAdminUser_GetMyInfo0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/user/{id}", _QyAdminUser_GetUser0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/user", _QyAdminUser_ListUser0_HTTP_Handler(srv))
 }
 
@@ -130,6 +130,25 @@ func _QyAdminUser_DeleteUsers0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx 
 	}
 }
 
+func _QyAdminUser_GetMyInfo0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetMyInfoRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminUserGetMyInfo)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetMyInfo(ctx, req.(*GetMyInfoRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _QyAdminUser_GetUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetUserRequest
@@ -142,25 +161,6 @@ func _QyAdminUser_GetUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http
 		http.SetOperation(ctx, OperationQyAdminUserGetUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.GetUser(ctx, req.(*GetUserRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetUserReply)
-		return ctx.Result(200, reply)
-	}
-}
-
-func _QyAdminUser_GetMyInfo0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetMyInfoRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationQyAdminUserGetMyInfo)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetMyInfo(ctx, req.(*GetMyInfoRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -223,7 +223,7 @@ func (c *QyAdminUserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUs
 
 func (c *QyAdminUserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...http.CallOption) (*DeleteUserReply, error) {
 	var out DeleteUserReply
-	pattern := "/api/admin/v1/user/{uid}"
+	pattern := "/api/admin/v1/user/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminUserDeleteUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -249,7 +249,7 @@ func (c *QyAdminUserHTTPClientImpl) DeleteUsers(ctx context.Context, in *DeleteU
 
 func (c *QyAdminUserHTTPClientImpl) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...http.CallOption) (*GetUserReply, error) {
 	var out GetUserReply
-	pattern := "/api/admin/v1/myInfo"
+	pattern := "/api/admin/v1/user/myInfo"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminUserGetMyInfo))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -262,7 +262,7 @@ func (c *QyAdminUserHTTPClientImpl) GetMyInfo(ctx context.Context, in *GetMyInfo
 
 func (c *QyAdminUserHTTPClientImpl) GetUser(ctx context.Context, in *GetUserRequest, opts ...http.CallOption) (*GetUserReply, error) {
 	var out GetUserReply
-	pattern := "/api/admin/v1/user/{uid}"
+	pattern := "/api/admin/v1/user/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminUserGetUser))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -288,7 +288,7 @@ func (c *QyAdminUserHTTPClientImpl) ListUser(ctx context.Context, in *ListUserRe
 
 func (c *QyAdminUserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...http.CallOption) (*UpdateUserReply, error) {
 	var out UpdateUserReply
-	pattern := "/api/admin/v1/user/{uid}"
+	pattern := "/api/admin/v1/user/{id}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminUserUpdateUser))
 	opts = append(opts, http.PathTemplate(pattern))

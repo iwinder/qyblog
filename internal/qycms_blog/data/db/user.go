@@ -84,8 +84,8 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*biz.UserDO, e
 	}
 
 	tUser := &po.UserPO{}
-	tUser.ID = user.ID
-	err := r.data.Db.Model(&tUser).Updates(&userPO).Error
+	//tUser.ID = user.ID
+	err := r.data.Db.Model(&tUser).Where("id=?", user.ID).Updates(&userPO).Error
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (r *userRepo) FindByID(ctx context.Context, id uint64) (*biz.UserDO, error)
 	user, err := r.getUserFromCache(ctx, cacheKey)
 	if err != nil {
 		user = &po.UserPO{}
-		err := r.data.Db.Where("id = ?", id).Preload("Roles").First(&user).Error
+		err = r.data.Db.Where("id = ?", id).Preload("Roles").First(&user).Error
 		user.Password = ""
 		if err != nil {
 			return nil, biz.ErrUserNotFound
@@ -194,7 +194,7 @@ func (r *userRepo) ListAll(c context.Context, opts biz.UserDOListOption) (*po.Us
 
 //func (r *userRepo) VerifyPassword(ctx context.Context, u *biz.UserDO) (bool, error) {
 //	user := &po.UserPO{}
-//	err := r.data.Db.Where("username=?", u.Username).First(&user).Error
+//	err := r.cdata.Db.Where("username=?", u.Username).First(&user).Error
 //	if err != nil {
 //		return false, err
 //	}

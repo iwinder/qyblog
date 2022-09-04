@@ -38,10 +38,10 @@ type QyAdminApiHTTPServer interface {
 func RegisterQyAdminApiHTTPServer(s *http.Server, srv QyAdminApiHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/sysapi", _QyAdminApi_CreateQyAdminApi0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/sysapi/{uid}", _QyAdminApi_UpdateQyAdminApi0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/sysapi/{uid}", _QyAdminApi_DeleteQyAdminApi0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/sysapi/{id}", _QyAdminApi_UpdateQyAdminApi0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/sysapi/{id}", _QyAdminApi_DeleteQyAdminApi0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/sysapi", _QyAdminApi_DeleteQyAdminApis0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/sysapi/{uid}", _QyAdminApi_GetQyAdminApi0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/sysapi/{id}", _QyAdminApi_GetQyAdminApi0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/sysapi", _QyAdminApi_ListQyAdminApi0_HTTP_Handler(srv))
 }
 
@@ -200,7 +200,7 @@ func (c *QyAdminApiHTTPClientImpl) CreateQyAdminApi(ctx context.Context, in *Cre
 
 func (c *QyAdminApiHTTPClientImpl) DeleteQyAdminApi(ctx context.Context, in *DeleteQyAdminApiRequest, opts ...http.CallOption) (*DeleteQyAdminApiReply, error) {
 	var out DeleteQyAdminApiReply
-	pattern := "/api/admin/v1/sysapi/{uid}"
+	pattern := "/api/admin/v1/sysapi/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminApiDeleteQyAdminApi))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -226,7 +226,7 @@ func (c *QyAdminApiHTTPClientImpl) DeleteQyAdminApis(ctx context.Context, in *De
 
 func (c *QyAdminApiHTTPClientImpl) GetQyAdminApi(ctx context.Context, in *GetQyAdminApiRequest, opts ...http.CallOption) (*GetQyAdminApiReply, error) {
 	var out GetQyAdminApiReply
-	pattern := "/api/admin/v1/sysapi/{uid}"
+	pattern := "/api/admin/v1/sysapi/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminApiGetQyAdminApi))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -252,7 +252,7 @@ func (c *QyAdminApiHTTPClientImpl) ListQyAdminApi(ctx context.Context, in *ListQ
 
 func (c *QyAdminApiHTTPClientImpl) UpdateQyAdminApi(ctx context.Context, in *UpdateQyAdminApiRequest, opts ...http.CallOption) (*UpdateQyAdminApiReply, error) {
 	var out UpdateQyAdminApiReply
-	pattern := "/api/admin/v1/sysapi/{uid}"
+	pattern := "/api/admin/v1/sysapi/{id}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminApiUpdateQyAdminApi))
 	opts = append(opts, http.PathTemplate(pattern))

@@ -8,10 +8,10 @@ ifeq ($(GOHOSTOS), windows)
 	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
 	Git_Bash= $(subst cmd\,bin\bash.exe,$(dir $(shell where git)))
 	INTERNAL_PROTO_FILES=$(shell $(Git_Bash) -c "find internal -name *.proto")
-	API_PROTO_FILES=$(shell $(Git_Bash) -c "find api -name *.proto")
+	API_PROTO_FILES=$(shell $(Git_Bash) -c "cd ./api && find qycms_bff  -name *.proto")
 else
 	INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
-	API_PROTO_FILES=$(shell find api -name *.proto)
+	API_PROTO_FILES=$(shell cd ./api && find qycms_bff  -name *.proto)
 endif
 
 .PHONY: init
@@ -41,6 +41,14 @@ api:
  	       --go-grpc_out=paths=source_relative:./api \
 	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 	       $(API_PROTO_FILES)
+.PHONY: swagger
+# generate swagger
+swagger:
+	cd ./api/$(APP_RELATIVE_PATH) && protoc --proto_path=. \
+	        --proto_path=../third_party \
+	        --openapiv2_out=../doc/api \
+	        --openapiv2_opt logtostderr=true \
+			 $(API_PROTO_FILES)
 
 .PHONY: build
 # build

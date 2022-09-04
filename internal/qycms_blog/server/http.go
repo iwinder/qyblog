@@ -12,7 +12,7 @@ import (
 
 // NewHTTPServer new a HTTP server.
 func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinData,
-	greeter *service.BlogAdminService, logger log.Logger) *http.Server {
+	userService *service.BlogAdminUserService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		mid.NewMiddleware(authConf, casbinData, logger),
 	}
@@ -26,7 +26,10 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterQyAdminLoginHTTPServer(srv, greeter)
-	v1.RegisterQyAdminUserHTTPServer(srv, greeter)
+	v1.RegisterQyAdminLoginHTTPServer(srv, userService)
+	v1.RegisterQyAdminRoleHTTPServer(srv, userService)
+	v1.RegisterQyAdminUserHTTPServer(srv, userService)
+	v1.RegisterQyAdminApiHTTPServer(srv, userService)
+	v1.RegisterQyAdminMenusAdminHTTPServer(srv, userService)
 	return srv
 }

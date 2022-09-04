@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/casbin"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
@@ -63,8 +63,8 @@ type UserUsecase struct {
 }
 
 // NewUserUsecase new a UserDO usecase.
-func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
-	return &UserUsecase{repo: repo, log: log.NewHelper(logger)}
+func NewUserUsecase(repo UserRepo, cabinRepo CasbinRuleRepo, logger log.Logger) *UserUsecase {
+	return &UserUsecase{repo: repo, cabinRepo: cabinRepo, log: log.NewHelper(logger)}
 }
 
 // CreateUser creates a UserDO, and returns the new UserDO.
@@ -77,11 +77,11 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, user *UserDO) (*UserDO, e
 	if user.Roles != nil && len(user.Roles) > 0 {
 		roleIdfStrs := make([]string, 0)
 		for _, obj := range user.Roles {
-			roleIdfStrs = append(roleIdfStrs, casbin.PrefixRole+obj.Identifier)
+			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+obj.Identifier)
 		}
 		// 权限
 		if len(roleIdfStrs) > 0 {
-			uc.cabinRepo.SaveRoleForUser(ctx, casbin.PrefixUser+user.Username, roleIdfStrs, "*")
+			uc.cabinRepo.SaveRoleForUser(ctx, auth_constants.PrefixUser+user.Username, roleIdfStrs, "*")
 		}
 	}
 
@@ -102,11 +102,14 @@ func (uc *UserUsecase) Update(ctx context.Context, user *UserDO) (*UserDO, error
 	if user.Roles != nil && len(user.Roles) > 0 {
 		roleIdfStrs := make([]string, 0)
 		for _, obj := range user.Roles {
-			roleIdfStrs = append(roleIdfStrs, casbin.PrefixRole+obj.Identifier)
+			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+obj.Identifier)
 		}
 		// 权限
 		if len(roleIdfStrs) > 0 {
-			uc.cabinRepo.UpdateRoleForUser(ctx, casbin.PrefixUser+user.Username, roleIdfStrs, "*")
+			_, ucerr := uc.cabinRepo.UpdateRoleForUser(ctx, auth_constants.PrefixUser+user.Username, roleIdfStrs, "*")
+			if ucerr != nil {
+				return nil, ucerr
+			}
 		}
 	}
 
@@ -202,8 +205,9 @@ func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *
 	}
 	// 获取角色信息
 	claims := jwt2.SecurityUser{
-		ID:       userInfo.ID,
-		NickName: userInfo.Nickname,
+		ID:            userInfo.ID,
+		NickName:      userInfo.Nickname,
+		AuthorityName: userInfo.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.Jwt.ExpireDuration.AsDuration())), // 设置token的过期时间
 		},

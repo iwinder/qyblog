@@ -28,6 +28,7 @@ func (r *apiRepo) Save(ctx context.Context, obj *biz.ApiDO) (*po.ApiPO, error) {
 	objPO := &po.ApiPO{
 		ObjectMeta:  obj.ObjectMeta,
 		ApiGroup:    obj.ApiGroup,
+		Identifier:  obj.Identifier,
 		Method:      obj.Method,
 		Path:        obj.Path,
 		Description: obj.Description,
@@ -43,13 +44,14 @@ func (r *apiRepo) Save(ctx context.Context, obj *biz.ApiDO) (*po.ApiPO, error) {
 func (r *apiRepo) Update(ctx context.Context, obj *biz.ApiDO) (*po.ApiPO, error) {
 	objPO := &po.ApiPO{
 		ApiGroup:    obj.ApiGroup,
+		Identifier:  obj.Identifier,
 		Method:      obj.Method,
 		Path:        obj.Path,
 		Description: obj.Description,
 	}
 	tObj := &po.ApiPO{}
 	tObj.ID = obj.ID
-	err := r.data.Db.Model(&tObj).Updates(&objPO).Error
+	err := r.data.Db.Model(&tObj).Where("id=?", obj.ID).Updates(&objPO).Error
 	if err != nil {
 		return nil, err
 	}

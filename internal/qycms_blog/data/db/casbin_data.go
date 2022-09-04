@@ -12,8 +12,9 @@ import (
 )
 
 type CasbinData struct {
-	Enf *casbin.SyncedEnforcer
-	log *log.Helper
+	Enf  *casbin.SyncedEnforcer
+	log  *log.Helper
+	data *Data
 }
 
 var (
@@ -31,7 +32,7 @@ func NewCasbinData(data *Data, conf *conf.Auth, logger log.Logger) (*CasbinData,
 	var e *casbin.SyncedEnforcer
 	l := log.NewHelper(log.With(logger, "module", "mysql/casbin"))
 	conce.Do(func() {
-		Apter, _ := gormadapter.NewAdapterByDBWithCustomTable(data.Db, &po.CasbinRulePO{})
+		Apter, _ := gormadapter.NewAdapterByDBWithCustomTable(data.Db, &po.CasbinRulePO{}, "qy_sys_casbin_rule")
 		// 从 .CONF 文件中加载 model
 		m, err = model.NewModelFromFile(conf.Casbin.ModelPath)
 		if err != nil {
@@ -43,8 +44,9 @@ func NewCasbinData(data *Data, conf *conf.Auth, logger log.Logger) (*CasbinData,
 			log.Fatalf("Casbin 执行者创建失败" + err.Error())
 		}
 		casbinData = &CasbinData{
-			Enf: e,
-			log: l,
+			Enf:  e,
+			log:  l,
+			data: data,
 		}
 
 	})

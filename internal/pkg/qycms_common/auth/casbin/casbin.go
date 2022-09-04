@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 	//"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 	//db "github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
@@ -46,25 +47,49 @@ func WithCasbinData(data *db.CasbinData) Option {
 }
 
 func Server(opts ...Option) middleware.Middleware {
-	//o := &options{
-	//	securityUser: nil,
-	//}
+	o := &options{}
+	for _, opt := range opts {
+		opt(o)
+	}
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
 			if header, ok := transport.FromServerContext(ctx); ok {
 				header.Operation()
-				s := header.RequestHeader()
-				ss := header.(*http.Transport)
-				sss := ss.Request().Method
-				fmt.Print(s, sss)
+				req := header.RequestHeader()
+				httpReq := header.(*http.Transport)
+				method := httpReq.Request().Method
+				fmt.Print(req, method)
+				url := httpReq.PathTemplate()
+
+				claims, ok := jwt.FromContext(ctx)
+				if !ok {
+					return nil, ErrSecurityParseFailed
+				}
+				cla := claims.(jwtV4.MapClaims)
+
+				if cla["AuthorityName"] == nil {
+					return nil, ErrSecurityUserCreatorMissing
+				}
+				name := auth_constants.PrefixUser + cla["AuthorityName"].(string)
+				hasE := o.casbinData.Enf.GetPermissionsForUser(name, "*")
+
+				fmt.Println(hasE)
+				flag, eerr := o.casbinData.Enf.Enforce(name, "*", url, method)
+				if eerr != nil {
+					return nil, eerr
+				}
+				if !flag {
+					return nil, ErrUnauthorized
+				}
 				//&(http.Transport)header
 				//opts.casbinData.Enf
 				// Do something on entering
 				//defer func() {
 				//	// Do something on exiting
 				//}()
+				return handler(ctx, req)
 			}
-			return handler(ctx, req)
+			return nil, ErrUnauthorized
 		}
 	}
 }

@@ -8,14 +8,14 @@ import (
 )
 
 type CasbinRulePO struct {
-	metaV1.ObjectMeta `json:"metadata,omitempty"`
-	PType             string `json:"p_type" gorm:"size:100;"` // 类型
-	V0                string `json:"v0" gorm:"size:100;"`     // sub
-	V1                string `json:"v1" gorm:"size:100;"`     // dom
-	V2                string `json:"v2" gorm:"size:100;"`     // obj
-	V3                string `json:"v3" gorm:"size:100;"`     // act
-	V4                string `json:"v4" gorm:"size:100;"`
-	V5                string `json:"v5" gorm:"size:100;"`
+	metaV1.ObjectNoInstMeta `json:"metadata,omitempty"`
+	PType                   string `json:"ptype" gorm:"column:ptype;size:100;"` // 类型
+	V0                      string `json:"v0" gorm:"column:v0;size:100;"`       // sub
+	V1                      string `json:"v1" gorm:"column:v1;size:100;"`       // dom
+	V2                      string `json:"v2" gorm:"column:v2;size:100;"`       // obj
+	V3                      string `json:"v3" gorm:"column:v3;size:100;"`       // act
+	V4                      string `json:"v4" gorm:"column:v4;size:100;"`
+	V5                      string `json:"v5" gorm:"column:v5;size:100;"`
 }
 
 func (c *CasbinRulePO) TableName() string {

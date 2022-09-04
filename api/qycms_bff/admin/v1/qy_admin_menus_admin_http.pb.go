@@ -38,10 +38,10 @@ type QyAdminMenusAdminHTTPServer interface {
 func RegisterQyAdminMenusAdminHTTPServer(s *http.Server, srv QyAdminMenusAdminHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/menusAdmin", _QyAdminMenusAdmin_CreateQyAdminMenusAdmin0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/menusAdmin/{uid}", _QyAdminMenusAdmin_UpdateQyAdminMenusAdmin0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/menusAdmin/{uid}", _QyAdminMenusAdmin_DeleteQyAdminMenusAdmin0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/menusAdmin/{id}", _QyAdminMenusAdmin_UpdateQyAdminMenusAdmin0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/menusAdmin/{id}", _QyAdminMenusAdmin_DeleteQyAdminMenusAdmin0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/menusAdmin", _QyAdminMenusAdmin_DeleteQyAdminMenusAdmins0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/menusAdmin/{uid}", _QyAdminMenusAdmin_GetQyAdminMenusAdmin0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/menusAdmin/{id}", _QyAdminMenusAdmin_GetQyAdminMenusAdmin0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/menusAdmin", _QyAdminMenusAdmin_ListQyAdminMenusAdmin0_HTTP_Handler(srv))
 }
 
@@ -200,7 +200,7 @@ func (c *QyAdminMenusAdminHTTPClientImpl) CreateQyAdminMenusAdmin(ctx context.Co
 
 func (c *QyAdminMenusAdminHTTPClientImpl) DeleteQyAdminMenusAdmin(ctx context.Context, in *DeleteQyAdminMenusAdminRequest, opts ...http.CallOption) (*DeleteQyAdminMenusAdminReply, error) {
 	var out DeleteQyAdminMenusAdminReply
-	pattern := "/api/admin/v1/menusAdmin/{uid}"
+	pattern := "/api/admin/v1/menusAdmin/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminMenusAdminDeleteQyAdminMenusAdmin))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -226,7 +226,7 @@ func (c *QyAdminMenusAdminHTTPClientImpl) DeleteQyAdminMenusAdmins(ctx context.C
 
 func (c *QyAdminMenusAdminHTTPClientImpl) GetQyAdminMenusAdmin(ctx context.Context, in *GetQyAdminMenusAdminRequest, opts ...http.CallOption) (*GetQyAdminMenusAdminReply, error) {
 	var out GetQyAdminMenusAdminReply
-	pattern := "/api/admin/v1/menusAdmin/{uid}"
+	pattern := "/api/admin/v1/menusAdmin/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminMenusAdminGetQyAdminMenusAdmin))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -252,7 +252,7 @@ func (c *QyAdminMenusAdminHTTPClientImpl) ListQyAdminMenusAdmin(ctx context.Cont
 
 func (c *QyAdminMenusAdminHTTPClientImpl) UpdateQyAdminMenusAdmin(ctx context.Context, in *UpdateQyAdminMenusAdminRequest, opts ...http.CallOption) (*UpdateQyAdminMenusAdminReply, error) {
 	var out UpdateQyAdminMenusAdminReply
-	pattern := "/api/admin/v1/menusAdmin/{uid}"
+	pattern := "/api/admin/v1/menusAdmin/{id}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminMenusAdminUpdateQyAdminMenusAdmin))
 	opts = append(opts, http.PathTemplate(pattern))

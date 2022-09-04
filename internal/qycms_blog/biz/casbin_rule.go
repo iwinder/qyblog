@@ -7,9 +7,14 @@ import (
 )
 
 type CasbinRuleDO struct {
-	metaV1.ObjectMeta
-	Name       string
-	Identifier string
+	metaV1.ObjectNoInstMeta
+	PType string
+	V0    string
+	V1    string
+	V2    string
+	V3    string
+	V4    string
+	V5    string
 }
 
 type CasbinRuleRepo interface {
@@ -17,6 +22,7 @@ type CasbinRuleRepo interface {
 	UpdateRoleForUser(ctx context.Context, user string, roles []string, domain ...string) (bool, error)
 	SavePolicies(ctx context.Context, rules [][]string) (bool, error)
 	CleanPolicy(ctx context.Context, p ...string) bool
+	UpdatePolicies(ctx context.Context, oldApi, newApi *ApiDO) (bool, error)
 	//Update(context.Context, *RoleDO) (*po.RolePO, error)
 	//Delete(context.Context, uint64) error
 	//DeleteList(c context.Context, uids []uint64) error

@@ -55,7 +55,7 @@ func (r *menusAdminRepo) Update(ctx context.Context, obj *biz.MenusAdminDO) (*po
 	}
 	tObj := &po.MenusAdminPO{}
 	tObj.ID = obj.ID
-	err := r.data.Db.Model(&tObj).Updates(&objPO).Error
+	err := r.data.Db.Model(&tObj).Where("id=?", obj.ID).Updates(&objPO).Error
 	if err != nil {
 		return nil, err
 	}

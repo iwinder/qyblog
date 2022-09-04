@@ -38,10 +38,10 @@ type QyAdminRoleHTTPServer interface {
 func RegisterQyAdminRoleHTTPServer(s *http.Server, srv QyAdminRoleHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/role", _QyAdminRole_CreateQyAdminRole0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/role/{uid}", _QyAdminRole_UpdateQyAdminRole0_HTTP_Handler(srv))
-	r.DELETE("/api/admin/v1/role/{uid}", _QyAdminRole_DeleteQyAdminRole0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/role/{id}", _QyAdminRole_UpdateQyAdminRole0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/role/{id}", _QyAdminRole_DeleteQyAdminRole0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/role", _QyAdminRole_DeleteQyAdminRoles0_HTTP_Handler(srv))
-	r.GET("/api/admin/v1/role/{uid}", _QyAdminRole_GetQyAdminRole0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/role/{id}", _QyAdminRole_GetQyAdminRole0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/role", _QyAdminRole_ListQyAdminRole0_HTTP_Handler(srv))
 }
 
@@ -200,7 +200,7 @@ func (c *QyAdminRoleHTTPClientImpl) CreateQyAdminRole(ctx context.Context, in *C
 
 func (c *QyAdminRoleHTTPClientImpl) DeleteQyAdminRole(ctx context.Context, in *DeleteQyAdminRoleRequest, opts ...http.CallOption) (*DeleteQyAdminRoleReply, error) {
 	var out DeleteQyAdminRoleReply
-	pattern := "/api/admin/v1/role/{uid}"
+	pattern := "/api/admin/v1/role/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminRoleDeleteQyAdminRole))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -226,7 +226,7 @@ func (c *QyAdminRoleHTTPClientImpl) DeleteQyAdminRoles(ctx context.Context, in *
 
 func (c *QyAdminRoleHTTPClientImpl) GetQyAdminRole(ctx context.Context, in *GetQyAdminRoleRequest, opts ...http.CallOption) (*GetQyAdminRoleReply, error) {
 	var out GetQyAdminRoleReply
-	pattern := "/api/admin/v1/role/{uid}"
+	pattern := "/api/admin/v1/role/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminRoleGetQyAdminRole))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -252,7 +252,7 @@ func (c *QyAdminRoleHTTPClientImpl) ListQyAdminRole(ctx context.Context, in *Lis
 
 func (c *QyAdminRoleHTTPClientImpl) UpdateQyAdminRole(ctx context.Context, in *UpdateQyAdminRoleRequest, opts ...http.CallOption) (*UpdateQyAdminRoleReply, error) {
 	var out UpdateQyAdminRoleReply
-	pattern := "/api/admin/v1/role/{uid}"
+	pattern := "/api/admin/v1/role/{id}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminRoleUpdateQyAdminRole))
 	opts = append(opts, http.PathTemplate(pattern))

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminUserClient interface {
-	// 创建新用户
+	// 新增用户
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 	// 更新用户
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserReply, error)
@@ -30,10 +30,10 @@ type QyAdminUserClient interface {
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserReply, error)
 	// 批量删除
 	DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...grpc.CallOption) (*DeleteUsersReply, error)
-	// 获取用户信息
-	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 获取用户个人信息
 	GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error)
+	// 获取用户信息
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
 	// 验证密码用于登录
@@ -84,18 +84,18 @@ func (c *qyAdminUserClient) DeleteUsers(ctx context.Context, in *DeleteUsersRequ
 	return out, nil
 }
 
-func (c *qyAdminUserClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
+func (c *qyAdminUserClient) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
 	out := new(GetUserReply)
-	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/GetUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/GetMyInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *qyAdminUserClient) GetMyInfo(ctx context.Context, in *GetMyInfoRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
+func (c *qyAdminUserClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
 	out := new(GetUserReply)
-	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/GetMyInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (c *qyAdminUserClient) VerifyPassword(ctx context.Context, in *VerifyPasswo
 // All implementations must embed UnimplementedQyAdminUserServer
 // for forward compatibility
 type QyAdminUserServer interface {
-	// 创建新用户
+	// 新增用户
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	// 更新用户
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
@@ -132,10 +132,10 @@ type QyAdminUserServer interface {
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	// 批量删除
 	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
-	// 获取用户信息
-	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// 获取用户个人信息
 	GetMyInfo(context.Context, *GetMyInfoRequest) (*GetUserReply, error)
+	// 获取用户信息
+	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	// 验证密码用于登录
@@ -159,11 +159,11 @@ func (UnimplementedQyAdminUserServer) DeleteUser(context.Context, *DeleteUserReq
 func (UnimplementedQyAdminUserServer) DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUsers not implemented")
 }
-func (UnimplementedQyAdminUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
-}
 func (UnimplementedQyAdminUserServer) GetMyInfo(context.Context, *GetMyInfoRequest) (*GetUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMyInfo not implemented")
+}
+func (UnimplementedQyAdminUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedQyAdminUserServer) ListUser(context.Context, *ListUserRequest) (*ListUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
@@ -256,24 +256,6 @@ func _QyAdminUser_DeleteUsers_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _QyAdminUser_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QyAdminUserServer).GetUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.qycms_bff.admin.v1.QyAdminUser/GetUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QyAdminUserServer).GetUser(ctx, req.(*GetUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _QyAdminUser_GetMyInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMyInfoRequest)
 	if err := dec(in); err != nil {
@@ -288,6 +270,24 @@ func _QyAdminUser_GetMyInfo_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QyAdminUserServer).GetMyInfo(ctx, req.(*GetMyInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminUser_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminUserServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminUser/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminUserServer).GetUser(ctx, req.(*GetUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -352,12 +352,12 @@ var QyAdminUser_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _QyAdminUser_DeleteUsers_Handler,
 		},
 		{
-			MethodName: "GetUser",
-			Handler:    _QyAdminUser_GetUser_Handler,
-		},
-		{
 			MethodName: "GetMyInfo",
 			Handler:    _QyAdminUser_GetMyInfo_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _QyAdminUser_GetUser_Handler,
 		},
 		{
 			MethodName: "ListUser",

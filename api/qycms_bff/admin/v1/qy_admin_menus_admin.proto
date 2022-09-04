@@ -16,13 +16,13 @@ service QyAdminMenusAdmin {
 	}
 	rpc UpdateQyAdminMenusAdmin (UpdateQyAdminMenusAdminRequest) returns (UpdateQyAdminMenusAdminReply){
 		option (google.api.http) = {
-			put: "/api/admin/v1/menusAdmin/{uid}",
+			put: "/api/admin/v1/menusAdmin/{id}",
 			body:"*"
 		};
 	}
 	rpc DeleteQyAdminMenusAdmin (DeleteQyAdminMenusAdminRequest) returns (DeleteQyAdminMenusAdminReply){
 		option (google.api.http) = {
-			delete: "/api/admin/v1/menusAdmin/{uid}",
+			delete: "/api/admin/v1/menusAdmin/{id}",
 		};
 	}
 	rpc DeleteQyAdminMenusAdmins (DeleteQyAdminMenusAdminsRequest) returns (DeleteQyAdminMenusAdminsReply){
@@ -32,7 +32,7 @@ service QyAdminMenusAdmin {
 	}
 	rpc GetQyAdminMenusAdmin (GetQyAdminMenusAdminRequest) returns (GetQyAdminMenusAdminReply){
 		option (google.api.http) = {
-			get: "/api/admin/v1/menusAdmin/{uid}",
+			get: "/api/admin/v1/menusAdmin/{id}",
 		};
 	}
 	rpc ListQyAdminMenusAdmin (ListQyAdminMenusAdminRequest) returns (ListQyAdminMenusAdminReply){
@@ -43,7 +43,7 @@ service QyAdminMenusAdmin {
 }
 
 message MenusAdminInfoResponse {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string Name    =2;
 	string Identifier    =3;
 	uint64 ParentId         =4;
@@ -76,11 +76,11 @@ message CreateQyAdminMenusAdminRequest {
 		uint32 Level             =8;
 }
 message CreateQyAdminMenusAdminReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message UpdateQyAdminMenusAdminRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 	string Name    =2;
 	string Identifier    =3;
 	uint64 ParentId         =4;
@@ -91,21 +91,21 @@ message UpdateQyAdminMenusAdminRequest {
 	uint32 Level             =9;
 }
 message UpdateQyAdminMenusAdminReply {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 
 message DeleteQyAdminMenusAdminRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message DeleteQyAdminMenusAdminReply {}
 
 message DeleteQyAdminMenusAdminsRequest {
-	repeated uint64 uids = 1;
+	repeated uint64 ids = 1;
 }
 message DeleteQyAdminMenusAdminsReply {}
 
 message GetQyAdminMenusAdminRequest {
-	uint64 uid = 1;
+	uint64 id = 1;
 }
 message GetQyAdminMenusAdminReply {
 	MenusAdminInfoResponse info = 1;

@@ -11,7 +11,7 @@ import (
 
 type MenusAdminDO struct {
 	metaV1.ObjectMeta
-	Level     uint
+	Level     int
 	ParentId  uint64          // 父菜单ID
 	Path      string          // 路由path
 	Name      string          // 路由name

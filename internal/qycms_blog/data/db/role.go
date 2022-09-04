@@ -65,8 +65,8 @@ func (r *roleRepo) Update(ctx context.Context, obj *biz.RoleDO) (*biz.RoleDO, er
 		objPO.Apis = objPos
 	}
 	tObj := &po.RolePO{}
-	tObj.ID = obj.ID
-	err := r.data.Db.Model(&tObj).Updates(&objPO).Error
+	//tObj.ID = obj.ID
+	err := r.data.Db.Model(&tObj).Where("id=?", obj.ID).Updates(&objPO).Error
 	if err != nil {
 		return nil, err
 	}

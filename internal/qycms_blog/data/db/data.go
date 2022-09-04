@@ -15,8 +15,8 @@ import (
 	"time"
 )
 
-// ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewGreeterRepo, NewCasbinRuleRepo,
+// ProviderSet is cdata providers.
+var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewCasbinRuleRepo,
 	NewUserRepo, NewRoleRepo,
 	NewMenusAdminRepo, NewApiRepo,
 	NewArticleRepo, NewArticleContentRepo,
@@ -39,7 +39,7 @@ var (
 // NewData .
 func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	cleanup := func() {
-		log.NewHelper(logger).Info("closing the data resources")
+		log.NewHelper(logger).Info("closing the cdata resources")
 	}
 
 	if strings.EqualFold(conf.Database.Source, "") && mysqlDb.Db == nil {
@@ -54,9 +54,11 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	var err error
 	var dbIns *gorm.DB
 	var redisCliDB redis.Cmdable
-	l := log.NewHelper(log.With(logger, "module", "mysql/data"))
+	l := log.NewHelper(log.With(logger, "module", "mysql/cdata"))
 	once.Do(func() {
-		dbIns, err = gorm.Open(mysql.Open(conf.Database.Source), &gorm.Config{})
+		dbIns, err = gorm.Open(mysql.Open(conf.Database.Source), &gorm.Config{
+			DisableForeignKeyConstraintWhenMigrating: true,
+		})
 		// redis
 		if redisOpen {
 			redisCliDB = redis.NewClient(&redis.Options{

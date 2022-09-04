@@ -16,8 +16,8 @@ type MenusAdminPO struct {
 	Hidden            bool      `json:"hidden" gorm:"column:name;comment:是否在列表隐藏"`     // 是否在列表隐藏
 	Component         string    `json:"component" gorm:"column:name;comment:对应前端文件路径"` // 对应前端文件路径
 	Sort              int       `json:"sort" gorm:"column:name;comment:排序标记"`          // 排序标记
-	Level             uint      `json:"-"`
-	Roles             []*RolePO `gorm:"many2many:qy_sys_user_role;"`
+	Level             int       `json:"-"`
+	Roles             []*RolePO `gorm:"many2many:qy_sys_role_menus_admin;"`
 	//children          []MenusAdminPO `json:"children" gorm:"-"`
 	//Parameters        []SysBaseMenuParameter                     `json:"parameters"`
 	//MenuBtn           []SysBaseMenuBtn                           `json:"menuBtn"`

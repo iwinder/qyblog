@@ -10,9 +10,9 @@ import (
 
 type SecurityUser struct {
 	auth.ASecurityUser
-	ID          uint64
-	NickName    string
-	AuthorityId uint64
+	ID            uint64
+	NickName      string
+	AuthorityName string
 	jwtV4.RegisteredClaims
 }
 
@@ -29,8 +29,8 @@ func CreateToken(c SecurityUser, key string) (string, error) {
 
 func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList := make(map[string]bool)
-	whiteList["/api.qycms_blog.admin.v1.QyBlogAdminLogin/Login"] = true
-	whiteList["/api.qycms_user.v1.User/CreateUser"] = true
+	whiteList["/api.qycms_bff.admin.v1.QyAdminLogin/Login"] = true
+	whiteList["/api.qycms_bff.admin.v1.QyAdminUser/CreateUser"] = true
 
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {

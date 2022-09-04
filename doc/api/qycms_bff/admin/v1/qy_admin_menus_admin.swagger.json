@@ -1,0 +1,449 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "qycms_bff/admin/v1/qy_admin_menus_admin.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "QyAdminMenusAdmin"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/admin/v1/menusAdmin": {
+      "get": {
+        "operationId": "QyAdminMenusAdmin_ListQyAdminMenusAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListQyAdminMenusAdminReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageInfo.page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.size",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.total",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.pages",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.firstFlag",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "pageInfo.LastFlag",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      },
+      "delete": {
+        "operationId": "QyAdminMenusAdmin_DeleteQyAdminMenusAdmins",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteQyAdminMenusAdminsReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      },
+      "post": {
+        "operationId": "QyAdminMenusAdmin_CreateQyAdminMenusAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateQyAdminMenusAdminReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateQyAdminMenusAdminRequest"
+            }
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      }
+    },
+    "/api/admin/v1/menusAdmin/{id}": {
+      "get": {
+        "operationId": "QyAdminMenusAdmin_GetQyAdminMenusAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetQyAdminMenusAdminReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      },
+      "delete": {
+        "operationId": "QyAdminMenusAdmin_DeleteQyAdminMenusAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteQyAdminMenusAdminReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      },
+      "put": {
+        "operationId": "QyAdminMenusAdmin_UpdateQyAdminMenusAdmin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateQyAdminMenusAdminReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Name": {
+                  "type": "string"
+                },
+                "Identifier": {
+                  "type": "string"
+                },
+                "ParentId": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "Path": {
+                  "type": "string"
+                },
+                "Hidden": {
+                  "type": "boolean"
+                },
+                "Component": {
+                  "type": "string"
+                },
+                "Sort": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "Level": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "QyAdminMenusAdmin"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateQyAdminMenusAdminReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1CreateQyAdminMenusAdminRequest": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Identifier": {
+          "type": "string"
+        },
+        "ParentId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Path": {
+          "type": "string"
+        },
+        "Hidden": {
+          "type": "boolean"
+        },
+        "Component": {
+          "type": "string"
+        },
+        "Sort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Level": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1DeleteQyAdminMenusAdminReply": {
+      "type": "object"
+    },
+    "v1DeleteQyAdminMenusAdminsReply": {
+      "type": "object"
+    },
+    "v1GetQyAdminMenusAdminReply": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/v1MenusAdminInfoResponse"
+        }
+      }
+    },
+    "v1ListQyAdminMenusAdminReply": {
+      "type": "object",
+      "properties": {
+        "pageInfo": {
+          "$ref": "#/definitions/v1MenusAdmPageInfo"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1MenusAdminInfoResponse"
+          }
+        }
+      }
+    },
+    "v1MenusAdmPageInfo": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "size": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "total": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "pages": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "firstFlag": {
+          "type": "boolean"
+        },
+        "LastFlag": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1MenusAdminInfoResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Identifier": {
+          "type": "string"
+        },
+        "ParentId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Path": {
+          "type": "string"
+        },
+        "Hidden": {
+          "type": "boolean"
+        },
+        "Component": {
+          "type": "string"
+        },
+        "Sort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Level": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1MenusAdminInfoResponse"
+          }
+        }
+      }
+    },
+    "v1UpdateQyAdminMenusAdminReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}

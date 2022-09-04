@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/casbin"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
@@ -71,9 +71,9 @@ func (uc *RoleUsecase) Update(ctx context.Context, obj *RoleDO) (*RoleDO, error)
 	if obj.Apis != nil && len(obj.Apis) > 0 {
 		rules := [][]string{}
 		for _, aobj := range obj.Apis {
-			rules = append(rules, []string{casbin.PrefixRole + obj.Identifier, aobj.ApiGroup, aobj.Path, aobj.Method})
+			rules = append(rules, []string{auth_constants.PrefixRole + obj.Identifier, aobj.Identifier, aobj.Path, aobj.Method})
 		}
-		uc.cabinRepo.CleanPolicy(ctx, casbin.PrefixRole+obj.Identifier)
+		uc.cabinRepo.CleanPolicy(ctx, auth_constants.PrefixRole+obj.Identifier)
 		_, cerr := uc.cabinRepo.SavePolicies(ctx, rules)
 		if cerr != nil {
 			return nil, cerr

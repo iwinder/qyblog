@@ -1,0 +1,461 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "qycms_bff/admin/v1/qy_admin_role.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "QyAdminRole"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/admin/v1/role": {
+      "get": {
+        "operationId": "QyAdminRole_ListQyAdminRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListQyAdminRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageInfo.page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.size",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.total",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.pages",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pageInfo.firstFlag",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "pageInfo.LastFlag",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      },
+      "delete": {
+        "operationId": "QyAdminRole_DeleteQyAdminRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteQyAdminRolesReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      },
+      "post": {
+        "operationId": "QyAdminRole_CreateQyAdminRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateQyAdminRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateQyAdminRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      }
+    },
+    "/api/admin/v1/role/{id}": {
+      "get": {
+        "operationId": "QyAdminRole_GetQyAdminRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetQyAdminRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      },
+      "delete": {
+        "operationId": "QyAdminRole_DeleteQyAdminRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteQyAdminRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      },
+      "put": {
+        "operationId": "QyAdminRole_UpdateQyAdminRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateQyAdminRoleReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "identifier": {
+                  "type": "string"
+                },
+                "menusAdmin": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1RMenusAdminInfoResponse"
+                  }
+                },
+                "apis": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/v1RApiInfoResponse"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "QyAdminRole"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateQyAdminRoleReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1CreateQyAdminRoleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        }
+      }
+    },
+    "v1DeleteQyAdminRoleReply": {
+      "type": "object"
+    },
+    "v1DeleteQyAdminRolesReply": {
+      "type": "object"
+    },
+    "v1GetQyAdminRoleReply": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/v1RoleInfoResponse"
+        }
+      }
+    },
+    "v1ListQyAdminRoleReply": {
+      "type": "object",
+      "properties": {
+        "pageInfo": {
+          "$ref": "#/definitions/v1RolePageInfo"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1RoleInfoResponse"
+          }
+        }
+      }
+    },
+    "v1RApiInfoResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "ApiGroup": {
+          "type": "string"
+        },
+        "Method": {
+          "type": "string"
+        },
+        "Path": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RMenusAdminInfoResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Identifier": {
+          "type": "string"
+        },
+        "ParentId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "Path": {
+          "type": "string"
+        },
+        "Hidden": {
+          "type": "boolean"
+        },
+        "Component": {
+          "type": "string"
+        },
+        "Sort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Level": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1RoleInfoResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "menusAdmin": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1RMenusAdminInfoResponse"
+          }
+        },
+        "apis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1RApiInfoResponse"
+          }
+        }
+      }
+    },
+    "v1RolePageInfo": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "size": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "total": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "pages": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "firstFlag": {
+          "type": "boolean"
+        },
+        "LastFlag": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1UpdateQyAdminRoleReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}
