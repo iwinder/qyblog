@@ -36,6 +36,7 @@ type RoleRepo interface {
 	FindByID(context.Context, uint64) (*po.RolePO, error)
 	FindByKey(c context.Context, key string) (*po.RolePO, error)
 	ListAll(c context.Context, opts RoleDOListOption) (*po.RolePOList, error)
+	FindByUserId(c context.Context, userId uint64) ([]*RoleDO, error)
 }
 
 type RoleUsecase struct {
@@ -110,6 +111,17 @@ func (uc *RoleUsecase) FindOneByID(ctx context.Context, id uint64) (*RoleDO, err
 		Identifier: obj.Identifier,
 	}
 	return objDO, nil
+}
+func (uc *RoleUsecase) FindByUserId(ctx context.Context, userId uint64) ([]*RoleDO, error) {
+	uc.log.WithContext(ctx).Infof("FindByUserId: %v", userId)
+	obj, err := uc.repo.FindByUserId(ctx, userId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return obj, nil
 }
 
 // FindByKey 根据用户名查询信息

@@ -10,6 +10,7 @@ import (
 	blogPo "github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	glogger "gorm.io/gorm/logger"
 	"strings"
 	"sync"
 	"time"
@@ -17,6 +18,7 @@ import (
 
 // ProviderSet is cdata providers.
 var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewCasbinRuleRepo,
+	NewUserRoleRepo,
 	NewUserRepo, NewRoleRepo,
 	NewMenusAdminRepo, NewApiRepo,
 	NewArticleRepo, NewArticleContentRepo,
@@ -58,6 +60,7 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 	once.Do(func() {
 		dbIns, err = gorm.Open(mysql.Open(conf.Database.Source), &gorm.Config{
 			DisableForeignKeyConstraintWhenMigrating: true,
+			Logger:                                   glogger.Default.LogMode(glogger.Info),
 		})
 		// redis
 		if redisOpen {
@@ -97,6 +100,7 @@ func AutoMigrateTable(dbIns *gorm.DB) {
 	dbIns.AutoMigrate(&blogPo.ArticlePO{},
 		&blogPo.UserPO{}, &blogPo.RolePO{},
 		&blogPo.ApiPO{}, &blogPo.MenusAdminPO{},
+		&blogPo.UserRolePO{},
 	) //&userPo.UserPO{},
 	//&commentsPo.CommentAgentPO{}, &commentsPo.CommentIndexPO{}, &commentsPo.CommentContentPO{},
 

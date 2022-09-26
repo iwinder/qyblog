@@ -5,7 +5,7 @@ import "math"
 type ListMeta struct {
 	TotalCount int64 `json:"totalCount,omitempty"`
 	PageSize   int64 `json:"size,omitempty"`
-	Page       int64 `json:"page,omitempty"`
+	Current    int64 `json:"page,omitempty"`
 	Pages      int64 `json:"pages,omitempty"`
 	FirstFlag  bool  `json:"firstFlag,omitempty"`
 	LastFlag   bool  `json:"lastFlag,omitempty"`
@@ -26,14 +26,14 @@ type ListOptions struct {
 func (page *ListOptions) Init() *ListOptions {
 	page.PageFlag = false
 	page.FirstFlag = true
-	if page.Page > 0 {
+	if page.Current > 0 {
 		// 当前
 		page.Limit = &page.PageSize
-		offset := (page.Page - 1) * page.PageSize
+		offset := (page.Current - 1) * page.PageSize
 		page.Offset = &offset
 		page.FirstFlag = false
 		page.PageFlag = true
-		if page.Page > 1 {
+		if page.Current > 1 {
 			page.FirstFlag = false
 		}
 	}
@@ -46,7 +46,7 @@ func (page *ListOptions) IsLast() *ListOptions {
 		if page.Pages <= 0 {
 			page.Pages = int64(math.Ceil(float64(page.TotalCount) / float64(page.PageSize)))
 		}
-		if page.Pages > page.Page {
+		if page.Pages > page.Current {
 			page.LastFlag = false
 		}
 	}

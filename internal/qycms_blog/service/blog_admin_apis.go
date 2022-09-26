@@ -72,11 +72,11 @@ func (s *BlogAdminUserService) GetQyAdminApi(ctx context.Context, in *v1.GetQyAd
 func (s *BlogAdminUserService) ListQyAdminApi(ctx context.Context, in *v1.ListQyAdminApiRequest) (*v1.ListQyAdminApiReply, error) {
 	opts := biz.ApiDOListOption{}
 	opts.ListOptions.Pages = 0
-	opts.ListOptions.Page = -1
+	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
 	if in.PageInfo != nil {
 		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Page = int64(in.PageInfo.Page)
+		opts.ListOptions.Current = int64(in.PageInfo.Page)
 		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
 	}
 

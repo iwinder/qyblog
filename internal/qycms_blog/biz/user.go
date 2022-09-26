@@ -5,12 +5,10 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
 	"time"
 )
@@ -50,21 +48,22 @@ type UserRepo interface {
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*UserDO, error)
-	FindByUsername(c context.Context, username string) (*po.UserPO, error)
-	ListAll(c context.Context, opts UserDOListOption) (*po.UserPOList, error)
+	FindByUsername(c context.Context, username string) (*UserDO, error)
+	ListAll(c context.Context, opts UserDOListOption) (*UserDOList, error)
 	//VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
 }
 
 // UserUsecase is a UserDO usecase.
 type UserUsecase struct {
-	repo      UserRepo
-	cabinRepo CasbinRuleRepo
-	log       *log.Helper
+	repo     UserRepo
+	role     *RoleUsecase
+	userRole *UserRoleUsecase
+	log      *log.Helper
 }
 
 // NewUserUsecase new a UserDO usecase.
-func NewUserUsecase(repo UserRepo, cabinRepo CasbinRuleRepo, logger log.Logger) *UserUsecase {
-	return &UserUsecase{repo: repo, cabinRepo: cabinRepo, log: log.NewHelper(logger)}
+func NewUserUsecase(repo UserRepo, role *RoleUsecase, userRole *UserRoleUsecase, logger log.Logger) *UserUsecase {
+	return &UserUsecase{repo: repo, role: role, userRole: userRole, log: log.NewHelper(logger)}
 }
 
 // CreateUser creates a UserDO, and returns the new UserDO.
@@ -74,17 +73,14 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, user *UserDO) (*UserDO, e
 	if err != nil {
 		return nil, err
 	}
+	// 关联
 	if user.Roles != nil && len(user.Roles) > 0 {
-		roleIdfStrs := make([]string, 0)
-		for _, obj := range user.Roles {
-			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+obj.Identifier)
-		}
 		// 权限
-		if len(roleIdfStrs) > 0 {
-			uc.cabinRepo.SaveRoleForUser(ctx, auth_constants.PrefixUser+user.Username, roleIdfStrs, "*")
+		rerr := uc.userRole.UpdateRoleForUser(ctx, user)
+		if rerr != nil {
+			return nil, rerr
 		}
 	}
-
 	return userDO, nil
 }
 
@@ -99,20 +95,11 @@ func (uc *UserUsecase) Update(ctx context.Context, user *UserDO) (*UserDO, error
 		return nil, err
 	}
 
-	if user.Roles != nil && len(user.Roles) > 0 {
-		roleIdfStrs := make([]string, 0)
-		for _, obj := range user.Roles {
-			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+obj.Identifier)
-		}
-		// 权限
-		if len(roleIdfStrs) > 0 {
-			_, ucerr := uc.cabinRepo.UpdateRoleForUser(ctx, auth_constants.PrefixUser+user.Username, roleIdfStrs, "*")
-			if ucerr != nil {
-				return nil, ucerr
-			}
-		}
+	// 权限
+	rerr := uc.userRole.UpdateRoleForUser(ctx, user)
+	if rerr != nil {
+		return nil, rerr
 	}
-
 	return userDO, nil
 }
 
@@ -138,7 +125,12 @@ func (uc *UserUsecase) FindOneByID(ctx context.Context, id uint64) (*UserDO, err
 		}
 		return nil, err
 	}
-
+	// 获取角色
+	roles, ree := uc.role.FindByUserId(ctx, id)
+	user.Roles = roles
+	if ree != nil {
+		user.Roles = make([]*RoleDO, 0)
+	}
 	return user, nil
 }
 
@@ -149,18 +141,14 @@ func (uc *UserUsecase) FindOneByUsername(ctx context.Context, username string) (
 	if err != nil {
 		return nil, err
 	}
-	userDO := &UserDO{
-		ObjectMeta: user.ObjectMeta,
-		Username:   user.Username,
-		Nickname:   user.Nickname,
-		Avatar:     user.Avatar,
-		Password:   user.Password,
-		Salt:       user.Salt,
-		Email:      user.Email,
-		Phone:      user.Phone,
-		AdminFlag:  user.AdminFlag,
+
+	// 获取角色
+	roles, ree := uc.role.FindByUserId(ctx, user.ID)
+	user.Roles = roles
+	if ree != nil {
+		user.Roles = make([]*RoleDO, 0)
 	}
-	return userDO, nil
+	return user, nil
 }
 
 // ListAll 批量查询
@@ -173,25 +161,14 @@ func (uc *UserUsecase) ListAll(ctx context.Context, opts UserDOListOption) (*Use
 		}
 		return nil, err
 	}
-
-	infos := make([]*UserDO, 0, len(userPOs.Items))
 	for _, user := range userPOs.Items {
-		infos = append(infos, &UserDO{
-			ObjectMeta: metaV1.ObjectMeta{
-				ID:         user.ID,
-				InstanceID: user.InstanceID,
-				Extend:     user.Extend,
-				CreatedAt:  user.CreatedAt,
-				UpdatedAt:  user.UpdatedAt,
-			},
-			Username: user.Username,
-			Avatar:   user.Avatar,
-			Nickname: user.Nickname,
-			Email:    user.Email,
-			Phone:    user.Phone,
-		})
+		roles, ree := uc.role.FindByUserId(ctx, user.ID)
+		user.Roles = roles
+		if ree != nil {
+			user.Roles = make([]*RoleDO, 0)
+		}
 	}
-	return &UserDOList{ListMeta: userPOs.ListMeta, Items: infos}, nil
+	return userPOs, nil
 }
 
 func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *conf.Auth) (string, error) {

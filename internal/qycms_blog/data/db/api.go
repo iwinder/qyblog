@@ -110,7 +110,7 @@ func (r *apiRepo) ListAll(c context.Context, opts biz.ApiDOListOption) (*po.ApiP
 	opts.TotalCount = ret.TotalCount
 	opts.IsLast()
 	ret.FirstFlag = opts.FirstFlag
-	ret.Page = opts.Page
+	ret.Current = opts.Current
 	ret.PageSize = opts.PageSize
 	ret.LastFlag = opts.LastFlag
 	return ret, err

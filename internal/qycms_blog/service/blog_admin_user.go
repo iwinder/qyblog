@@ -13,7 +13,7 @@ import (
 func (s *BlogAdminUserService) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
-		Nickname: in.NickName,
+		Nickname: in.Nickname,
 		Password: in.Password,
 		Salt:     s.conf.Token,
 		Avatar:   in.Avatar,
@@ -25,18 +25,20 @@ func (s *BlogAdminUserService) CreateUser(ctx context.Context, in *v1.CreateUser
 		return nil, err
 	}
 	u := bizToUserResponse(user)
-	return &v1.CreateUserReply{User: &u}, nil
+	return &v1.CreateUserReply{Data: &u}, nil
 }
 
 // UpdateUser 更新用户
 func (s *BlogAdminUserService) UpdateUser(ctx context.Context, in *v1.UpdateUserRequest) (*v1.UpdateUserReply, error) {
 	userDO := &biz.UserDO{
 		Username: in.Username,
-		Nickname: in.NickName,
+		Nickname: in.Nickname,
 		Avatar:   in.Avatar,
 		Email:    in.Email,
 		Phone:    in.Phone,
 	}
+	userDO.ID = in.Id
+	userDO.StatusFlag = int(in.StatusFlag)
 	if in.Roles != nil && len(in.Roles) > 0 {
 		roles := make([]*biz.RoleDO, 0, len(in.Roles))
 		for _, obj := range in.Roles {
@@ -55,7 +57,7 @@ func (s *BlogAdminUserService) UpdateUser(ctx context.Context, in *v1.UpdateUser
 		return nil, err
 	}
 	u := bizToUserResponse(user)
-	return &v1.UpdateUserReply{User: &u}, nil
+	return &v1.UpdateUserReply{Data: &u}, nil
 }
 
 // DeleteUser 根据ID删除用户
@@ -69,10 +71,12 @@ func (s *BlogAdminUserService) DeleteUser(ctx context.Context, in *v1.DeleteUser
 
 // DeleteUsers 根据ID批量删除用户
 func (s *BlogAdminUserService) DeleteUsers(ctx context.Context, in *v1.DeleteUsersRequest) (*v1.DeleteUsersReply, error) {
+
 	err := s.uc.DeleteList(ctx, in.Ids)
 	if err != nil {
 		return nil, err
 	}
+
 	return &v1.DeleteUsersReply{}, nil
 }
 
@@ -83,7 +87,7 @@ func (s *BlogAdminUserService) GetUser(ctx context.Context, in *v1.GetUserReques
 		return nil, err
 	}
 	u := bizToUserResponse(user)
-	return &v1.GetUserReply{User: &u}, nil
+	return &v1.GetUserReply{Data: &u}, nil
 }
 
 // GetMyInfo 获取用户个人信息
@@ -102,54 +106,67 @@ func (s *BlogAdminUserService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRe
 		return nil, err
 	}
 	u := bizToUserResponse(user)
-	return &v1.GetUserReply{User: &u}, nil
+	return &v1.GetUserReply{Data: &u}, nil
 }
 
 // ListUser 获取用户列表
 func (s *BlogAdminUserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
 	opts := biz.UserDOListOption{}
 	opts.ListOptions.Pages = 0
-	opts.ListOptions.Page = -1
+	opts.ListOptions.Current = 0
 	opts.ListOptions.PageSize = 20
-	if in.PageInfo != nil {
-		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Page = int64(in.PageInfo.Page)
-		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
+	if in.Current > 0 {
+		opts.ListOptions.Pages = in.Pages
+		opts.ListOptions.Current = in.Current
+		opts.ListOptions.PageSize = in.PageSize
 	}
-
+	opts.Username = in.Username
+	opts.Nickname = in.Nickname
+	opts.Email = in.Email
+	opts.StatusFlag = int(in.StatusFlag)
 	opts.ListOptions.Init()
 	userList, err := s.uc.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
 	pageInfo := &v1.PageInfo{
-		Page:      uint64(userList.Pages),
-		Size:      uint64(userList.PageSize),
-		Total:     uint64(userList.TotalCount),
-		Pages:     uint64(userList.Pages),
+		Current:   userList.Current,
+		PageSize:  userList.PageSize,
+		Total:     userList.TotalCount,
+		Pages:     userList.Pages,
 		FirstFlag: userList.FirstFlag,
 		LastFlag:  userList.LastFlag,
 	}
 	users := make([]*v1.UserInfoResponse, 0, len(userList.Items))
 	for _, user := range userList.Items {
-		users = append(users, &v1.UserInfoResponse{
-			Id:       user.ID,
-			Username: user.Username,
-			NickName: user.Nickname,
-			Avatar:   user.Avatar,
-			Email:    user.Email,
-			Phone:    user.Phone,
-		})
+		temp := bizToUserResponse(user)
+		users = append(users, &temp)
 	}
 	return &v1.ListUserReply{PageInfo: pageInfo, Items: users}, nil
 }
 func bizToUserResponse(user *biz.UserDO) v1.UserInfoResponse {
 	userInfoRsp := v1.UserInfoResponse{
-		Id:       user.ID,
-		Username: user.Username,
-		NickName: user.Nickname,
-		Avatar:   user.Avatar,
-		Email:    user.Email,
+		Id:         user.ID,
+		Username:   user.Username,
+		Nickname:   user.Nickname,
+		Avatar:     user.Avatar,
+		Email:      user.Email,
+		StatusFlag: int32(user.StatusFlag),
+	}
+	alen := 0
+	if user.Roles != nil && len(user.Roles) >= 0 {
+		alen = len(user.Roles)
+	}
+	roles := make([]*v1.URoleInfo, 0, alen)
+	if user.Roles != nil {
+		for _, obj := range user.Roles {
+			roles = append(roles, &v1.URoleInfo{
+				Id:         obj.ID,
+				Name:       obj.Name,
+				Identifier: obj.Identifier,
+			})
+		}
+		userInfoRsp.Roles = roles
 	}
 
 	return userInfoRsp

@@ -2,7 +2,6 @@ package casbin
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -55,14 +54,12 @@ func Server(opts ...Option) middleware.Middleware {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
 			if header, ok := transport.FromServerContext(ctx); ok {
 				header.Operation()
-				req := header.RequestHeader()
 				httpReq := header.(*http.Transport)
 				method := httpReq.Request().Method
-				fmt.Print(req, method)
 				url := httpReq.PathTemplate()
 
-				claims, ok := jwt.FromContext(ctx)
-				if !ok {
+				claims, cok := jwt.FromContext(ctx)
+				if !cok {
 					return nil, ErrSecurityParseFailed
 				}
 				cla := claims.(jwtV4.MapClaims)
@@ -71,22 +68,25 @@ func Server(opts ...Option) middleware.Middleware {
 					return nil, ErrSecurityUserCreatorMissing
 				}
 				name := auth_constants.PrefixUser + cla["AuthorityName"].(string)
-				hasE := o.casbinData.Enf.GetPermissionsForUser(name, "*")
+				roles, rerr := o.casbinData.Enf.GetRolesForUser(name, "*")
+				if rerr != nil {
+					return nil, rerr
+				}
+				var flag bool
+				var eerr error
+				for _, role := range roles {
+					flag, eerr = o.casbinData.Enf.Enforce(role, "*", url, method)
+					if eerr != nil {
+						return nil, eerr
+					}
+					if flag {
+						break
+					}
 
-				fmt.Println(hasE)
-				flag, eerr := o.casbinData.Enf.Enforce(name, "*", url, method)
-				if eerr != nil {
-					return nil, eerr
 				}
 				if !flag {
 					return nil, ErrUnauthorized
 				}
-				//&(http.Transport)header
-				//opts.casbinData.Enf
-				// Do something on entering
-				//defer func() {
-				//	// Do something on exiting
-				//}()
 				return handler(ctx, req)
 			}
 			return nil, ErrUnauthorized

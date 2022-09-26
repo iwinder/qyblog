@@ -111,11 +111,11 @@ func (s *UserService) GetMyInfo(ctx context.Context, in *v1.GetMyInfoRequest) (*
 func (s *UserService) ListUser(ctx context.Context, in *v1.ListUserRequest) (*v1.ListUserReply, error) {
 	opts := biz.UserDOListOption{}
 	opts.ListOptions.Pages = 0
-	opts.ListOptions.Page = -1
+	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
 	if in.PageInfo != nil {
 		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Page = int64(in.PageInfo.Page)
+		opts.ListOptions.Current = int64(in.PageInfo.Page)
 		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
 	}
 

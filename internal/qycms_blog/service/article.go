@@ -121,7 +121,7 @@ func (s *ArticleService) GetArticle(ctx context.Context, in *v1.GetArticleReques
 func (s *ArticleService) ListArticle(ctx context.Context, in *v1.ListArticleRequest) (*v1.ListArticleReply, error) {
 	opts := biz.ArticleDOListOption{}
 	opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-	opts.ListOptions.Page = int64(in.PageInfo.Page)
+	opts.ListOptions.Current = int64(in.PageInfo.Page)
 	opts.ListOptions.PageSize = int64(in.PageInfo.Size)
 	opts.ListOptions.Init()
 	ArticleList, err := s.auc.ListAll(ctx, opts)

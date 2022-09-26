@@ -29,34 +29,34 @@ func (s *BlogAdminUserService) UpdateQyAdminRole(ctx context.Context, in *v1.Upd
 		Name:       in.Name,
 		Identifier: in.Identifier,
 	}
-	if in.MenusAdmin != nil && len(in.MenusAdmin) > 0 {
-		menus := make([]*biz.MenusAdminDO, 0, len(in.MenusAdmin))
-		for _, item := range in.MenusAdmin {
-			menus = append(menus, &biz.MenusAdminDO{
-				ObjectMeta: metaV1.ObjectMeta{
-					ID: item.Id,
-				},
-				Path: item.Path,
-				Name: item.Name,
-			})
-		}
-		objDO.MenusAdmins = menus
-	}
-	if in.Apis != nil && len(in.Apis) > 0 {
-		apiDOS := make([]*biz.ApiDO, 0, len(in.Apis))
-		for _, item := range in.Apis {
-			apiDOS = append(apiDOS, &biz.ApiDO{
-				ObjectMeta: metaV1.ObjectMeta{
-					ID: item.Id,
-				},
-				ApiGroup:   item.ApiGroup,
-				Identifier: item.Identifier,
-				Method:     item.Method,
-				Path:       item.Path,
-			})
-		}
-		objDO.Apis = apiDOS
-	}
+	//if in.MenusAdmin != nil && len(in.MenusAdmin) > 0 {
+	//	menus := make([]*biz.MenusAdminDO, 0, len(in.MenusAdmin))
+	//	for _, item := range in.MenusAdmin {
+	//		menus = append(menus, &biz.MenusAdminDO{
+	//			ObjectMeta: metaV1.ObjectMeta{
+	//				ID: item.Id,
+	//			},
+	//			Path: item.Path,
+	//			Name: item.Name,
+	//		})
+	//	}
+	//	objDO.MenusAdmins = menus
+	//}
+	//if in.Apis != nil && len(in.Apis) > 0 {
+	//	apiDOS := make([]*biz.ApiDO, 0, len(in.Apis))
+	//	for _, item := range in.Apis {
+	//		apiDOS = append(apiDOS, &biz.ApiDO{
+	//			ObjectMeta: metaV1.ObjectMeta{
+	//				ID: item.Id,
+	//			},
+	//			ApiGroup:   item.ApiGroup,
+	//			Identifier: item.Identifier,
+	//			Method:     item.Method,
+	//			Path:       item.Path,
+	//		})
+	//	}
+	//	objDO.Apis = apiDOS
+	//}
 
 	obj, err := s.rc.Update(ctx, objDO)
 	if err != nil {
@@ -90,31 +90,31 @@ func (s *BlogAdminUserService) GetQyAdminRole(ctx context.Context, in *v1.GetQyA
 		return nil, err
 	}
 	u := bizToRoleResponse(obj)
-	return &v1.GetQyAdminRoleReply{Info: &u}, nil
+	return &v1.GetQyAdminRoleReply{Data: &u}, nil
 }
 
 // ListRole 获取用户列表
 func (s *BlogAdminUserService) ListQyAdminRole(ctx context.Context, in *v1.ListQyAdminRoleRequest) (*v1.ListQyAdminRoleReply, error) {
 	opts := biz.RoleDOListOption{}
 	opts.ListOptions.Pages = 0
-	opts.ListOptions.Page = -1
+	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
-	if in.PageInfo != nil {
-		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Page = int64(in.PageInfo.Page)
-		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
+	if in.Current > 0 {
+		opts.ListOptions.Pages = in.Pages
+		opts.ListOptions.Current = in.Current
+		opts.ListOptions.PageSize = in.PageSize
 	}
-
+	opts.Name = in.Name
 	opts.ListOptions.Init()
 	objList, err := s.rc.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
 	pageInfo := &v1.RolePageInfo{
-		Page:      uint64(objList.Pages),
-		Size:      uint64(objList.PageSize),
-		Total:     uint64(objList.TotalCount),
-		Pages:     uint64(objList.Pages),
+		Current:   objList.Current,
+		PageSize:  objList.PageSize,
+		Total:     objList.TotalCount,
+		Pages:     objList.Pages,
 		FirstFlag: objList.FirstFlag,
 		LastFlag:  objList.LastFlag,
 	}

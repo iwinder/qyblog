@@ -107,16 +107,40 @@ func (r *roleRepo) FindByKey(c context.Context, identifier string) (*po.RolePO, 
 	return obj, err
 }
 
+// FindByUserId 获取用户拥有的角色
+func (r *roleRepo) FindByUserId(c context.Context, userId uint64) ([]*biz.RoleDO, error) {
+	db := r.data.Db
+	rolePos := make([]*po.RolePO, 0)
+	e := db.Where("ID in (?)", db.Table("qy_sys_user_role").Select("role_id ").Where(" user_id = ?", userId)).Find(&rolePos)
+	if e.Error != nil {
+		return nil, e.Error
+	}
+	infos := make([]*biz.RoleDO, 0, len(rolePos))
+	for _, obj := range rolePos {
+		infos = append(infos, &biz.RoleDO{
+			ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.ID,
+			},
+			Name:       obj.Name,
+			Identifier: obj.Identifier,
+		})
+	}
+	return infos, nil
+}
+
 // ListAll 批量查询
 func (r *roleRepo) ListAll(c context.Context, opts biz.RoleDOListOption) (*po.RolePOList, error) {
 	ret := &po.RolePOList{}
 
 	where := &po.RolePO{}
 	var err error
-
+	query := r.data.Db.Model(where)
+	if len(opts.Name) > 0 {
+		query.Where(" name like ? ", "%"+opts.Name+"%")
+	}
 	if opts.PageFlag {
 		ol := gormutil.Unpointer(opts.Offset, opts.Limit)
-		d := r.data.Db.Model(where).Where(where).
+		d := query.
 			Offset(ol.Offset).
 			Limit(ol.Limit).
 			Order("id desc").
@@ -126,7 +150,7 @@ func (r *roleRepo) ListAll(c context.Context, opts biz.RoleDOListOption) (*po.Ro
 			Count(&ret.TotalCount)
 		err = d.Error
 	} else {
-		d := r.data.Db.Model(where).Where(where).
+		d := query.
 			Find(&ret.Items).
 			Count(&ret.TotalCount)
 		err = d.Error
@@ -134,7 +158,7 @@ func (r *roleRepo) ListAll(c context.Context, opts biz.RoleDOListOption) (*po.Ro
 	opts.TotalCount = ret.TotalCount
 	opts.IsLast()
 	ret.FirstFlag = opts.FirstFlag
-	ret.Page = opts.Page
+	ret.Current = opts.Current
 	ret.PageSize = opts.PageSize
 	ret.LastFlag = opts.LastFlag
 	return ret, err

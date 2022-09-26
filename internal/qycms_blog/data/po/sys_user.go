@@ -17,7 +17,7 @@ type UserPO struct {
 	Email             string    `json:"email" gorm:"column:email" validate:"required,email,min=1,max=100"`
 	Phone             string    `json:"phone" gorm:"column:phone" validate:"omitempty"`
 	AdminFlag         bool      `json:"adminFlag,omitempty" gorm:"column:admin_flag;default: 0;" validate:"omitempty"`
-	Roles             []*RolePO `gorm:"many2many:qy_sys_user_role;"`
+	Roles             []*RolePO `gorm:"-"`
 }
 
 type UserPOList struct {
@@ -42,10 +42,5 @@ func (u *UserPO) BeforeCreate(tx *gorm.DB) (err error) {
 func (u *UserPO) AfterCreate(tx *gorm.DB) (err error) {
 	u.InstanceID = idUtil.GetInstanceID(u.ID, "user-")
 	u.Sort = int(u.ID)
-	return tx.Save(u).Error
-}
-
-func (u *UserPO) AfterDelete(tx *gorm.DB) (err error) {
-	u.StatusFlag = 2
-	return tx.Save(u).Error
+	return tx.Updates(u).Error
 }

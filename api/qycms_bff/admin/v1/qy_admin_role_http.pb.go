@@ -111,7 +111,7 @@ func _QyAdminRole_DeleteQyAdminRole0_HTTP_Handler(srv QyAdminRoleHTTPServer) fun
 func _QyAdminRole_DeleteQyAdminRoles0_HTTP_Handler(srv QyAdminRoleHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteQyAdminRolesRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationQyAdminRoleDeleteQyAdminRoles)
@@ -214,10 +214,10 @@ func (c *QyAdminRoleHTTPClientImpl) DeleteQyAdminRole(ctx context.Context, in *D
 func (c *QyAdminRoleHTTPClientImpl) DeleteQyAdminRoles(ctx context.Context, in *DeleteQyAdminRolesRequest, opts ...http.CallOption) (*DeleteQyAdminRolesReply, error) {
 	var out DeleteQyAdminRolesReply
 	pattern := "/api/admin/v1/role"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminRoleDeleteQyAdminRoles))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

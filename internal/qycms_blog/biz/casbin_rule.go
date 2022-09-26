@@ -23,6 +23,7 @@ type CasbinRuleRepo interface {
 	SavePolicies(ctx context.Context, rules [][]string) (bool, error)
 	CleanPolicy(ctx context.Context, p ...string) bool
 	UpdatePolicies(ctx context.Context, oldApi, newApi *ApiDO) (bool, error)
+	DeleteRoleForUser(ctx context.Context, user string, domain ...string) (bool, error)
 	//Update(context.Context, *RoleDO) (*po.RolePO, error)
 	//Delete(context.Context, uint64) error
 	//DeleteList(c context.Context, uids []uint64) error

@@ -30,10 +30,12 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 		return nil, nil, err
 	}
 	userRepo := db.NewUserRepo(dbData, logger)
-	casbinRuleRepo := db.NewCasbinRuleRepo(casbinData, logger)
-	userUsecase := biz.NewUserUsecase(userRepo, casbinRuleRepo, logger)
 	roleRepo := db.NewRoleRepo(dbData, logger)
+	casbinRuleRepo := db.NewCasbinRuleRepo(casbinData, logger)
 	roleUsecase := biz.NewRoleUsecase(roleRepo, casbinRuleRepo, logger)
+	userRoleRepo := db.NewUserRoleRepo(dbData, logger)
+	userRoleUsecase := biz.NewUserRoleUsecase(userRoleRepo, casbinRuleRepo, logger)
+	userUsecase := biz.NewUserUsecase(userRepo, roleUsecase, userRoleUsecase, logger)
 	apiRepo := db.NewApiRepo(dbData, logger)
 	apiUsecase := biz.NewApiUsecase(apiRepo, casbinRuleRepo, logger)
 	menusAdminRepo := db.NewMenusAdminRepo(dbData, logger)

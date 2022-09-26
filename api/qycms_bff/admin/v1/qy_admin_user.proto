@@ -31,6 +31,7 @@ service QyAdminUser {
 	rpc DeleteUsers (DeleteUsersRequest) returns (DeleteUsersReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/user",
+			body:"*"
 		};
 	};
 
@@ -64,17 +65,19 @@ service QyAdminUser {
 message UserInfoResponse {
 	uint64 id = 1;
 	string username = 2;
-	string nickName = 3;
+	string nickname = 3;
 	string avatar = 4;
 	string email = 5;
 	string phone = 6;
+	int32 statusFlag = 7;
+	repeated URoleInfo roles = 8;
 }
 
 message PageInfo {
-	uint64 page = 1;
-	uint64 size = 2;
-	uint64 total = 3;
-	uint64 pages = 4;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
 	bool firstFlag = 5;
 	bool LastFlag = 6;
 }
@@ -89,28 +92,30 @@ message URoleInfo {
 message CreateUserRequest {
 	string username = 1;
 	string password = 2;
-	string nickName = 3;
+	string nickname = 3;
 	string avatar = 4;
 	string email = 5;
 	string phone = 6;
-	repeated URoleInfo roles = 7;
+	int32 statusFlag = 7;
+	repeated URoleInfo roles = 8;
 }
 
 message CreateUserReply {
-	UserInfoResponse user = 1;
+	UserInfoResponse data = 1;
 }
 
 message UpdateUserRequest {
 	uint64 id = 1;
 	string username = 2;
-	string nickName = 3;
+	string nickname = 3;
 	string avatar = 4;
 	string email = 5;
 	string phone = 6;
-	repeated URoleInfo roles = 7;
+	int32 statusFlag = 7;
+	repeated URoleInfo roles = 8;
 }
 message UpdateUserReply {
-	UserInfoResponse user = 1;
+	UserInfoResponse data = 1;
 }
 
 message DeleteUserRequest {
@@ -130,16 +135,23 @@ message GetUserRequest {
 	uint64 id = 1;
 }
 message GetUserReply {
-	UserInfoResponse user = 1;
+	UserInfoResponse data = 1;
 }
 
 message		GetMyInfoRequest {
 }
 
 message ListUserRequest {
-	PageInfo pageInfo = 1;
-	string username = 2;
-	string nickName = 3;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+	string username = 7;
+	string nickname = 8;
+	string email = 9;
+	int32 statusFlag = 10;
 }
 
 message ListUserReply {

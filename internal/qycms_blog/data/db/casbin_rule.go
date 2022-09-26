@@ -53,6 +53,14 @@ func (r *casbinRuleRepo) UpdatePolicies(ctx context.Context, oldApi, newApi *biz
 	}
 	return true, nil
 }
+func (r *casbinRuleRepo) DeleteRoleForUser(ctx context.Context, user string, domain ...string) (bool, error) {
+	flag, err := r.cdata.Enf.DeleteRolesForUser(user, domain...)
+
+	if !flag || err != nil {
+		return false, err
+	}
+	return true, nil
+}
 
 //func (r *casbinRuleRepo) SaveRoleForUser(ctx context.Context, obj *biz.RoleDO) (*po.RolePO, error) {
 //	//r.cdata.Enf.AddRoleForUser()

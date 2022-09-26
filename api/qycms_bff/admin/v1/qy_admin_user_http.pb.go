@@ -114,7 +114,7 @@ func _QyAdminUser_DeleteUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx h
 func _QyAdminUser_DeleteUsers0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteUsersRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationQyAdminUserDeleteUsers)
@@ -237,10 +237,10 @@ func (c *QyAdminUserHTTPClientImpl) DeleteUser(ctx context.Context, in *DeleteUs
 func (c *QyAdminUserHTTPClientImpl) DeleteUsers(ctx context.Context, in *DeleteUsersRequest, opts ...http.CallOption) (*DeleteUsersReply, error) {
 	var out DeleteUsersReply
 	pattern := "/api/admin/v1/user"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminUserDeleteUsers))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

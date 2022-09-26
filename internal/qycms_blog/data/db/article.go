@@ -132,7 +132,7 @@ func (r *articleRepo) ListAll(ctx context.Context, opts biz.ArticleDOListOption)
 	opts.TotalCount = ret.TotalCount
 	opts.IsLast()
 	ret.FirstFlag = opts.FirstFlag
-	ret.Page = opts.Page
+	ret.Current = opts.Current
 	ret.PageSize = opts.PageSize
 	ret.LastFlag = opts.LastFlag
 	return ret, err

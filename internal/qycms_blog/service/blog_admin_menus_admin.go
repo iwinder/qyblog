@@ -76,11 +76,11 @@ func (s *BlogAdminUserService) GetQyAdminMenusAdmin(ctx context.Context, in *v1.
 func (s *BlogAdminUserService) ListQyAdminMenusAdmin(ctx context.Context, in *v1.ListQyAdminMenusAdminRequest) (*v1.ListQyAdminMenusAdminReply, error) {
 	opts := biz.MenusAdminDOListOption{}
 	opts.ListOptions.Pages = 0
-	opts.ListOptions.Page = -1
+	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
 	if in.PageInfo != nil {
 		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Page = int64(in.PageInfo.Page)
+		opts.ListOptions.Current = int64(in.PageInfo.Page)
 		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
 	}
 
