@@ -10,6 +10,8 @@ import (
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -31,6 +33,15 @@ type UserDO struct {
 	AdminFlag bool
 	Roles     []*RoleDO
 }
+type UserInfoDO struct {
+	metaV1.ObjectMeta
+	Nickname  string
+	Avatar    string
+	Email     string
+	Phone     string
+	Token     string
+	RoleNames string
+}
 type UserDOList struct {
 	metaV1.ListMeta `json:",inline"`
 	Items           []*UserDO `json:"items"`
@@ -50,6 +61,7 @@ type UserRepo interface {
 	FindByID(context.Context, uint64) (*UserDO, error)
 	FindByUsername(c context.Context, username string) (*UserDO, error)
 	ListAll(c context.Context, opts UserDOListOption) (*UserDOList, error)
+	ChangePassword(c context.Context, user *UserDO) error
 	//VerifyPassword(ctx context.Context, u *UserDO) (bool, error)
 }
 
@@ -171,20 +183,35 @@ func (uc *UserUsecase) ListAll(ctx context.Context, opts UserDOListOption) (*Use
 	return userPOs, nil
 }
 
-func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *conf.Auth) (string, error) {
+func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *conf.Auth) (*UserInfoDO, error) {
 	userInfo, err := uc.FindOneByUsername(ctx, u.Username)
 	if err != nil {
-		return "", errors.New("登录失败" + err.Error())
+		return nil, errors.New("登录失败" + err.Error())
 	}
 	aerr := bcryptUtil.Compare(userInfo.Password, u.Password+u.Salt)
 	if aerr != nil {
-		return "", errors.New("登录失败" + aerr.Error())
+		return nil, errors.New("登录失败" + aerr.Error())
 	}
+	var roleNames []string
+	var roleIds []string
+	if len(userInfo.Roles) > 0 {
+		roleNames = make([]string, 0, len(userInfo.Roles))
+		for _, obj := range userInfo.Roles {
+			roleIds = append(roleIds, strconv.FormatUint(obj.ID, 10))
+			roleNames = append(roleNames, obj.Name)
+		}
+	} else {
+		roleIds = make([]string, 0, 0)
+		roleNames = make([]string, 0, 0)
+	}
+	roleNameStr := strings.Join(roleNames, ",")
+	roleIdStr := strings.Join(roleIds, ",")
 	// 获取角色信息
 	claims := jwt2.SecurityUser{
 		ID:            userInfo.ID,
 		NickName:      userInfo.Nickname,
 		AuthorityName: userInfo.Username,
+		RoleIds:       roleIdStr,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(authConf.Jwt.ExpireDuration.AsDuration())), // 设置token的过期时间
 		},
@@ -193,7 +220,24 @@ func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *
 	token, err := jwt2.CreateToken(claims, authConf.Jwt.JwtSecret)
 	if err != nil {
 		log.Errorf("登录失败，生成token失败：%v", err)
-		return "", errors.New("登录失败" + err.Error())
+		return nil, errors.New("登录失败" + err.Error())
 	}
-	return token, err
+
+	user := &UserInfoDO{
+		Nickname:  userInfo.Nickname,
+		Avatar:    userInfo.Avatar,
+		Token:     token,
+		RoleNames: roleNameStr,
+	}
+
+	return user, err
+}
+
+func (uc *UserUsecase) ChangePassword(ctx context.Context, user *UserDO) error {
+	var err error
+	user.Password, err = bcryptUtil.Encrypt(user.Password + user.Salt)
+	if err != nil {
+		return err
+	}
+	return uc.repo.ChangePassword(ctx, user)
 }

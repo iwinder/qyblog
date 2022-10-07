@@ -36,6 +36,7 @@ type QyAdminUserClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
+	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 	// 验证密码用于登录
 	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordReply, error)
 }
@@ -111,6 +112,15 @@ func (c *qyAdminUserClient) ListUser(ctx context.Context, in *ListUserRequest, o
 	return out, nil
 }
 
+func (c *qyAdminUserClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*CreateUserReply, error) {
+	out := new(CreateUserReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/ChangePassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *qyAdminUserClient) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordReply, error) {
 	out := new(VerifyPasswordReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminUser/VerifyPassword", in, out, opts...)
@@ -138,6 +148,7 @@ type QyAdminUserServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
+	ChangePassword(context.Context, *ChangePasswordRequest) (*CreateUserReply, error)
 	// 验证密码用于登录
 	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error)
 	mustEmbedUnimplementedQyAdminUserServer()
@@ -167,6 +178,9 @@ func (UnimplementedQyAdminUserServer) GetUser(context.Context, *GetUserRequest) 
 }
 func (UnimplementedQyAdminUserServer) ListUser(context.Context, *ListUserRequest) (*ListUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUser not implemented")
+}
+func (UnimplementedQyAdminUserServer) ChangePassword(context.Context, *ChangePasswordRequest) (*CreateUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
 }
 func (UnimplementedQyAdminUserServer) VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
@@ -310,6 +324,24 @@ func _QyAdminUser_ListUser_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminUser_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminUserServer).ChangePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminUser/ChangePassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminUserServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QyAdminUser_VerifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VerifyPasswordReq)
 	if err := dec(in); err != nil {
@@ -362,6 +394,10 @@ var QyAdminUser_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUser",
 			Handler:    _QyAdminUser_ListUser_Handler,
+		},
+		{
+			MethodName: "ChangePassword",
+			Handler:    _QyAdminUser_ChangePassword_Handler,
 		},
 		{
 			MethodName: "VerifyPassword",

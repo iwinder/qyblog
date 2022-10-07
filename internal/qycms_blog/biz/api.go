@@ -4,9 +4,10 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type ApiDO struct {
@@ -16,8 +17,18 @@ type ApiDO struct {
 	Path        string
 	Description string
 	Identifier  string
+	GroupId     uint64
 }
-
+type ApiTreeDO struct {
+	ID          string
+	ApiGroup    string
+	Method      string
+	Path        string
+	Description string
+	Identifier  string
+	GroupId     uint64
+	Children    []*ApiTreeDO
+}
 type ApiDOList struct {
 	metaV1.ListMeta `json:",inline"`
 	Items           []*ApiDO `json:"items"`
@@ -29,32 +40,31 @@ type ApiDOListOption struct {
 }
 
 type ApiRepo interface {
-	Save(context.Context, *ApiDO) (*po.ApiPO, error)
-	Update(context.Context, *ApiDO) (*po.ApiPO, error)
+	Save(context.Context, *ApiDO) (*ApiDO, error)
+	Update(context.Context, *ApiDO) (*ApiDO, error)
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
-	FindByID(context.Context, uint64) (*po.ApiPO, error)
-	ListAll(c context.Context, opts ApiDOListOption) (*po.ApiPOList, error)
+	FindByID(context.Context, uint64) (*ApiDO, error)
+	ListAll(c context.Context, opts ApiDOListOption) (*ApiDOList, error)
 }
 
 type ApiUsecase struct {
 	repo     ApiRepo
+	acg      *ApiGroupUsecase
 	casbRepo CasbinRuleRepo
 	log      *log.Helper
 }
 
-func NewApiUsecase(repo ApiRepo, casbRepo CasbinRuleRepo, logger log.Logger) *ApiUsecase {
-	return &ApiUsecase{repo: repo, casbRepo: casbRepo, log: log.NewHelper(logger)}
+func NewApiUsecase(repo ApiRepo, acg *ApiGroupUsecase, casbRepo CasbinRuleRepo, logger log.Logger) *ApiUsecase {
+	return &ApiUsecase{repo: repo, acg: acg, casbRepo: casbRepo, log: log.NewHelper(logger)}
 }
 
 func (uc *ApiUsecase) Create(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", obj.Path)
-	objPO, err := uc.repo.Save(ctx, obj)
+	objDO, err := uc.repo.Save(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
-	objDO := &ApiDO{Path: objPO.Path}
-	objDO.ID = objPO.ID
 	return objDO, nil
 }
 
@@ -70,16 +80,13 @@ func (uc *ApiUsecase) Update(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 		return nil, err
 	}
 
-	objPO, err := uc.repo.Update(ctx, obj)
+	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-	// 更新权限
-	objDO := &ApiDO{Path: objPO.Path}
-	objDO.ID = objPO.ID
 	return objDO, nil
 }
 
@@ -105,21 +112,13 @@ func (uc *ApiUsecase) FindOneByID(ctx context.Context, id uint64) (*ApiDO, error
 		}
 		return nil, err
 	}
-	objDO := &ApiDO{
-		ObjectMeta:  obj.ObjectMeta,
-		ApiGroup:    obj.ApiGroup,
-		Identifier:  obj.Identifier,
-		Method:      obj.Method,
-		Path:        obj.Path,
-		Description: obj.Description,
-	}
-	return objDO, nil
+	return obj, nil
 }
 
 // ListAll 批量查询
 func (uc *ApiUsecase) ListAll(ctx context.Context, opts ApiDOListOption) (*ApiDOList, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")
-	objPOs, err := uc.repo.ListAll(ctx, opts)
+	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
@@ -127,22 +126,51 @@ func (uc *ApiUsecase) ListAll(ctx context.Context, opts ApiDOListOption) (*ApiDO
 		return nil, err
 	}
 
-	infos := make([]*ApiDO, 0, len(objPOs.Items))
-	for _, obj := range objPOs.Items {
-		infos = append(infos, &ApiDO{
-			ObjectMeta: metaV1.ObjectMeta{
-				ID:         obj.ID,
-				InstanceID: obj.InstanceID,
-				Extend:     obj.Extend,
-				CreatedAt:  obj.CreatedAt,
-				UpdatedAt:  obj.UpdatedAt,
-			},
-			ApiGroup:    obj.ApiGroup,
-			Identifier:  obj.Identifier,
-			Method:      obj.Method,
-			Path:        obj.Path,
-			Description: obj.Description,
-		})
+	return objDOs, nil
+}
+func (uc *ApiUsecase) TreeAll(ctx context.Context) ([]*ApiTreeDO, error) {
+	uc.log.WithContext(ctx).Infof("ListAll")
+	// 获取分组
+	acgOpt := ApiGroupDOListOption{}
+	acgOpt.PageFlag = false
+	acgData, acgErr := uc.acg.ListAll(ctx, acgOpt)
+	if acgErr != nil {
+		return nil, acgErr
 	}
-	return &ApiDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
+	opts := ApiDOListOption{}
+	opts.PageFlag = false
+	var result []*ApiTreeDO
+	acgLen := len(acgData.Items)
+	if acgLen > 0 {
+		result = make([]*ApiTreeDO, 0, acgLen)
+		for _, obj := range acgData.Items {
+			parent := &ApiTreeDO{
+				ID:          auth_constants.PrefixApiGroup + strconv.FormatUint(obj.ID, 10),
+				Description: obj.Name,
+			}
+			opts.GroupId = obj.ID
+			objDOs, err := uc.repo.ListAll(ctx, opts)
+			if err != nil {
+				uc.log.Error(err.Error())
+				parent.Children = make([]*ApiTreeDO, 0, 0)
+				continue
+			}
+			child := make([]*ApiTreeDO, 0, len(objDOs.Items))
+			for _, cobj := range objDOs.Items {
+				child = append(child, &ApiTreeDO{
+					ID:          strconv.FormatUint(cobj.ID, 10),
+					Path:        cobj.Path,
+					Method:      cobj.Method,
+					Identifier:  cobj.Identifier,
+					Description: cobj.Description,
+				})
+			}
+			parent.Children = child
+			result = append(result, parent)
+		}
+	} else {
+		result = make([]*ApiTreeDO, 0, 0)
+	}
+
+	return result, nil
 }

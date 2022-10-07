@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
@@ -12,10 +11,11 @@ import (
 
 type RoleDO struct {
 	metaV1.ObjectMeta
-	Name        string
-	Identifier  string
-	MenusAdmins []*MenusAdminDO
-	Apis        []*ApiDO
+	Name       string
+	Identifier string
+	MenusIDs   []uint64
+	ApiIds     []uint64
+	Apis       []*ApiDO
 }
 
 type RoleDOList struct {
@@ -42,11 +42,13 @@ type RoleRepo interface {
 type RoleUsecase struct {
 	repo      RoleRepo
 	cabinRepo CasbinRuleRepo
+	roleMenus *RoleMenusUsecase
+	ra        *RoleApiUsecase
 	log       *log.Helper
 }
 
-func NewRoleUsecase(repo RoleRepo, cabinRepo CasbinRuleRepo, logger log.Logger) *RoleUsecase {
-	return &RoleUsecase{repo: repo, cabinRepo: cabinRepo, log: log.NewHelper(logger)}
+func NewRoleUsecase(repo RoleRepo, cabinRepo CasbinRuleRepo, roleMenus *RoleMenusUsecase, ra *RoleApiUsecase, logger log.Logger) *RoleUsecase {
+	return &RoleUsecase{repo: repo, cabinRepo: cabinRepo, roleMenus: roleMenus, ra: ra, log: log.NewHelper(logger)}
 }
 
 func (uc *RoleUsecase) Create(ctx context.Context, obj *RoleDO) (*RoleDO, error) {
@@ -68,17 +70,6 @@ func (uc *RoleUsecase) Update(ctx context.Context, obj *RoleDO) (*RoleDO, error)
 			return nil, ErrUserNotFound
 		}
 		return nil, err
-	}
-	if obj.Apis != nil && len(obj.Apis) > 0 {
-		rules := [][]string{}
-		for _, aobj := range obj.Apis {
-			rules = append(rules, []string{auth_constants.PrefixRole + obj.Identifier, aobj.Identifier, aobj.Path, aobj.Method})
-		}
-		uc.cabinRepo.CleanPolicy(ctx, auth_constants.PrefixRole+obj.Identifier)
-		_, cerr := uc.cabinRepo.SavePolicies(ctx, rules)
-		if cerr != nil {
-			return nil, cerr
-		}
 	}
 	return objDO, nil
 }
@@ -152,6 +143,17 @@ func (uc *RoleUsecase) ListAll(ctx context.Context, opts RoleDOListOption) (*Rol
 
 	infos := make([]*RoleDO, 0, len(objPOs.Items))
 	for _, obj := range objPOs.Items {
+		// 角色的菜单
+		menusIds, merr := uc.roleMenus.FindMenusIdsByRoleId(ctx, obj.ID)
+		if merr != nil {
+			uc.log.Error("角色菜单获取失败", err)
+		}
+		// 角色 Apis
+		apiIds, aerr := uc.ra.FindApiIdsByRoleId(ctx, obj.ID)
+		if aerr != nil {
+			uc.log.Error("角色Apis获取失败", err)
+		}
+		// 角色基本信息
 		infos = append(infos, &RoleDO{
 			ObjectMeta: metaV1.ObjectMeta{
 				ID:         obj.ID,
@@ -162,7 +164,10 @@ func (uc *RoleUsecase) ListAll(ctx context.Context, opts RoleDOListOption) (*Rol
 			},
 			Name:       obj.Name,
 			Identifier: obj.Identifier,
+			MenusIDs:   menusIds,
+			ApiIds:     apiIds,
 		})
+		//
 	}
 	return &RoleDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
 }

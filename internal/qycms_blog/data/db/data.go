@@ -18,9 +18,9 @@ import (
 
 // ProviderSet is cdata providers.
 var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewCasbinRuleRepo,
-	NewUserRoleRepo,
+	NewUserRoleRepo, NewRoleMenusRepo, NewRoleApiRepo,
 	NewUserRepo, NewRoleRepo,
-	NewMenusAdminRepo, NewApiRepo,
+	NewMenusAdminRepo, NewApiRepo, NewApiGroupRepo,
 	NewArticleRepo, NewArticleContentRepo,
 	NewCommentAgentRepo, NewCommentIndexRepo, NewCommentContentRepo,
 )
@@ -99,9 +99,21 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 func AutoMigrateTable(dbIns *gorm.DB) {
 	dbIns.AutoMigrate(&blogPo.ArticlePO{},
 		&blogPo.UserPO{}, &blogPo.RolePO{},
-		&blogPo.ApiPO{}, &blogPo.MenusAdminPO{},
-		&blogPo.UserRolePO{},
+		&blogPo.ApiPO{}, &blogPo.ApiGroupPO{}, &blogPo.MenusAdminPO{},
+		&blogPo.UserRolePO{}, &blogPo.RoleApiPO{}, &blogPo.RoleMenusPO{},
 	) //&userPo.UserPO{},
 	//&commentsPo.CommentAgentPO{}, &commentsPo.CommentIndexPO{}, &commentsPo.CommentContentPO{},
 
+}
+
+func withFilterKeyLikeValue(key, value string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where(key+" like ? ", value)
+	}
+}
+
+func withFilterKeyEquarlsValue(key string, value interface{}) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where(key+" = ? ", value)
+	}
 }

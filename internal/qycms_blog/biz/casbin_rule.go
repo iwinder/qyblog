@@ -21,7 +21,7 @@ type CasbinRuleRepo interface {
 	SaveRoleForUser(ctx context.Context, user string, roles []string, domain ...string) (bool, error)
 	UpdateRoleForUser(ctx context.Context, user string, roles []string, domain ...string) (bool, error)
 	SavePolicies(ctx context.Context, rules [][]string) (bool, error)
-	CleanPolicy(ctx context.Context, p ...string) bool
+	CleanPolicy(ctx context.Context, p ...string) (bool, error)
 	UpdatePolicies(ctx context.Context, oldApi, newApi *ApiDO) (bool, error)
 	DeleteRoleForUser(ctx context.Context, user string, domain ...string) (bool, error)
 	//Update(context.Context, *RoleDO) (*po.RolePO, error)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
+	"strconv"
 )
 
 type UserRoleDO struct {
@@ -66,7 +67,7 @@ func (uc *UserRoleUsecase) UpdateRoleForUser(ctx context.Context, user *UserDO) 
 		roleIdfStrs := make([]string, 0, rlen)
 		userRoles := make([]*UserRoleDO, 0, rlen)
 		for _, obj := range user.Roles {
-			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+string(obj.ID))
+			roleIdfStrs = append(roleIdfStrs, auth_constants.PrefixRole+strconv.FormatUint(obj.ID, 10))
 			userRoles = append(userRoles, &UserRoleDO{
 				UserID: user.ID,
 				RoleID: obj.ID,

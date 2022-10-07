@@ -12,8 +12,8 @@ type RolePO struct {
 	Name              string          `json:"name" gorm:"column:name;comment:角色名称""`
 	Identifier        string          `json:"identifier" gorm:"column:identifier;comment:唯一英文标识"`
 	Users             []*UserPO       `gorm:"-"`
-	MenusAdmins       []*MenusAdminPO `gorm:"many2many:qy_sys_role_menus_admin"`
-	Apis              []*ApiPO        `gorm:"many2many:qy_sys_role_api"`
+	MenusAdmins       []*MenusAdminPO `gorm:"-"`
+	Apis              []*ApiPO        `gorm:"-"`
 }
 
 type RolePOList struct {

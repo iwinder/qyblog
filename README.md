@@ -28,8 +28,14 @@
 - 用户->blog服务webApi接口->推送kafka
 - 评论服务->订阅kafka主题获取评论->保存到数据库中
 - 推送kafka为可选部分，根据配置文件决定是否启动
-
-## API生成
+## API 生成
+```shell
+# 创建api
+kratos proto add api/qycms_bff/admin/v1/qy_admin_api_group.proto
+# 生成api
+kratos proto client api/
+```
+## API JSON文件生成
 
 暂时需要手动在 Makefile 文件中手动配置需要生成 API 的文件，然后执行 `make swagger` 会在对应的文件夹下面生成json文件
 

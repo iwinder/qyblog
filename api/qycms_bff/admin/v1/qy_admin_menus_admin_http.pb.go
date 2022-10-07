@@ -111,7 +111,7 @@ func _QyAdminMenusAdmin_DeleteQyAdminMenusAdmin0_HTTP_Handler(srv QyAdminMenusAd
 func _QyAdminMenusAdmin_DeleteQyAdminMenusAdmins0_HTTP_Handler(srv QyAdminMenusAdminHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteQyAdminMenusAdminsRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationQyAdminMenusAdminDeleteQyAdminMenusAdmins)
@@ -214,10 +214,10 @@ func (c *QyAdminMenusAdminHTTPClientImpl) DeleteQyAdminMenusAdmin(ctx context.Co
 func (c *QyAdminMenusAdminHTTPClientImpl) DeleteQyAdminMenusAdmins(ctx context.Context, in *DeleteQyAdminMenusAdminsRequest, opts ...http.CallOption) (*DeleteQyAdminMenusAdminsReply, error) {
 	var out DeleteQyAdminMenusAdminsReply
 	pattern := "/api/admin/v1/menusAdmin"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminMenusAdminDeleteQyAdminMenusAdmins))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

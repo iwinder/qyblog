@@ -24,6 +24,8 @@ const OperationQyAdminRoleDeleteQyAdminRole = "/api.qycms_bff.admin.v1.QyAdminRo
 const OperationQyAdminRoleDeleteQyAdminRoles = "/api.qycms_bff.admin.v1.QyAdminRole/DeleteQyAdminRoles"
 const OperationQyAdminRoleGetQyAdminRole = "/api.qycms_bff.admin.v1.QyAdminRole/GetQyAdminRole"
 const OperationQyAdminRoleListQyAdminRole = "/api.qycms_bff.admin.v1.QyAdminRole/ListQyAdminRole"
+const OperationQyAdminRoleSaveQyAdminRoleApis = "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleApis"
+const OperationQyAdminRoleSaveQyAdminRoleMenus = "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleMenus"
 const OperationQyAdminRoleUpdateQyAdminRole = "/api.qycms_bff.admin.v1.QyAdminRole/UpdateQyAdminRole"
 
 type QyAdminRoleHTTPServer interface {
@@ -32,6 +34,8 @@ type QyAdminRoleHTTPServer interface {
 	DeleteQyAdminRoles(context.Context, *DeleteQyAdminRolesRequest) (*DeleteQyAdminRolesReply, error)
 	GetQyAdminRole(context.Context, *GetQyAdminRoleRequest) (*GetQyAdminRoleReply, error)
 	ListQyAdminRole(context.Context, *ListQyAdminRoleRequest) (*ListQyAdminRoleReply, error)
+	SaveQyAdminRoleApis(context.Context, *SaveRoleApisRequest) (*SaveRoleApisReply, error)
+	SaveQyAdminRoleMenus(context.Context, *SaveRoleMenusRequest) (*SaveRoleMenusReply, error)
 	UpdateQyAdminRole(context.Context, *UpdateQyAdminRoleRequest) (*UpdateQyAdminRoleReply, error)
 }
 
@@ -43,6 +47,8 @@ func RegisterQyAdminRoleHTTPServer(s *http.Server, srv QyAdminRoleHTTPServer) {
 	r.DELETE("/api/admin/v1/role", _QyAdminRole_DeleteQyAdminRoles0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/role/{id}", _QyAdminRole_GetQyAdminRole0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/role", _QyAdminRole_ListQyAdminRole0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/role-menus", _QyAdminRole_SaveQyAdminRoleMenus0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/role-apis", _QyAdminRole_SaveQyAdminRoleApis0_HTTP_Handler(srv))
 }
 
 func _QyAdminRole_CreateQyAdminRole0_HTTP_Handler(srv QyAdminRoleHTTPServer) func(ctx http.Context) error {
@@ -168,12 +174,52 @@ func _QyAdminRole_ListQyAdminRole0_HTTP_Handler(srv QyAdminRoleHTTPServer) func(
 	}
 }
 
+func _QyAdminRole_SaveQyAdminRoleMenus0_HTTP_Handler(srv QyAdminRoleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SaveRoleMenusRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminRoleSaveQyAdminRoleMenus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SaveQyAdminRoleMenus(ctx, req.(*SaveRoleMenusRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SaveRoleMenusReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyAdminRole_SaveQyAdminRoleApis0_HTTP_Handler(srv QyAdminRoleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in SaveRoleApisRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminRoleSaveQyAdminRoleApis)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.SaveQyAdminRoleApis(ctx, req.(*SaveRoleApisRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SaveRoleApisReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyAdminRoleHTTPClient interface {
 	CreateQyAdminRole(ctx context.Context, req *CreateQyAdminRoleRequest, opts ...http.CallOption) (rsp *CreateQyAdminRoleReply, err error)
 	DeleteQyAdminRole(ctx context.Context, req *DeleteQyAdminRoleRequest, opts ...http.CallOption) (rsp *DeleteQyAdminRoleReply, err error)
 	DeleteQyAdminRoles(ctx context.Context, req *DeleteQyAdminRolesRequest, opts ...http.CallOption) (rsp *DeleteQyAdminRolesReply, err error)
 	GetQyAdminRole(ctx context.Context, req *GetQyAdminRoleRequest, opts ...http.CallOption) (rsp *GetQyAdminRoleReply, err error)
 	ListQyAdminRole(ctx context.Context, req *ListQyAdminRoleRequest, opts ...http.CallOption) (rsp *ListQyAdminRoleReply, err error)
+	SaveQyAdminRoleApis(ctx context.Context, req *SaveRoleApisRequest, opts ...http.CallOption) (rsp *SaveRoleApisReply, err error)
+	SaveQyAdminRoleMenus(ctx context.Context, req *SaveRoleMenusRequest, opts ...http.CallOption) (rsp *SaveRoleMenusReply, err error)
 	UpdateQyAdminRole(ctx context.Context, req *UpdateQyAdminRoleRequest, opts ...http.CallOption) (rsp *UpdateQyAdminRoleReply, err error)
 }
 
@@ -244,6 +290,32 @@ func (c *QyAdminRoleHTTPClientImpl) ListQyAdminRole(ctx context.Context, in *Lis
 	opts = append(opts, http.Operation(OperationQyAdminRoleListQyAdminRole))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminRoleHTTPClientImpl) SaveQyAdminRoleApis(ctx context.Context, in *SaveRoleApisRequest, opts ...http.CallOption) (*SaveRoleApisReply, error) {
+	var out SaveRoleApisReply
+	pattern := "/api/admin/v1/role-apis"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminRoleSaveQyAdminRoleApis))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminRoleHTTPClientImpl) SaveQyAdminRoleMenus(ctx context.Context, in *SaveRoleMenusRequest, opts ...http.CallOption) (*SaveRoleMenusReply, error) {
+	var out SaveRoleMenusReply
+	pattern := "/api/admin/v1/role-menus"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminRoleSaveQyAdminRoleMenus))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

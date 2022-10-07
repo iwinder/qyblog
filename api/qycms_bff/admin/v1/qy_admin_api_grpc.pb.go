@@ -30,6 +30,7 @@ type QyAdminApiClient interface {
 	DeleteQyAdminApis(ctx context.Context, in *DeleteQyAdminApisRequest, opts ...grpc.CallOption) (*DeleteQyAdminApisReply, error)
 	GetQyAdminApi(ctx context.Context, in *GetQyAdminApiRequest, opts ...grpc.CallOption) (*GetQyAdminApiReply, error)
 	ListQyAdminApi(ctx context.Context, in *ListQyAdminApiRequest, opts ...grpc.CallOption) (*ListQyAdminApiReply, error)
+	TreeQyAdminApi(ctx context.Context, in *TreeQyAdminApiRequest, opts ...grpc.CallOption) (*TreeQyAdminApiReply, error)
 }
 
 type qyAdminApiClient struct {
@@ -94,6 +95,15 @@ func (c *qyAdminApiClient) ListQyAdminApi(ctx context.Context, in *ListQyAdminAp
 	return out, nil
 }
 
+func (c *qyAdminApiClient) TreeQyAdminApi(ctx context.Context, in *TreeQyAdminApiRequest, opts ...grpc.CallOption) (*TreeQyAdminApiReply, error) {
+	out := new(TreeQyAdminApiReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminApi/TreeQyAdminApi", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QyAdminApiServer is the server API for QyAdminApi service.
 // All implementations must embed UnimplementedQyAdminApiServer
 // for forward compatibility
@@ -106,6 +116,7 @@ type QyAdminApiServer interface {
 	DeleteQyAdminApis(context.Context, *DeleteQyAdminApisRequest) (*DeleteQyAdminApisReply, error)
 	GetQyAdminApi(context.Context, *GetQyAdminApiRequest) (*GetQyAdminApiReply, error)
 	ListQyAdminApi(context.Context, *ListQyAdminApiRequest) (*ListQyAdminApiReply, error)
+	TreeQyAdminApi(context.Context, *TreeQyAdminApiRequest) (*TreeQyAdminApiReply, error)
 	mustEmbedUnimplementedQyAdminApiServer()
 }
 
@@ -130,6 +141,9 @@ func (UnimplementedQyAdminApiServer) GetQyAdminApi(context.Context, *GetQyAdminA
 }
 func (UnimplementedQyAdminApiServer) ListQyAdminApi(context.Context, *ListQyAdminApiRequest) (*ListQyAdminApiReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminApi not implemented")
+}
+func (UnimplementedQyAdminApiServer) TreeQyAdminApi(context.Context, *TreeQyAdminApiRequest) (*TreeQyAdminApiReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TreeQyAdminApi not implemented")
 }
 func (UnimplementedQyAdminApiServer) mustEmbedUnimplementedQyAdminApiServer() {}
 
@@ -252,6 +266,24 @@ func _QyAdminApi_ListQyAdminApi_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminApi_TreeQyAdminApi_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TreeQyAdminApiRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminApiServer).TreeQyAdminApi(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminApi/TreeQyAdminApi",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminApiServer).TreeQyAdminApi(ctx, req.(*TreeQyAdminApiRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QyAdminApi_ServiceDesc is the grpc.ServiceDesc for QyAdminApi service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -282,6 +314,10 @@ var QyAdminApi_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQyAdminApi",
 			Handler:    _QyAdminApi_ListQyAdminApi_Handler,
+		},
+		{
+			MethodName: "TreeQyAdminApi",
+			Handler:    _QyAdminApi_TreeQyAdminApi_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

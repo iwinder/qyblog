@@ -125,6 +125,44 @@ func (s *BlogAdminUserService) ListQyAdminRole(ctx context.Context, in *v1.ListQ
 	}
 	return &v1.ListQyAdminRoleReply{PageInfo: pageInfo, Items: objs}, nil
 }
+
+func (s *BlogAdminUserService) SaveQyAdminRoleMenus(ctx context.Context, in *v1.SaveRoleMenusRequest) (*v1.SaveRoleMenusReply, error) {
+	param := &biz.RoleDO{
+		MenusIDs: in.MenusIDs,
+	}
+	param.ID = in.Id
+	err := s.rm.UpdateRoleForUser(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.SaveRoleMenusReply{}, nil
+}
+func (s *BlogAdminUserService) SaveQyAdminRoleApis(ctx context.Context, in *v1.SaveRoleApisRequest) (*v1.SaveRoleApisReply, error) {
+
+	apis := make([]*biz.ApiDO, 0, len(in.Apis))
+	for _, obj := range in.Apis {
+		apis = append(apis, &biz.ApiDO{
+			ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.Id,
+			},
+			ApiGroup:    obj.ApiGroup,
+			Method:      obj.Method,
+			Path:        obj.Path,
+			Description: obj.Description,
+			Identifier:  obj.Identifier,
+		})
+	}
+	param := &biz.RoleDO{
+		ApiIds: in.ApiIDs,
+		Apis:   apis,
+	}
+	param.ID = in.Id
+	err := s.ra.UpdateApisForRole(ctx, param)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.SaveRoleApisReply{}, nil
+}
 func bizToRoleResponse(obj *biz.RoleDO) v1.RoleInfoResponse {
 	objInfoRsp := v1.RoleInfoResponse{
 		Id:         obj.ID,
@@ -145,16 +183,11 @@ func bizToRoleResponse(obj *biz.RoleDO) v1.RoleInfoResponse {
 		}
 		objInfoRsp.Apis = aobjRes
 	}
-
-	if obj.MenusAdmins != nil && len(obj.MenusAdmins) > 0 {
-		aobjRes := make([]*v1.RMenusAdminInfoResponse, 0, len(obj.MenusAdmins))
-		for _, item := range obj.Apis {
-			aobjRes = append(aobjRes, &v1.RMenusAdminInfoResponse{
-				Id:   item.ID,
-				Path: item.Path,
-			})
-		}
-		objInfoRsp.MenusAdmin = aobjRes
+	if obj.MenusIDs != nil && len(obj.MenusIDs) > 0 {
+		objInfoRsp.MenusIDs = obj.MenusIDs
+	}
+	if obj.ApiIds != nil && len(obj.ApiIds) > 0 {
+		objInfoRsp.ApiIDs = obj.ApiIds
 	}
 	return objInfoRsp
 }

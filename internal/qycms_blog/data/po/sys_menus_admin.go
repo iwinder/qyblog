@@ -1,6 +1,7 @@
 package po
 
 import (
+	"database/sql"
 	"encoding/json"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/idUtil"
@@ -9,15 +10,18 @@ import (
 
 type MenusAdminPO struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
-	Name              string    `json:"name" gorm:"column:name;comment:展示名称"` // 路由name
-	Identifier        string    `json:"identifier" gorm:"unique;column:identifier;comment:路由名称，唯一英文"`
-	ParentId          uint64    `json:"parentId" gorm:"column:name;comment:父菜单ID"`     // 父菜单ID
-	Path              string    `json:"path" gorm:"column:name;comment:路由path"`        // 路由path
-	Hidden            bool      `json:"hidden" gorm:"column:name;comment:是否在列表隐藏"`     // 是否在列表隐藏
-	Component         string    `json:"component" gorm:"column:name;comment:对应前端文件路径"` // 对应前端文件路径
-	Sort              int       `json:"sort" gorm:"column:name;comment:排序标记"`          // 排序标记
-	Level             int       `json:"-"`
-	Roles             []*RolePO `gorm:"many2many:qy_sys_role_menus_admin;"`
+	Name              string         `json:"name" gorm:"column:name;comment:展示名称"`                         // 展示名称
+	BreadcrumbName    string         `json:"breadcrumbName" gorm:"column:breadcrumbName;comment:标签页名称"`    // 标签页名称
+	Identifier        string         `json:"identifier" gorm:"unique;column:identifier;comment:路由名称，唯一英文"` // 路由名称
+	ParentId          sql.NullInt64  `json:"parentId" gorm:"column:parent_id;default: 0;comment:父菜单ID"`    // 父菜单ID
+	Icon              string         `json:"icon" gorm:"column:icon;comment:icon图标"`                       // Icon图标
+	MType             int            `json:"mtype" gorm:"column:mtype;default: 1;comment:路由类型:1 菜单,2 按钮"`  // 路由类型
+	Path              string         `json:"path" gorm:"column:path;comment:路由Path"`                       // 路由 path
+	Redirect          string         `json:"redirect" gorm:"column:redirect;comment:路由重定向地址"`              // 路由重定向地址
+	Component         sql.NullString `json:"component" gorm:"column:component;comment:对应前端文件路径"`           // 对应前端文件路径
+	Sort              int            `json:"sort" gorm:"column:sort;comment:排序标记"`                         // 排序标记
+	Level             int            `json:"-"`
+	//Roles             []*RolePO `gorm:"many2many:qy_sys_role_menus_admin;"`
 	//children          []MenusAdminPO `json:"children" gorm:"-"`
 	//Parameters        []SysBaseMenuParameter                     `json:"parameters"`
 	//MenuBtn           []SysBaseMenuBtn                           `json:"menuBtn"`
@@ -42,7 +46,7 @@ func (o *MenusAdminPO) BeforeCreate(tx *gorm.DB) (er error) {
 }
 
 func (o *MenusAdminPO) AfterCreate(tx *gorm.DB) (err error) {
-	o.InstanceID = idUtil.GetInstanceID(o.ID, "menus_admin-")
+	o.InstanceID = idUtil.GetInstanceID(o.ID, "menus-admin-")
 	return tx.Save(o).Error
 }
 

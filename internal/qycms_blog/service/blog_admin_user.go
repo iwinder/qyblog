@@ -20,6 +20,7 @@ func (s *BlogAdminUserService) CreateUser(ctx context.Context, in *v1.CreateUser
 		Email:    in.Email,
 		Phone:    in.Phone,
 	}
+	userDO.StatusFlag = int(in.StatusFlag)
 	user, err := s.uc.CreateUser(ctx, userDO)
 	if err != nil {
 		return nil, err
@@ -143,6 +144,18 @@ func (s *BlogAdminUserService) ListUser(ctx context.Context, in *v1.ListUserRequ
 		users = append(users, &temp)
 	}
 	return &v1.ListUserReply{PageInfo: pageInfo, Items: users}, nil
+}
+func (s *BlogAdminUserService) ChangePassword(ctx context.Context, in *v1.ChangePasswordRequest) (*v1.CreateUserReply, error) {
+	userDO := &biz.UserDO{
+		Password: in.Password,
+		Salt:     s.conf.Token,
+	}
+	userDO.ID = in.Id
+	err := s.uc.ChangePassword(ctx, userDO)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.CreateUserReply{}, nil
 }
 func bizToUserResponse(user *biz.UserDO) v1.UserInfoResponse {
 	userInfoRsp := v1.UserInfoResponse{

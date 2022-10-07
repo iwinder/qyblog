@@ -32,6 +32,7 @@ service QyAdminApi {
 	rpc DeleteQyAdminApis (DeleteQyAdminApisRequest) returns (DeleteQyAdminApisReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/sysapi",
+			body:"*"
 		};
 	}
 	rpc GetQyAdminApi (GetQyAdminApiRequest) returns (GetQyAdminApiReply){
@@ -44,33 +45,40 @@ service QyAdminApi {
 			get: "/api/admin/v1/sysapi",
 		};
 	}
+	rpc TreeQyAdminApi (TreeQyAdminApiRequest) returns (TreeQyAdminApiReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/sysapi-tree",
+		};
+	}
 }
 
 message	ApiInfoResponse {
 	uint64 id = 1;
-	string	ApiGroup    =2;
-	string Method          =3;
-	string Path              =4;
-	string Description        =5;
-	string Identifier = 6;
+	string	apiGroup    =2;
+	string method          =3;
+	string path              =4;
+	string description        =5;
+	string identifier = 6;
+	uint64 groupId = 7;
 }
 
 message APIPageInfo {
-	uint64 page = 1;
-	uint64 size = 2;
-	uint64 total = 3;
-	uint64 pages = 4;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
 	bool firstFlag = 5;
-	bool LastFlag = 6;
+	bool lastFlag = 6;
 }
 
 
 message CreateQyAdminApiRequest {
-	string	ApiGroup    =1;
-	string Method          =2;
-	string Path              =3;
-		string Description        =4;
-		string Identifier = 5;
+	string apiGroup    =1;
+	string method          =2;
+	string path              =3;
+	string description        =4;
+	string identifier = 5;
+	uint64 groupId = 6;
 }
 message CreateQyAdminApiReply {
 	uint64 id = 1;
@@ -78,11 +86,12 @@ message CreateQyAdminApiReply {
 
 message UpdateQyAdminApiRequest {
 	uint64 id = 1;
-	string	ApiGroup    =2;
-	string Method          =3;
-	string Path              =4;
-	string Description        =5;
-	string Identifier = 6;
+	string	apiGroup    =2;
+	string method          =3;
+	string path              =4;
+	string description        =5;
+	string identifier = 6;
+	uint64 groupId = 7;
 }
 message UpdateQyAdminApiReply {
 	uint64 id = 1;
@@ -102,13 +111,40 @@ message GetQyAdminApiRequest {
 	uint64 id = 1;
 }
 message GetQyAdminApiReply {
-	ApiInfoResponse info = 1;
+	ApiInfoResponse data = 1;
 }
 
 message ListQyAdminApiRequest {
-	APIPageInfo pageInfo = 1;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+	string apiGroup    =7;
+	string method          =8;
+	string path              =9;
+	string description        =10;
+	string identifier = 11;
+	uint64 groupId = 12;
 }
 message ListQyAdminApiReply {
 	APIPageInfo pageInfo = 1;
 	repeated ApiInfoResponse items = 2;
+}
+message TreeQyAdminApiRequest {
+
+}
+message ApiTreeInfo {
+	string id = 1;
+	string apiGroup    =2;
+	string method          =3;
+	string path              =4;
+	string description        =5;
+	string identifier = 6;
+	uint64 groupId = 7;
+	repeated ApiTreeInfo children = 8;
+}
+message TreeQyAdminApiReply {
+	repeated ApiTreeInfo items = 3;
 }

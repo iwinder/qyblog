@@ -46,15 +46,15 @@ func (r *roleRepo) Update(ctx context.Context, obj *biz.RoleDO) (*biz.RoleDO, er
 		Name:       obj.Name,
 		Identifier: obj.Identifier,
 	}
-	if obj.MenusAdmins != nil && len(obj.MenusAdmins) > 0 {
-		objPos := make([]*po.MenusAdminPO, len(obj.MenusAdmins))
-		for _, aobj := range obj.MenusAdmins {
-			objPos = append(objPos, &po.MenusAdminPO{ObjectMeta: metaV1.ObjectMeta{
-				ID: aobj.ID,
-			}})
-		}
-		objPO.MenusAdmins = objPos
-	}
+	//if obj.MenusAdmins != nil && len(obj.MenusAdmins) > 0 {
+	//	objPos := make([]*po.MenusAdminPO, len(obj.MenusAdmins))
+	//	for _, aobj := range obj.MenusAdmins {
+	//		objPos = append(objPos, &po.MenusAdminPO{ObjectMeta: metaV1.ObjectMeta{
+	//			ID: aobj.ID,
+	//		}})
+	//	}
+	//	objPO.MenusAdmins = objPos
+	//}
 	if obj.Apis != nil && len(obj.Apis) > 0 {
 		objPos := make([]*po.ApiPO, len(obj.Apis))
 		for _, aobj := range obj.Apis {

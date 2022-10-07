@@ -10,14 +10,18 @@ import (
 // CreateMenusAdmin 创建用户
 func (s *BlogAdminUserService) CreateQyAdminMenusAdmin(ctx context.Context, in *v1.CreateQyAdminMenusAdminRequest) (*v1.CreateQyAdminMenusAdminReply, error) {
 	objDO := &biz.MenusAdminDO{
-		Level:     int(in.Level),
-		ParentId:  in.ParentId,
-		Path:      in.Path,
-		Name:      in.Name,
-		Hidden:    in.Hidden,
-		Component: in.Component,
-		Sort:      int(in.Sort),
+		Name:           in.Name,
+		BreadcrumbName: in.BreadcrumbName,
+		Identifier:     in.Identifier,
+		ParentId:       in.ParentId,
+		Icon:           in.Icon,
+		MType:          int(in.Type),
+		Path:           in.Path,
+		Redirect:       in.Redirect,
+		Component:      in.Component,
+		Sort:           int(in.Sort),
 	}
+	objDO.StatusFlag = int(in.StatusFlag)
 	obj, err := s.mc.Create(ctx, objDO)
 	if err != nil {
 		return nil, err
@@ -28,15 +32,19 @@ func (s *BlogAdminUserService) CreateQyAdminMenusAdmin(ctx context.Context, in *
 // UpdateMenusAdmin 更新用户
 func (s *BlogAdminUserService) UpdateQyAdminMenusAdmin(ctx context.Context, in *v1.UpdateQyAdminMenusAdminRequest) (*v1.UpdateQyAdminMenusAdminReply, error) {
 	objDO := &biz.MenusAdminDO{
-		ObjectMeta: metaV1.ObjectMeta{ID: in.Id},
-		Level:      int(in.Level),
-		ParentId:   in.ParentId,
-		Path:       in.Path,
-		Name:       in.Name,
-		Hidden:     in.Hidden,
-		Component:  in.Component,
-		Sort:       int(in.Sort),
+		ObjectMeta:     metaV1.ObjectMeta{ID: in.Id},
+		Name:           in.Name,
+		BreadcrumbName: in.BreadcrumbName,
+		Identifier:     in.Identifier,
+		ParentId:       in.ParentId,
+		Icon:           in.Icon,
+		MType:          int(in.Type),
+		Path:           in.Path,
+		Redirect:       in.Redirect,
+		Component:      in.Component,
+		Sort:           int(in.Sort),
 	}
+	objDO.StatusFlag = int(in.StatusFlag)
 	obj, err := s.mc.Update(ctx, objDO)
 	if err != nil {
 		return nil, err
@@ -69,7 +77,7 @@ func (s *BlogAdminUserService) GetQyAdminMenusAdmin(ctx context.Context, in *v1.
 		return nil, err
 	}
 	u := bizToMenusAdminResponse(obj)
-	return &v1.GetQyAdminMenusAdminReply{Info: &u}, nil
+	return &v1.GetQyAdminMenusAdminReply{Data: &u}, nil
 }
 
 // ListMenusAdmin 获取用户列表
@@ -78,22 +86,33 @@ func (s *BlogAdminUserService) ListQyAdminMenusAdmin(ctx context.Context, in *v1
 	opts.ListOptions.Pages = 0
 	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
-	if in.PageInfo != nil {
-		opts.ListOptions.Pages = int64(in.PageInfo.Pages)
-		opts.ListOptions.Current = int64(in.PageInfo.Page)
-		opts.ListOptions.PageSize = int64(in.PageInfo.Size)
+	if in.Current > 0 {
+		opts.ListOptions.Pages = in.Pages
+		opts.ListOptions.Current = in.Current
+		opts.ListOptions.PageSize = in.PageSize
 	}
 
 	opts.ListOptions.Init()
+	opts.HasChildren = false
+	opts.Redirect = in.Redirect
+	if in.HasChildren {
+		opts.HasChildren = true
+	}
+	if in.Type > 0 {
+		opts.MType = int(in.Type)
+	}
+	if in.ParentId >= 0 {
+		opts.ParentId = uint64(in.ParentId)
+	}
 	objList, err := s.mc.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
 	pageInfo := &v1.MenusAdmPageInfo{
-		Page:      uint64(objList.Pages),
-		Size:      uint64(objList.PageSize),
-		Total:     uint64(objList.TotalCount),
-		Pages:     uint64(objList.Pages),
+		Current:   objList.Current,
+		PageSize:  objList.PageSize,
+		Total:     objList.TotalCount,
+		Pages:     objList.Pages,
 		FirstFlag: objList.FirstFlag,
 		LastFlag:  objList.LastFlag,
 	}
@@ -106,14 +125,17 @@ func (s *BlogAdminUserService) ListQyAdminMenusAdmin(ctx context.Context, in *v1
 }
 func bizToMenusAdminResponse(obj *biz.MenusAdminDO) v1.MenusAdminInfoResponse {
 	objInfoRsp := v1.MenusAdminInfoResponse{
-		Id:        obj.ID,
-		Name:      obj.Name,
-		ParentId:  obj.ParentId,
-		Path:      obj.Path,
-		Hidden:    obj.Hidden,
-		Component: obj.Component,
-		Sort:      int32(obj.Sort),
-		Level:     uint32(obj.Level),
+		Id:             obj.ID,
+		Name:           obj.Name,
+		BreadcrumbName: obj.BreadcrumbName,
+		Identifier:     obj.Identifier,
+		ParentId:       obj.ParentId,
+		Icon:           obj.Icon,
+		Type:           int32(obj.MType),
+		Path:           obj.Path,
+		Redirect:       obj.Redirect,
+		Component:      obj.Component,
+		Sort:           int32(obj.Sort),
 	}
 	if obj.Children != nil && len(obj.Children) > 0 {
 		cobjList := make([]*v1.MenusAdminInfoResponse, 0, len(obj.Children))

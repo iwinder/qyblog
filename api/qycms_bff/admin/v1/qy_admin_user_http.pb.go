@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationQyAdminUserChangePassword = "/api.qycms_bff.admin.v1.QyAdminUser/ChangePassword"
 const OperationQyAdminUserCreateUser = "/api.qycms_bff.admin.v1.QyAdminUser/CreateUser"
 const OperationQyAdminUserDeleteUser = "/api.qycms_bff.admin.v1.QyAdminUser/DeleteUser"
 const OperationQyAdminUserDeleteUsers = "/api.qycms_bff.admin.v1.QyAdminUser/DeleteUsers"
@@ -28,6 +29,7 @@ const OperationQyAdminUserListUser = "/api.qycms_bff.admin.v1.QyAdminUser/ListUs
 const OperationQyAdminUserUpdateUser = "/api.qycms_bff.admin.v1.QyAdminUser/UpdateUser"
 
 type QyAdminUserHTTPServer interface {
+	ChangePassword(context.Context, *ChangePasswordRequest) (*CreateUserReply, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
 	DeleteUsers(context.Context, *DeleteUsersRequest) (*DeleteUsersReply, error)
@@ -46,6 +48,7 @@ func RegisterQyAdminUserHTTPServer(s *http.Server, srv QyAdminUserHTTPServer) {
 	r.GET("/api/admin/v1/user/myInfo", _QyAdminUser_GetMyInfo0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/user/{id}", _QyAdminUser_GetUser0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/user", _QyAdminUser_ListUser0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/user-password", _QyAdminUser_ChangePassword0_HTTP_Handler(srv))
 }
 
 func _QyAdminUser_CreateUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
@@ -190,7 +193,27 @@ func _QyAdminUser_ListUser0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx htt
 	}
 }
 
+func _QyAdminUser_ChangePassword0_HTTP_Handler(srv QyAdminUserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ChangePasswordRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminUserChangePassword)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ChangePassword(ctx, req.(*ChangePasswordRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CreateUserReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyAdminUserHTTPClient interface {
+	ChangePassword(ctx context.Context, req *ChangePasswordRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
 	CreateUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
 	DeleteUser(ctx context.Context, req *DeleteUserRequest, opts ...http.CallOption) (rsp *DeleteUserReply, err error)
 	DeleteUsers(ctx context.Context, req *DeleteUsersRequest, opts ...http.CallOption) (rsp *DeleteUsersReply, err error)
@@ -206,6 +229,19 @@ type QyAdminUserHTTPClientImpl struct {
 
 func NewQyAdminUserHTTPClient(client *http.Client) QyAdminUserHTTPClient {
 	return &QyAdminUserHTTPClientImpl{client}
+}
+
+func (c *QyAdminUserHTTPClientImpl) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...http.CallOption) (*CreateUserReply, error) {
+	var out CreateUserReply
+	pattern := "/api/admin/v1/user-password"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminUserChangePassword))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *QyAdminUserHTTPClientImpl) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...http.CallOption) (*CreateUserReply, error) {

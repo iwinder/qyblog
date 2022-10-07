@@ -28,6 +28,8 @@ type QyAdminRoleClient interface {
 	DeleteQyAdminRoles(ctx context.Context, in *DeleteQyAdminRolesRequest, opts ...grpc.CallOption) (*DeleteQyAdminRolesReply, error)
 	GetQyAdminRole(ctx context.Context, in *GetQyAdminRoleRequest, opts ...grpc.CallOption) (*GetQyAdminRoleReply, error)
 	ListQyAdminRole(ctx context.Context, in *ListQyAdminRoleRequest, opts ...grpc.CallOption) (*ListQyAdminRoleReply, error)
+	SaveQyAdminRoleMenus(ctx context.Context, in *SaveRoleMenusRequest, opts ...grpc.CallOption) (*SaveRoleMenusReply, error)
+	SaveQyAdminRoleApis(ctx context.Context, in *SaveRoleApisRequest, opts ...grpc.CallOption) (*SaveRoleApisReply, error)
 }
 
 type qyAdminRoleClient struct {
@@ -92,6 +94,24 @@ func (c *qyAdminRoleClient) ListQyAdminRole(ctx context.Context, in *ListQyAdmin
 	return out, nil
 }
 
+func (c *qyAdminRoleClient) SaveQyAdminRoleMenus(ctx context.Context, in *SaveRoleMenusRequest, opts ...grpc.CallOption) (*SaveRoleMenusReply, error) {
+	out := new(SaveRoleMenusReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleMenus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminRoleClient) SaveQyAdminRoleApis(ctx context.Context, in *SaveRoleApisRequest, opts ...grpc.CallOption) (*SaveRoleApisReply, error) {
+	out := new(SaveRoleApisReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleApis", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QyAdminRoleServer is the server API for QyAdminRole service.
 // All implementations must embed UnimplementedQyAdminRoleServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type QyAdminRoleServer interface {
 	DeleteQyAdminRoles(context.Context, *DeleteQyAdminRolesRequest) (*DeleteQyAdminRolesReply, error)
 	GetQyAdminRole(context.Context, *GetQyAdminRoleRequest) (*GetQyAdminRoleReply, error)
 	ListQyAdminRole(context.Context, *ListQyAdminRoleRequest) (*ListQyAdminRoleReply, error)
+	SaveQyAdminRoleMenus(context.Context, *SaveRoleMenusRequest) (*SaveRoleMenusReply, error)
+	SaveQyAdminRoleApis(context.Context, *SaveRoleApisRequest) (*SaveRoleApisReply, error)
 	mustEmbedUnimplementedQyAdminRoleServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedQyAdminRoleServer) GetQyAdminRole(context.Context, *GetQyAdmi
 }
 func (UnimplementedQyAdminRoleServer) ListQyAdminRole(context.Context, *ListQyAdminRoleRequest) (*ListQyAdminRoleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminRole not implemented")
+}
+func (UnimplementedQyAdminRoleServer) SaveQyAdminRoleMenus(context.Context, *SaveRoleMenusRequest) (*SaveRoleMenusReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveQyAdminRoleMenus not implemented")
+}
+func (UnimplementedQyAdminRoleServer) SaveQyAdminRoleApis(context.Context, *SaveRoleApisRequest) (*SaveRoleApisReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveQyAdminRoleApis not implemented")
 }
 func (UnimplementedQyAdminRoleServer) mustEmbedUnimplementedQyAdminRoleServer() {}
 
@@ -248,6 +276,42 @@ func _QyAdminRole_ListQyAdminRole_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminRole_SaveQyAdminRoleMenus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveRoleMenusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminRoleServer).SaveQyAdminRoleMenus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleMenus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminRoleServer).SaveQyAdminRoleMenus(ctx, req.(*SaveRoleMenusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminRole_SaveQyAdminRoleApis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveRoleApisRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminRoleServer).SaveQyAdminRoleApis(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminRole/SaveQyAdminRoleApis",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminRoleServer).SaveQyAdminRoleApis(ctx, req.(*SaveRoleApisRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QyAdminRole_ServiceDesc is the grpc.ServiceDesc for QyAdminRole service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var QyAdminRole_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQyAdminRole",
 			Handler:    _QyAdminRole_ListQyAdminRole_Handler,
+		},
+		{
+			MethodName: "SaveQyAdminRoleMenus",
+			Handler:    _QyAdminRole_SaveQyAdminRoleMenus_Handler,
+		},
+		{
+			MethodName: "SaveQyAdminRoleApis",
+			Handler:    _QyAdminRole_SaveQyAdminRoleApis_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

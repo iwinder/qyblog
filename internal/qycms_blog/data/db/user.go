@@ -9,7 +9,6 @@ import (
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -77,7 +76,6 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*biz.UserDO, e
 	}
 
 	tUser := &po.UserPO{}
-	//tUser.ID = user.ID
 	err := r.data.Db.Model(&tUser).Where("id=?", user.ID).Updates(&userPO).Error
 	if err != nil {
 		return nil, err
@@ -87,6 +85,11 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*biz.UserDO, e
 	userDO := &biz.UserDO{Username: userPO.Username}
 	userDO.ID = userPO.ID
 	return userDO, nil
+}
+
+func (r *userRepo) ChangePassword(c context.Context, user *biz.UserDO) error {
+	err := r.data.Db.Model(&po.UserPO{}).Where("id=?", user.ID).Update("password", user.Password).Error
+	return err
 }
 
 // Delete 根据ID删除用户
@@ -273,15 +276,4 @@ func rolePOToDO(roles []*po.RolePO) []*biz.RoleDO {
 		}
 	}
 	return userPos
-}
-
-func withFilterKeyLikeValue(key, value string) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		return db.Where(key+" like ? ", value)
-	}
-}
-func withFilterKeyEquarlsValue(key string, value interface{}) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		return db.Where(key+" = ? ", value)
-	}
 }

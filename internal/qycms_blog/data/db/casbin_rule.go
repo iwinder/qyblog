@@ -36,9 +36,9 @@ func (r *casbinRuleRepo) SavePolicies(ctx context.Context, rules [][]string) (bo
 	return r.cdata.Enf.AddPolicies(rules)
 }
 
-func (r *casbinRuleRepo) CleanPolicy(ctx context.Context, p ...string) bool {
-	success, _ := r.cdata.Enf.RemoveFilteredPolicy(0, p...)
-	return success
+func (r *casbinRuleRepo) CleanPolicy(ctx context.Context, p ...string) (bool, error) {
+	success, err := r.cdata.Enf.RemoveFilteredPolicy(0, p...)
+	return success, err
 }
 
 func (r *casbinRuleRepo) UpdatePolicies(ctx context.Context, oldApi, newApi *biz.ApiDO) (bool, error) {

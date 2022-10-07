@@ -42,6 +42,18 @@ service QyAdminRole {
 			get: "/api/admin/v1/role",
 		};
 	}
+	rpc SaveQyAdminRoleMenus (SaveRoleMenusRequest) returns (SaveRoleMenusReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/role-menus",
+			body:"*"
+		};
+	}
+	rpc SaveQyAdminRoleApis (SaveRoleApisRequest) returns (SaveRoleApisReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/role-apis",
+			body:"*"
+		};
+	}
 }
 
 
@@ -50,8 +62,9 @@ message		RoleInfoResponse {
 	uint64 id = 1;
 	string name = 2;
 	string identifier =3;
-	repeated	RMenusAdminInfoResponse menusAdmin = 4;
-	repeated	RApiInfoResponse apis = 5;
+	repeated	uint64 menusIDs = 4;
+	repeated	uint64 apiIDs = 5;
+	repeated	RApiInfoResponse apis = 6;
 }
 
 message RolePageInfo {
@@ -60,7 +73,7 @@ message RolePageInfo {
 	int64 total = 3;
 	int64 pages = 4;
 	bool firstFlag = 5;
-	bool LastFlag = 6;
+	bool lastFlag = 6;
 }
 
 message RMenusAdminInfoResponse {
@@ -132,4 +145,19 @@ message ListQyAdminRoleRequest {
 message ListQyAdminRoleReply {
 	RolePageInfo pageInfo = 1;
 	repeated RoleInfoResponse items = 2;
+}
+message SaveRoleMenusRequest {
+	uint64 id = 1;
+	repeated uint64 menusIDs = 2;
+}
+message SaveRoleMenusReply {
+
+}
+message SaveRoleApisRequest {
+	uint64 id = 1;
+	repeated uint64 apiIDs = 2;
+	repeated	RApiInfoResponse apis = 3;
+}
+message SaveRoleApisReply {
+
 }

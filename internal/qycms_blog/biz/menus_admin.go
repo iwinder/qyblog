@@ -5,20 +5,23 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
 )
 
 type MenusAdminDO struct {
 	metaV1.ObjectMeta
-	Level     int
-	ParentId  uint64          // 父菜单ID
-	Path      string          // 路由path
-	Name      string          // 路由name
-	Hidden    bool            // 是否在列表隐藏
-	Component string          // 对应前端文件路径
-	Sort      int             // 排序标记
-	Children  []*MenusAdminDO // 子集
+	Name           string          // 展示名称
+	BreadcrumbName string          // 标签页名称
+	Identifier     string          // 路由名称
+	ParentId       uint64          // 父菜单ID
+	Icon           string          // Icon图标
+	MType          int             // 路由类型
+	Path           string          // 路由 path
+	Redirect       string          // 路由重定向
+	Component      string          // 对应前端文件路径
+	Sort           int             // 排序标记
+	Children       []*MenusAdminDO // 子集
+	HasChildren    bool            // 子集
 }
 
 type MenusAdminDOList struct {
@@ -32,13 +35,13 @@ type MenusAdminDOListOption struct {
 }
 
 type MenusAdminRepo interface {
-	Save(context.Context, *MenusAdminDO) (*po.MenusAdminPO, error)
-	Update(context.Context, *MenusAdminDO) (*po.MenusAdminPO, error)
+	Save(context.Context, *MenusAdminDO) (*MenusAdminDO, error)
+	Update(context.Context, *MenusAdminDO) (*MenusAdminDO, error)
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
-	FindByID(context.Context, uint64) (*po.MenusAdminPO, error)
+	FindByID(context.Context, uint64) (*MenusAdminDO, error)
 	//FindByKey(c context.Context, key string) (*po.MenusAdminPO, error)
-	ListAll(c context.Context, opts MenusAdminDOListOption) (*po.MenusAdminPOList, error)
+	ListAll(c context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error)
 }
 
 type MenusAdminUsecase struct {
@@ -52,27 +55,24 @@ func NewMenusAdminUsecase(repo MenusAdminRepo, logger log.Logger) *MenusAdminUse
 
 func (uc *MenusAdminUsecase) Create(ctx context.Context, obj *MenusAdminDO) (*MenusAdminDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", obj.Name)
-	objPO, err := uc.repo.Save(ctx, obj)
+	objDO, err := uc.repo.Save(ctx, obj)
 	if err != nil {
 		return nil, err
 	}
-	objDO := &MenusAdminDO{Name: objPO.Name}
-	objDO.ID = objPO.ID
 	return objDO, nil
 }
 
 // Update 更新用户
 func (uc *MenusAdminUsecase) Update(ctx context.Context, obj *MenusAdminDO) (*MenusAdminDO, error) {
 	uc.log.WithContext(ctx).Infof("Update: %v", obj.Name)
-	objPO, err := uc.repo.Update(ctx, obj)
+	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-	objDO := &MenusAdminDO{Name: objPO.Name}
-	objDO.ID = objPO.ID
+
 	return objDO, nil
 }
 
@@ -91,22 +91,12 @@ func (uc *MenusAdminUsecase) DeleteList(ctx context.Context, ids []uint64) error
 // FindOneByID 根据ID查询用户信息
 func (uc *MenusAdminUsecase) FindOneByID(ctx context.Context, id uint64) (*MenusAdminDO, error) {
 	uc.log.WithContext(ctx).Infof("FindOneByID: %v", id)
-	obj, err := uc.repo.FindByID(ctx, id)
+	objDO, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
-	}
-	objDO := &MenusAdminDO{
-		ObjectMeta: obj.ObjectMeta,
-		Level:      obj.Level,
-		ParentId:   obj.ParentId,
-		Path:       obj.Path,
-		Name:       obj.Name,
-		Hidden:     obj.Hidden,
-		Component:  obj.Component,
-		Sort:       obj.Sort,
 	}
 	return objDO, nil
 }
@@ -129,122 +119,90 @@ func (uc *MenusAdminUsecase) FindOneByID(ctx context.Context, id uint64) (*Menus
 // ListAll 批量查询
 func (uc *MenusAdminUsecase) ListAll(ctx context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")
-	objPOs, err := uc.repo.ListAll(ctx, opts)
+	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
+	if opts.HasChildren {
+		// 获取子集
+		newopts := MenusAdminDOListOption{}
+		if opts.MType > 0 {
+			newopts.MType = opts.MType
+		}
+		newopts.PageFlag = false
+		for _, obj := range objDOs.Items {
+			newopts.ParentId = obj.ID
+			cobjPOs, aerr := uc.ListAllChildren(ctx, newopts)
+			obj.Children = cobjPOs.Items
+			if aerr != nil {
+				log.Errorf("菜单列表获取异常%v", aerr)
+				obj.Children = make([]*MenusAdminDO, 0, 0)
+			}
 
-	infos := make([]*MenusAdminDO, 0, len(objPOs.Items))
-	for _, obj := range objPOs.Items {
-		infos = append(infos, &MenusAdminDO{
-			ObjectMeta: metaV1.ObjectMeta{
-				ID:         obj.ID,
-				InstanceID: obj.InstanceID,
-				Extend:     obj.Extend,
-				CreatedAt:  obj.CreatedAt,
-				UpdatedAt:  obj.UpdatedAt,
-			},
-			Level:     obj.Level,
-			ParentId:  obj.ParentId,
-			Path:      obj.Path,
-			Name:      obj.Name,
-			Hidden:    obj.Hidden,
-			Component: obj.Component,
-			Sort:      obj.Sort,
-		})
+		}
 	}
-	return &MenusAdminDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
+
+	return objDOs, nil
 }
 
 // ListAllParent 获取所有菜单列表
-func (uc *MenusAdminUsecase) ListAllParent(ctx context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error) {
-	uc.log.WithContext(ctx).Infof("ListAll")
-	opts.ParentId = 0
-	objPOs, err := uc.repo.ListAll(ctx, opts)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
-		}
-		return nil, err
-	}
-
-	infos := make([]*MenusAdminDO, 0, len(objPOs.Items))
-
-	var parent *MenusAdminDO
-	newopts := MenusAdminDOListOption{}
-	newopts.PageFlag = false
-	for _, obj := range objPOs.Items {
-		parent = &MenusAdminDO{
-			ObjectMeta: metaV1.ObjectMeta{
-				ID:         obj.ID,
-				InstanceID: obj.InstanceID,
-				Extend:     obj.Extend,
-				CreatedAt:  obj.CreatedAt,
-				UpdatedAt:  obj.UpdatedAt,
-			},
-			Level:     obj.Level,
-			ParentId:  obj.ParentId,
-			Path:      obj.Path,
-			Name:      obj.Name,
-			Hidden:    obj.Hidden,
-			Component: obj.Component,
-			Sort:      obj.Sort,
-		}
-		newopts.ParentId = parent.ID
-		cobjPOs, aerr := uc.ListAllChildren(ctx, newopts)
-		if aerr != nil {
-			log.Errorf("菜单列表获取异常%v", aerr)
-			cobjPOs = &MenusAdminDOList{}
-			cobjPOs.Items = make([]*MenusAdminDO, 0)
-		}
-		parent.Children = cobjPOs.Items
-		infos = append(infos, parent)
-	}
-	return &MenusAdminDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
-}
+//func (uc *MenusAdminUsecase) ListAllParent(ctx context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error) {
+//	uc.log.WithContext(ctx).Infof("ListAll")
+//	opts.ParentId = 0
+//	objDOs, err := uc.repo.ListAll(ctx, opts)
+//	if err != nil {
+//		if errors.Is(err, gorm.ErrRecordNotFound) {
+//			return nil, ErrUserNotFound
+//		}
+//		return nil, err
+//	}
+//
+//	infos := make([]*MenusAdminDO, 0, len(objDOs.Items))
+//
+//	var parent *MenusAdminDO
+//
+//	newopts := MenusAdminDOListOption{}
+//	newopts.PageFlag = false
+//	for _, obj := range objDOs.Items {
+//		newopts.ParentId = obj.ID
+//		cobjPOs, aerr := uc.ListAllChildren(ctx, newopts)
+//		if aerr != nil {
+//			log.Errorf("菜单列表获取异常%v", aerr)
+//			cobjPOs = &MenusAdminDOList{}
+//			cobjPOs.Items = make([]*MenusAdminDO, 0)
+//		}
+//		parent.Children = cobjPOs.Items
+//		infos = append(infos, parent)
+//	}
+//	return &MenusAdminDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
+//}
 
 func (uc *MenusAdminUsecase) ListAllChildren(ctx context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error) {
-	uc.log.WithContext(ctx).Infof("ListAll")
-	objPOs, err := uc.repo.ListAll(ctx, opts)
+	uc.log.WithContext(ctx).Infof("ListAllChildren")
+	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-
-	infos := make([]*MenusAdminDO, 0, len(objPOs.Items))
 	newopts := MenusAdminDOListOption{}
 	newopts.PageFlag = false
-	var parent *MenusAdminDO
-	for _, obj := range objPOs.Items {
-		parent = &MenusAdminDO{
-			ObjectMeta: metaV1.ObjectMeta{
-				ID:         obj.ID,
-				InstanceID: obj.InstanceID,
-				Extend:     obj.Extend,
-				CreatedAt:  obj.CreatedAt,
-				UpdatedAt:  obj.UpdatedAt,
-			},
-			Level:     obj.Level,
-			ParentId:  obj.ParentId,
-			Path:      obj.Path,
-			Name:      obj.Name,
-			Hidden:    obj.Hidden,
-			Component: obj.Component,
-			Sort:      obj.Sort,
-		}
-		cobjPOs, aerr := uc.ListAllChildren(ctx, newopts)
-		if aerr != nil {
-			log.Errorf("菜单列表获取异常%v", aerr)
-			cobjPOs = &MenusAdminDOList{}
-			cobjPOs.Items = make([]*MenusAdminDO, 0)
-		}
-		parent.Children = cobjPOs.Items
-		infos = append(infos, parent)
+	if opts.MType > 0 {
+		newopts.MType = opts.MType
 	}
-	return &MenusAdminDOList{ListMeta: objPOs.ListMeta, Items: infos}, nil
+	for _, obj := range objDOs.Items {
+		newopts.ParentId = obj.ID
+		cobjPOs, aerr := uc.ListAllChildren(ctx, newopts)
+		obj.Children = cobjPOs.Items
+		if aerr != nil {
+			log.Errorf("ListAllChildren 菜单列表获取异常%v", aerr)
+			cobjPOs = &MenusAdminDOList{}
+			obj.Children = make([]*MenusAdminDO, 0, 0)
+		}
+	}
+	return objDOs, nil
 }

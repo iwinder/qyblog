@@ -13,6 +13,7 @@ type SecurityUser struct {
 	ID            uint64
 	NickName      string
 	AuthorityName string
+	RoleIds       string
 	jwtV4.RegisteredClaims
 }
 

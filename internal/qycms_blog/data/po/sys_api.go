@@ -1,6 +1,7 @@
 package po
 
 import (
+	"database/sql"
 	"encoding/json"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/idUtil"
@@ -9,12 +10,13 @@ import (
 
 type ApiPO struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
-	ApiGroup          string    `json:"name" gorm:"column:api_group;comment:API分组""`
-	Identifier        string    `json:"identifier" gorm:"column:identifier;comment:路由名称，唯一英文"`
-	Method            string    `json:"method" gorm:"column:method;comment:请求方法"`
-	Path              string    `json:"identifier" gorm:"path;comment:API路径"`
-	Description       string    `json:"description" gorm:"description;comment:API简介"`
-	Roles             []*RolePO `gorm:"many2many:qy_sys_role_api;"`
+	Path              string        `json:"path" gorm:"column:path;comment:API路径"`
+	Method            string        `json:"method" gorm:"column:method;comment:请求方法"`
+	Description       string        `json:"description" gorm:"column:description;comment:API简介"`
+	GroupId           sql.NullInt64 `json:"parentId" gorm:"column:group_id;default: 0;comment:分组ID"` // 分组ID
+	ApiGroup          string        `json:"name" gorm:"column:api_group;comment:API分组名称""`
+	Identifier        string        `json:"identifier" gorm:"column:identifier;comment:分组标识，唯一英文"`
+	Roles             []*RolePO     `gorm:"-"`
 }
 
 type ApiPOList struct {
@@ -36,7 +38,7 @@ func (o *ApiPO) BeforeCreate(tx *gorm.DB) (er error) {
 }
 
 func (o *ApiPO) AfterCreate(tx *gorm.DB) (err error) {
-	o.InstanceID = idUtil.GetInstanceID(o.ID, "api-")
+	o.InstanceID = idUtil.GetInstanceID(o.ID, "apis-")
 	return tx.Save(o).Error
 }
 

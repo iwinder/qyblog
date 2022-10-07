@@ -24,6 +24,7 @@ const OperationQyAdminApiDeleteQyAdminApi = "/api.qycms_bff.admin.v1.QyAdminApi/
 const OperationQyAdminApiDeleteQyAdminApis = "/api.qycms_bff.admin.v1.QyAdminApi/DeleteQyAdminApis"
 const OperationQyAdminApiGetQyAdminApi = "/api.qycms_bff.admin.v1.QyAdminApi/GetQyAdminApi"
 const OperationQyAdminApiListQyAdminApi = "/api.qycms_bff.admin.v1.QyAdminApi/ListQyAdminApi"
+const OperationQyAdminApiTreeQyAdminApi = "/api.qycms_bff.admin.v1.QyAdminApi/TreeQyAdminApi"
 const OperationQyAdminApiUpdateQyAdminApi = "/api.qycms_bff.admin.v1.QyAdminApi/UpdateQyAdminApi"
 
 type QyAdminApiHTTPServer interface {
@@ -32,6 +33,7 @@ type QyAdminApiHTTPServer interface {
 	DeleteQyAdminApis(context.Context, *DeleteQyAdminApisRequest) (*DeleteQyAdminApisReply, error)
 	GetQyAdminApi(context.Context, *GetQyAdminApiRequest) (*GetQyAdminApiReply, error)
 	ListQyAdminApi(context.Context, *ListQyAdminApiRequest) (*ListQyAdminApiReply, error)
+	TreeQyAdminApi(context.Context, *TreeQyAdminApiRequest) (*TreeQyAdminApiReply, error)
 	UpdateQyAdminApi(context.Context, *UpdateQyAdminApiRequest) (*UpdateQyAdminApiReply, error)
 }
 
@@ -43,6 +45,7 @@ func RegisterQyAdminApiHTTPServer(s *http.Server, srv QyAdminApiHTTPServer) {
 	r.DELETE("/api/admin/v1/sysapi", _QyAdminApi_DeleteQyAdminApis0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/sysapi/{id}", _QyAdminApi_GetQyAdminApi0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/sysapi", _QyAdminApi_ListQyAdminApi0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/sysapi-tree", _QyAdminApi_TreeQyAdminApi0_HTTP_Handler(srv))
 }
 
 func _QyAdminApi_CreateQyAdminApi0_HTTP_Handler(srv QyAdminApiHTTPServer) func(ctx http.Context) error {
@@ -111,7 +114,7 @@ func _QyAdminApi_DeleteQyAdminApi0_HTTP_Handler(srv QyAdminApiHTTPServer) func(c
 func _QyAdminApi_DeleteQyAdminApis0_HTTP_Handler(srv QyAdminApiHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DeleteQyAdminApisRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationQyAdminApiDeleteQyAdminApis)
@@ -168,12 +171,32 @@ func _QyAdminApi_ListQyAdminApi0_HTTP_Handler(srv QyAdminApiHTTPServer) func(ctx
 	}
 }
 
+func _QyAdminApi_TreeQyAdminApi0_HTTP_Handler(srv QyAdminApiHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in TreeQyAdminApiRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminApiTreeQyAdminApi)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.TreeQyAdminApi(ctx, req.(*TreeQyAdminApiRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*TreeQyAdminApiReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyAdminApiHTTPClient interface {
 	CreateQyAdminApi(ctx context.Context, req *CreateQyAdminApiRequest, opts ...http.CallOption) (rsp *CreateQyAdminApiReply, err error)
 	DeleteQyAdminApi(ctx context.Context, req *DeleteQyAdminApiRequest, opts ...http.CallOption) (rsp *DeleteQyAdminApiReply, err error)
 	DeleteQyAdminApis(ctx context.Context, req *DeleteQyAdminApisRequest, opts ...http.CallOption) (rsp *DeleteQyAdminApisReply, err error)
 	GetQyAdminApi(ctx context.Context, req *GetQyAdminApiRequest, opts ...http.CallOption) (rsp *GetQyAdminApiReply, err error)
 	ListQyAdminApi(ctx context.Context, req *ListQyAdminApiRequest, opts ...http.CallOption) (rsp *ListQyAdminApiReply, err error)
+	TreeQyAdminApi(ctx context.Context, req *TreeQyAdminApiRequest, opts ...http.CallOption) (rsp *TreeQyAdminApiReply, err error)
 	UpdateQyAdminApi(ctx context.Context, req *UpdateQyAdminApiRequest, opts ...http.CallOption) (rsp *UpdateQyAdminApiReply, err error)
 }
 
@@ -214,10 +237,10 @@ func (c *QyAdminApiHTTPClientImpl) DeleteQyAdminApi(ctx context.Context, in *Del
 func (c *QyAdminApiHTTPClientImpl) DeleteQyAdminApis(ctx context.Context, in *DeleteQyAdminApisRequest, opts ...http.CallOption) (*DeleteQyAdminApisReply, error) {
 	var out DeleteQyAdminApisReply
 	pattern := "/api/admin/v1/sysapi"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminApiDeleteQyAdminApis))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "DELETE", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -242,6 +265,19 @@ func (c *QyAdminApiHTTPClientImpl) ListQyAdminApi(ctx context.Context, in *ListQ
 	pattern := "/api/admin/v1/sysapi"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyAdminApiListQyAdminApi))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminApiHTTPClientImpl) TreeQyAdminApi(ctx context.Context, in *TreeQyAdminApiRequest, opts ...http.CallOption) (*TreeQyAdminApiReply, error) {
+	var out TreeQyAdminApiReply
+	pattern := "/api/admin/v1/sysapi-tree"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyAdminApiTreeQyAdminApi))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

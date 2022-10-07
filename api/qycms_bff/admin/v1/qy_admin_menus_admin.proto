@@ -28,6 +28,7 @@ service QyAdminMenusAdmin {
 	rpc DeleteQyAdminMenusAdmins (DeleteQyAdminMenusAdminsRequest) returns (DeleteQyAdminMenusAdminsReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/menusAdmin",
+			body:"*"
 		};
 	}
 	rpc GetQyAdminMenusAdmin (GetQyAdminMenusAdminRequest) returns (GetQyAdminMenusAdminReply){
@@ -44,36 +45,44 @@ service QyAdminMenusAdmin {
 
 message MenusAdminInfoResponse {
 	uint64 id = 1;
-	string Name    =2;
-	string Identifier    =3;
-	uint64 ParentId         =4;
-	string Path             =5;
-	bool Hidden               =6;
-	string Component         =7;
-	int32 Sort                =8;
-	uint32 Level             =9;
-	repeated MenusAdminInfoResponse children =10;
+	string name    =2;
+	string identifier    =3;
+	uint64 parentId         =4;
+	string path             =5;
+	int32 statusFlag               =6;
+	string component         =7;
+	int32 sort                =8;
+	uint32 level             =9;
+	string breadcrumbName    =10;
+	string icon    =11;
+	int32 type    =12;
+	string redirect = 13;
+	repeated MenusAdminInfoResponse children =14;
 }
 
 
 message MenusAdmPageInfo {
-	uint64 page = 1;
-	uint64 size = 2;
-	uint64 total = 3;
-	uint64 pages = 4;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
 	bool firstFlag = 5;
-	bool LastFlag = 6;
+	bool lastFlag = 6;
 }
 
 message CreateQyAdminMenusAdminRequest {
-		string Name    =1;
-		string Identifier    =2;
-		uint64 ParentId         =3;
-		string Path             =4;
-		bool Hidden               =5;
-		string Component         =6;
-		int32 Sort                =7;
-		uint32 Level             =8;
+	string name    =1;
+	string identifier    =2;
+	uint64 parentId         =3;
+	string path             =4;
+	int32 statusFlag               =5;
+	string component         =6;
+	int32 sort                =7;
+	uint32 level             =8;
+	string breadcrumbName    =9;
+	string icon    =10;
+	int32 type    =11;
+	string redirect = 12;
 }
 message CreateQyAdminMenusAdminReply {
 	uint64 id = 1;
@@ -81,14 +90,18 @@ message CreateQyAdminMenusAdminReply {
 
 message UpdateQyAdminMenusAdminRequest {
 	uint64 id = 1;
-	string Name    =2;
-	string Identifier    =3;
-	uint64 ParentId         =4;
-	string Path             =5;
-	bool Hidden               =6;
-	string Component         =7;
-	int32 Sort                =8;
-	uint32 Level             =9;
+	string name    =2;
+	string identifier    =3;
+	uint64 parentId         =4;
+	string path             =5;
+	int32 statusFlag               =6;
+	string component         =7;
+	int32 sort                =8;
+	uint32 level             =9;
+	string breadcrumbName    =10;
+	string icon    =11;
+	int32 type    =12;
+	string redirect = 13;
 }
 message UpdateQyAdminMenusAdminReply {
 	uint64 id = 1;
@@ -108,11 +121,20 @@ message GetQyAdminMenusAdminRequest {
 	uint64 id = 1;
 }
 message GetQyAdminMenusAdminReply {
-	MenusAdminInfoResponse info = 1;
+	MenusAdminInfoResponse data = 1;
 }
 
 message ListQyAdminMenusAdminRequest {
-	MenusAdmPageInfo pageInfo = 1;
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool LastFlag = 6;
+	bool hasChildren = 7;
+	int32 type = 8;
+	int64 parentId = 9;
+	string redirect = 10;
 }
 message ListQyAdminMenusAdminReply {
 	MenusAdmPageInfo pageInfo = 1;
