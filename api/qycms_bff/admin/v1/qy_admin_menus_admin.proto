@@ -36,6 +36,11 @@ service QyAdminMenusAdmin {
 			get: "/api/admin/v1/menusAdmin/{id}",
 		};
 	}
+	rpc GetMyMenusAdminInfo (GetMyMenusAdminInfoReq) returns (GetMyMenusAdminInfoReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/menusAdmin-my",
+		};
+	}
 	rpc ListQyAdminMenusAdmin (ListQyAdminMenusAdminRequest) returns (ListQyAdminMenusAdminReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/menusAdmin",
@@ -124,6 +129,12 @@ message GetQyAdminMenusAdminReply {
 	MenusAdminInfoResponse data = 1;
 }
 
+message GetMyMenusAdminInfoReq {
+
+}
+message GetMyMenusAdminInfoReply {
+	repeated MenusAdminInfoResponse items = 1;
+}
 message ListQyAdminMenusAdminRequest {
 	int64 current = 1;
 	int64 pageSize = 2;

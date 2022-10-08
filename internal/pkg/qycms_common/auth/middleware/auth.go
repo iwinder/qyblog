@@ -9,7 +9,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/casbin"
 	qyjwt "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
@@ -27,9 +26,9 @@ func NewMiddleware(authConf *conf.Auth, casbinData *db.CasbinData, logger log.Lo
 				},
 				jwt.WithSigningMethod(jwtV4.SigningMethodHS256),
 			),
-			casbin.Server(
-				casbin.WithCasbinData(casbinData),
-			),
+			//casbin.Server(
+			//	casbin.WithCasbinData(casbinData),
+			//),
 		).Match(qyjwt.NewWhiteListMatcher()).Build(),
 	)
 }

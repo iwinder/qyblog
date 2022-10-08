@@ -27,6 +27,7 @@ type QyAdminMenusAdminClient interface {
 	DeleteQyAdminMenusAdmin(ctx context.Context, in *DeleteQyAdminMenusAdminRequest, opts ...grpc.CallOption) (*DeleteQyAdminMenusAdminReply, error)
 	DeleteQyAdminMenusAdmins(ctx context.Context, in *DeleteQyAdminMenusAdminsRequest, opts ...grpc.CallOption) (*DeleteQyAdminMenusAdminsReply, error)
 	GetQyAdminMenusAdmin(ctx context.Context, in *GetQyAdminMenusAdminRequest, opts ...grpc.CallOption) (*GetQyAdminMenusAdminReply, error)
+	GetMyMenusAdminInfo(ctx context.Context, in *GetMyMenusAdminInfoReq, opts ...grpc.CallOption) (*GetMyMenusAdminInfoReply, error)
 	ListQyAdminMenusAdmin(ctx context.Context, in *ListQyAdminMenusAdminRequest, opts ...grpc.CallOption) (*ListQyAdminMenusAdminReply, error)
 }
 
@@ -83,6 +84,15 @@ func (c *qyAdminMenusAdminClient) GetQyAdminMenusAdmin(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *qyAdminMenusAdminClient) GetMyMenusAdminInfo(ctx context.Context, in *GetMyMenusAdminInfoReq, opts ...grpc.CallOption) (*GetMyMenusAdminInfoReply, error) {
+	out := new(GetMyMenusAdminInfoReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminMenusAdmin/GetMyMenusAdminInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *qyAdminMenusAdminClient) ListQyAdminMenusAdmin(ctx context.Context, in *ListQyAdminMenusAdminRequest, opts ...grpc.CallOption) (*ListQyAdminMenusAdminReply, error) {
 	out := new(ListQyAdminMenusAdminReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminMenusAdmin/ListQyAdminMenusAdmin", in, out, opts...)
@@ -101,6 +111,7 @@ type QyAdminMenusAdminServer interface {
 	DeleteQyAdminMenusAdmin(context.Context, *DeleteQyAdminMenusAdminRequest) (*DeleteQyAdminMenusAdminReply, error)
 	DeleteQyAdminMenusAdmins(context.Context, *DeleteQyAdminMenusAdminsRequest) (*DeleteQyAdminMenusAdminsReply, error)
 	GetQyAdminMenusAdmin(context.Context, *GetQyAdminMenusAdminRequest) (*GetQyAdminMenusAdminReply, error)
+	GetMyMenusAdminInfo(context.Context, *GetMyMenusAdminInfoReq) (*GetMyMenusAdminInfoReply, error)
 	ListQyAdminMenusAdmin(context.Context, *ListQyAdminMenusAdminRequest) (*ListQyAdminMenusAdminReply, error)
 	mustEmbedUnimplementedQyAdminMenusAdminServer()
 }
@@ -123,6 +134,9 @@ func (UnimplementedQyAdminMenusAdminServer) DeleteQyAdminMenusAdmins(context.Con
 }
 func (UnimplementedQyAdminMenusAdminServer) GetQyAdminMenusAdmin(context.Context, *GetQyAdminMenusAdminRequest) (*GetQyAdminMenusAdminReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQyAdminMenusAdmin not implemented")
+}
+func (UnimplementedQyAdminMenusAdminServer) GetMyMenusAdminInfo(context.Context, *GetMyMenusAdminInfoReq) (*GetMyMenusAdminInfoReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMyMenusAdminInfo not implemented")
 }
 func (UnimplementedQyAdminMenusAdminServer) ListQyAdminMenusAdmin(context.Context, *ListQyAdminMenusAdminRequest) (*ListQyAdminMenusAdminReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminMenusAdmin not implemented")
@@ -230,6 +244,24 @@ func _QyAdminMenusAdmin_GetQyAdminMenusAdmin_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminMenusAdmin_GetMyMenusAdminInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyMenusAdminInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminMenusAdminServer).GetMyMenusAdminInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminMenusAdmin/GetMyMenusAdminInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminMenusAdminServer).GetMyMenusAdminInfo(ctx, req.(*GetMyMenusAdminInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QyAdminMenusAdmin_ListQyAdminMenusAdmin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListQyAdminMenusAdminRequest)
 	if err := dec(in); err != nil {
@@ -274,6 +306,10 @@ var QyAdminMenusAdmin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetQyAdminMenusAdmin",
 			Handler:    _QyAdminMenusAdmin_GetQyAdminMenusAdmin_Handler,
+		},
+		{
+			MethodName: "GetMyMenusAdminInfo",
+			Handler:    _QyAdminMenusAdmin_GetMyMenusAdminInfo_Handler,
 		},
 		{
 			MethodName: "ListQyAdminMenusAdmin",

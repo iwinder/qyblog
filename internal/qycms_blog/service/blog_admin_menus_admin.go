@@ -2,9 +2,12 @@ package service
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
+	jwtV4 "github.com/golang-jwt/jwt/v4"
 	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	"strconv"
 )
 
 // CreateMenusAdmin 创建用户
@@ -78,6 +81,33 @@ func (s *BlogAdminUserService) GetQyAdminMenusAdmin(ctx context.Context, in *v1.
 	}
 	u := bizToMenusAdminResponse(obj)
 	return &v1.GetQyAdminMenusAdminReply{Data: &u}, nil
+}
+
+func (s *BlogAdminUserService) GetMyMenusAdminInfo(ctx context.Context, in *v1.GetMyMenusAdminInfoReq) (*v1.GetMyMenusAdminInfoReply, error) {
+	var uId uint64
+	var aerr error
+	if claims, ok := jwt.FromContext(ctx); ok {
+		c := claims.(jwtV4.MapClaims)
+		if c["RoleIds"] == nil {
+			return nil, ErrAuthFailed
+		}
+		uId, aerr = strconv.ParseUint(c["RoleIds"].(string), 10, 64)
+		if aerr != nil {
+			return nil, aerr
+		}
+
+	}
+
+	objList, err := s.mc.FindAllByRoleID(ctx, uId)
+	if err != nil {
+		return nil, err
+	}
+	objs := make([]*v1.MenusAdminInfoResponse, 0, len(objList))
+	for _, item := range objList {
+		titem := bizToMenusAdminResponse(item)
+		objs = append(objs, &titem)
+	}
+	return &v1.GetMyMenusAdminInfoReply{Items: objs}, nil
 }
 
 // ListMenusAdmin 获取用户列表

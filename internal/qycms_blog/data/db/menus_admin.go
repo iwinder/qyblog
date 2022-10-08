@@ -194,3 +194,40 @@ func (r *menusAdminRepo) ListAll(c context.Context, opts biz.MenusAdminDOListOpt
 	}
 	return &biz.MenusAdminDOList{ListMeta: ret.ListMeta, Items: infos}, err
 }
+
+func (r *menusAdminRepo) FindAllByRoleID(ctx context.Context, rid uint64) ([]*biz.MenusAdminDO, error) {
+	db := r.data.Db
+	dataPos := make([]*po.MenusAdminPO, 0, 0)
+	e := db.Where("ID in (?)", db.Table("qy_sys_role_menus").Select("menus_id ").Where(" role_id = ?", rid)).Order("parent_id,Sort,id").Find(&dataPos)
+	if e.Error != nil {
+		return nil, e.Error
+	}
+	infos := make([]*biz.MenusAdminDO, 0, len(dataPos))
+	imap := make(map[uint64]*biz.MenusAdminDO)
+	for _, obj := range dataPos {
+		do := &biz.MenusAdminDO{
+			ObjectMeta:     obj.ObjectMeta,
+			Name:           obj.Name,
+			BreadcrumbName: obj.BreadcrumbName,
+			Identifier:     obj.Identifier,
+			ParentId:       uint64(obj.ParentId.Int64),
+			Icon:           obj.Icon,
+			MType:          obj.MType,
+			Path:           obj.Path,
+			Redirect:       obj.Redirect,
+			Component:      obj.Component.String,
+			Sort:           obj.Sort,
+			HasChildren:    false,
+			Children:       make([]*biz.MenusAdminDO, 0, 0),
+		}
+		imap[do.ID] = do
+		_, ok := imap[do.ParentId]
+		if ok {
+			imap[do.ParentId].Children = append(imap[do.ParentId].Children, do)
+		}
+		if do.ParentId == 0 || !ok {
+			infos = append(infos, do)
+		}
+	}
+	return infos, nil
+}

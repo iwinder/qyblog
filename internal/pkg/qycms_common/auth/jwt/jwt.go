@@ -37,6 +37,6 @@ func NewWhiteListMatcher() selector.MatchFunc {
 		if _, ok := whiteList[operation]; ok {
 			return false
 		}
-		return false
+		return true
 	}
 }

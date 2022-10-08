@@ -42,6 +42,7 @@ type MenusAdminRepo interface {
 	FindByID(context.Context, uint64) (*MenusAdminDO, error)
 	//FindByKey(c context.Context, key string) (*po.MenusAdminPO, error)
 	ListAll(c context.Context, opts MenusAdminDOListOption) (*MenusAdminDOList, error)
+	FindAllByRoleID(ctx context.Context, rid uint64) ([]*MenusAdminDO, error)
 }
 
 type MenusAdminUsecase struct {
@@ -146,6 +147,10 @@ func (uc *MenusAdminUsecase) ListAll(ctx context.Context, opts MenusAdminDOListO
 	}
 
 	return objDOs, nil
+}
+
+func (uc *MenusAdminUsecase) FindAllByRoleID(ctx context.Context, rid uint64) ([]*MenusAdminDO, error) {
+	return uc.repo.FindAllByRoleID(ctx, rid)
 }
 
 // ListAllParent 获取所有菜单列表
