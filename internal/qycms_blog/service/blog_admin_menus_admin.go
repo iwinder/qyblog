@@ -167,6 +167,7 @@ func bizToMenusAdminResponse(obj *biz.MenusAdminDO) v1.MenusAdminInfoResponse {
 		Component:      obj.Component,
 		Sort:           int32(obj.Sort),
 	}
+	objInfoRsp.StatusFlag = int32(obj.StatusFlag)
 	if obj.Children != nil && len(obj.Children) > 0 {
 		cobjList := make([]*v1.MenusAdminInfoResponse, 0, len(obj.Children))
 		for _, cobj := range obj.Children {

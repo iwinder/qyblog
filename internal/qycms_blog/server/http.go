@@ -32,5 +32,6 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminApiHTTPServer(srv, userService)
 	v1.RegisterQyAdminMenusAdminHTTPServer(srv, userService)
 	v1.RegisterQyAdminApiGroupHTTPServer(srv, userService)
+	v1.RegisterQyAdminFileHTTPServer(srv, userService)
 	return srv
 }

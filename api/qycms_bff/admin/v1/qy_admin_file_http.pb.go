@@ -19,18 +19,49 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationQyAdminFileCreateQyAdminFileLibConfig = "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibConfig"
+const OperationQyAdminFileCreateQyAdminFileLibType = "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibType"
+const OperationQyAdminFileDeleteQyAdminFileLibType = "/api.qycms_bff.admin.v1.QyAdminFile/DeleteQyAdminFileLibType"
+const OperationQyAdminFileGetQyAdminFileLibConfig = "/api.qycms_bff.admin.v1.QyAdminFile/GetQyAdminFileLibConfig"
 const OperationQyAdminFileListQyAdminFileLibType = "/api.qycms_bff.admin.v1.QyAdminFile/ListQyAdminFileLibType"
 const OperationQyAdminFileUpdateQyAdminFileLibType = "/api.qycms_bff.admin.v1.QyAdminFile/UpdateQyAdminFileLibType"
 
 type QyAdminFileHTTPServer interface {
+	CreateQyAdminFileLibConfig(context.Context, *CreateQyAdminFileLibConfigRequest) (*CreateQyAdminFileLibConfigReply, error)
+	CreateQyAdminFileLibType(context.Context, *CreateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
+	DeleteQyAdminFileLibType(context.Context, *DeleteQyAdminFileLibTypeRequest) (*DeleteQyAdminFileLibTypeReply, error)
+	GetQyAdminFileLibConfig(context.Context, *GetQyAdminFileLibConfigRequest) (*GetQyAdminFileLibConfigReply, error)
 	ListQyAdminFileLibType(context.Context, *ListQyAdminFileLibTypeRequest) (*ListQyAdminFileLibTypeReply, error)
 	UpdateQyAdminFileLibType(context.Context, *UpdateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
 }
 
 func RegisterQyAdminFileHTTPServer(s *http.Server, srv QyAdminFileHTTPServer) {
 	r := s.Route("/")
+	r.POST("/api/admin/v1/fileLibType", _QyAdminFile_CreateQyAdminFileLibType0_HTTP_Handler(srv))
 	r.PUT("/api/admin/v1/fileLibType/{id}", _QyAdminFile_UpdateQyAdminFileLibType0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/fileLibType", _QyAdminFile_ListQyAdminFileLibType0_HTTP_Handler(srv))
+	r.DELETE("/api/admin/v1/fileLibType", _QyAdminFile_DeleteQyAdminFileLibType0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/fileLibConfig", _QyAdminFile_CreateQyAdminFileLibConfig0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/fileLibConfig/{typeId}", _QyAdminFile_GetQyAdminFileLibConfig0_HTTP_Handler(srv))
+}
+
+func _QyAdminFile_CreateQyAdminFileLibType0_HTTP_Handler(srv QyAdminFileHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateQyAdminFileLibTypeRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminFileCreateQyAdminFileLibType)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateQyAdminFileLibType(ctx, req.(*CreateQyAdminFileLibTypeRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateQyAdminFileLibTypeReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _QyAdminFile_UpdateQyAdminFileLibType0_HTTP_Handler(srv QyAdminFileHTTPServer) func(ctx http.Context) error {
@@ -74,7 +105,71 @@ func _QyAdminFile_ListQyAdminFileLibType0_HTTP_Handler(srv QyAdminFileHTTPServer
 	}
 }
 
+func _QyAdminFile_DeleteQyAdminFileLibType0_HTTP_Handler(srv QyAdminFileHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteQyAdminFileLibTypeRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminFileDeleteQyAdminFileLibType)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteQyAdminFileLibType(ctx, req.(*DeleteQyAdminFileLibTypeRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteQyAdminFileLibTypeReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyAdminFile_CreateQyAdminFileLibConfig0_HTTP_Handler(srv QyAdminFileHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CreateQyAdminFileLibConfigRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminFileCreateQyAdminFileLibConfig)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CreateQyAdminFileLibConfig(ctx, req.(*CreateQyAdminFileLibConfigRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CreateQyAdminFileLibConfigReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyAdminFile_GetQyAdminFileLibConfig0_HTTP_Handler(srv QyAdminFileHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetQyAdminFileLibConfigRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminFileGetQyAdminFileLibConfig)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetQyAdminFileLibConfig(ctx, req.(*GetQyAdminFileLibConfigRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetQyAdminFileLibConfigReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyAdminFileHTTPClient interface {
+	CreateQyAdminFileLibConfig(ctx context.Context, req *CreateQyAdminFileLibConfigRequest, opts ...http.CallOption) (rsp *CreateQyAdminFileLibConfigReply, err error)
+	CreateQyAdminFileLibType(ctx context.Context, req *CreateQyAdminFileLibTypeRequest, opts ...http.CallOption) (rsp *UpdateQyAdminFileLibTypeReply, err error)
+	DeleteQyAdminFileLibType(ctx context.Context, req *DeleteQyAdminFileLibTypeRequest, opts ...http.CallOption) (rsp *DeleteQyAdminFileLibTypeReply, err error)
+	GetQyAdminFileLibConfig(ctx context.Context, req *GetQyAdminFileLibConfigRequest, opts ...http.CallOption) (rsp *GetQyAdminFileLibConfigReply, err error)
 	ListQyAdminFileLibType(ctx context.Context, req *ListQyAdminFileLibTypeRequest, opts ...http.CallOption) (rsp *ListQyAdminFileLibTypeReply, err error)
 	UpdateQyAdminFileLibType(ctx context.Context, req *UpdateQyAdminFileLibTypeRequest, opts ...http.CallOption) (rsp *UpdateQyAdminFileLibTypeReply, err error)
 }
@@ -85,6 +180,58 @@ type QyAdminFileHTTPClientImpl struct {
 
 func NewQyAdminFileHTTPClient(client *http.Client) QyAdminFileHTTPClient {
 	return &QyAdminFileHTTPClientImpl{client}
+}
+
+func (c *QyAdminFileHTTPClientImpl) CreateQyAdminFileLibConfig(ctx context.Context, in *CreateQyAdminFileLibConfigRequest, opts ...http.CallOption) (*CreateQyAdminFileLibConfigReply, error) {
+	var out CreateQyAdminFileLibConfigReply
+	pattern := "/api/admin/v1/fileLibConfig"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminFileCreateQyAdminFileLibConfig))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminFileHTTPClientImpl) CreateQyAdminFileLibType(ctx context.Context, in *CreateQyAdminFileLibTypeRequest, opts ...http.CallOption) (*UpdateQyAdminFileLibTypeReply, error) {
+	var out UpdateQyAdminFileLibTypeReply
+	pattern := "/api/admin/v1/fileLibType"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminFileCreateQyAdminFileLibType))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminFileHTTPClientImpl) DeleteQyAdminFileLibType(ctx context.Context, in *DeleteQyAdminFileLibTypeRequest, opts ...http.CallOption) (*DeleteQyAdminFileLibTypeReply, error) {
+	var out DeleteQyAdminFileLibTypeReply
+	pattern := "/api/admin/v1/fileLibType"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminFileDeleteQyAdminFileLibType))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "DELETE", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminFileHTTPClientImpl) GetQyAdminFileLibConfig(ctx context.Context, in *GetQyAdminFileLibConfigRequest, opts ...http.CallOption) (*GetQyAdminFileLibConfigReply, error) {
+	var out GetQyAdminFileLibConfigReply
+	pattern := "/api/admin/v1/fileLibConfig/{typeId}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyAdminFileGetQyAdminFileLibConfig))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *QyAdminFileHTTPClientImpl) ListQyAdminFileLibType(ctx context.Context, in *ListQyAdminFileLibTypeRequest, opts ...http.CallOption) (*ListQyAdminFileLibTypeReply, error) {

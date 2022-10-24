@@ -81,7 +81,7 @@ func (r *userRepo) Update(ctx context.Context, user *biz.UserDO) (*biz.UserDO, e
 		return nil, err
 	}
 	cacheKey := userCacheKey(fmt.Sprintf("%d", user.ID))
-	r.serUserCache(ctx, userPO, cacheKey)
+	r.setUserCache(ctx, userPO, cacheKey)
 	userDO := &biz.UserDO{Username: userPO.Username}
 	userDO.ID = userPO.ID
 	return userDO, nil
@@ -121,7 +121,7 @@ func (r *userRepo) FindByID(ctx context.Context, id uint64) (*biz.UserDO, error)
 		if err != nil {
 			return nil, biz.ErrUserNotFound
 		}
-		r.serUserCache(ctx, user, cacheKey)
+		r.setUserCache(ctx, user, cacheKey)
 	}
 
 	if err != nil {
@@ -248,7 +248,7 @@ func (r *userRepo) getUserFromCache(ctx context.Context, key string) (*po.UserPO
 	return cacheUser, nil
 }
 
-func (r *userRepo) serUserCache(ctx context.Context, user *po.UserPO, key string) {
+func (r *userRepo) setUserCache(ctx context.Context, user *po.UserPO, key string) {
 	marshal, err := json.Marshal(user)
 	if err != nil {
 		r.log.Errorf("fail to set user cache:json.Marshal(%v) error(%v)", user, err)

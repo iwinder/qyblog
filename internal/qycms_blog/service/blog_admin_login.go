@@ -14,6 +14,7 @@ type BlogAdminUserService struct {
 	v1.UnimplementedQyAdminMenusAdminServer
 	v1.UnimplementedQyAdminApiServer
 	v1.UnimplementedQyAdminApiGroupServer
+	v1.UnimplementedQyAdminFileServer
 	conf     *conf.Qycms
 	authConf *conf.Auth
 	uc       *biz.UserUsecase
@@ -23,13 +24,16 @@ type BlogAdminUserService struct {
 	mc       *biz.MenusAdminUsecase
 	rm       *biz.RoleMenusUsecase
 	ra       *biz.RoleApiUsecase
+	fit      *biz.FileLibTypeUsecase
+	fic      *biz.FileLibConfigUsecase
 }
 
 func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.ApiUsecase, rm *biz.RoleMenusUsecase,
 	acg *biz.ApiGroupUsecase, mc *biz.MenusAdminUsecase, ra *biz.RoleApiUsecase,
+	fit *biz.FileLibTypeUsecase, fic *biz.FileLibConfigUsecase,
 	conf *conf.Qycms, authConf *conf.Auth) *BlogAdminUserService {
 	return &BlogAdminUserService{uc: uc, rc: rc, ac: ac, rm: rm,
-		acg: acg, mc: mc, ra: ra,
+		acg: acg, mc: mc, ra: ra, fit: fit, fic: fic,
 		conf: conf, authConf: authConf}
 }
 

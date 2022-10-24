@@ -22,8 +22,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminFileClient interface {
+	CreateQyAdminFileLibType(ctx context.Context, in *CreateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error)
 	UpdateQyAdminFileLibType(ctx context.Context, in *UpdateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error)
 	ListQyAdminFileLibType(ctx context.Context, in *ListQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*ListQyAdminFileLibTypeReply, error)
+	DeleteQyAdminFileLibType(ctx context.Context, in *DeleteQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*DeleteQyAdminFileLibTypeReply, error)
+	CreateQyAdminFileLibConfig(ctx context.Context, in *CreateQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*CreateQyAdminFileLibConfigReply, error)
+	//	rpc GetQyAdminFileLibConfigByType (GetQyAdminFileLibConfigRequest) returns (GetQyAdminFileLibConfigReply){
+	//		option (google.api.http) = {
+	//			get: "/api/admin/v1/fileLibConfig/byType/{id}",
+	//		};
+	//	};
+	GetQyAdminFileLibConfig(ctx context.Context, in *GetQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*GetQyAdminFileLibConfigReply, error)
 	CreateQyAdminFile(ctx context.Context, in *CreateQyAdminFileRequest, opts ...grpc.CallOption) (*CreateQyAdminFileReply, error)
 	UpdateQyAdminFile(ctx context.Context, in *UpdateQyAdminFileRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileReply, error)
 	DeleteQyAdminFile(ctx context.Context, in *DeleteQyAdminFileRequest, opts ...grpc.CallOption) (*DeleteQyAdminFileReply, error)
@@ -39,6 +48,15 @@ func NewQyAdminFileClient(cc grpc.ClientConnInterface) QyAdminFileClient {
 	return &qyAdminFileClient{cc}
 }
 
+func (c *qyAdminFileClient) CreateQyAdminFileLibType(ctx context.Context, in *CreateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error) {
+	out := new(UpdateQyAdminFileLibTypeReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *qyAdminFileClient) UpdateQyAdminFileLibType(ctx context.Context, in *UpdateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error) {
 	out := new(UpdateQyAdminFileLibTypeReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/UpdateQyAdminFileLibType", in, out, opts...)
@@ -51,6 +69,33 @@ func (c *qyAdminFileClient) UpdateQyAdminFileLibType(ctx context.Context, in *Up
 func (c *qyAdminFileClient) ListQyAdminFileLibType(ctx context.Context, in *ListQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*ListQyAdminFileLibTypeReply, error) {
 	out := new(ListQyAdminFileLibTypeReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/ListQyAdminFileLibType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminFileClient) DeleteQyAdminFileLibType(ctx context.Context, in *DeleteQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*DeleteQyAdminFileLibTypeReply, error) {
+	out := new(DeleteQyAdminFileLibTypeReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/DeleteQyAdminFileLibType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminFileClient) CreateQyAdminFileLibConfig(ctx context.Context, in *CreateQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*CreateQyAdminFileLibConfigReply, error) {
+	out := new(CreateQyAdminFileLibConfigReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminFileClient) GetQyAdminFileLibConfig(ctx context.Context, in *GetQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*GetQyAdminFileLibConfigReply, error) {
+	out := new(GetQyAdminFileLibConfigReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminFile/GetQyAdminFileLibConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +151,17 @@ func (c *qyAdminFileClient) ListQyAdminFile(ctx context.Context, in *ListQyAdmin
 // All implementations must embed UnimplementedQyAdminFileServer
 // for forward compatibility
 type QyAdminFileServer interface {
+	CreateQyAdminFileLibType(context.Context, *CreateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
 	UpdateQyAdminFileLibType(context.Context, *UpdateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
 	ListQyAdminFileLibType(context.Context, *ListQyAdminFileLibTypeRequest) (*ListQyAdminFileLibTypeReply, error)
+	DeleteQyAdminFileLibType(context.Context, *DeleteQyAdminFileLibTypeRequest) (*DeleteQyAdminFileLibTypeReply, error)
+	CreateQyAdminFileLibConfig(context.Context, *CreateQyAdminFileLibConfigRequest) (*CreateQyAdminFileLibConfigReply, error)
+	//	rpc GetQyAdminFileLibConfigByType (GetQyAdminFileLibConfigRequest) returns (GetQyAdminFileLibConfigReply){
+	//		option (google.api.http) = {
+	//			get: "/api/admin/v1/fileLibConfig/byType/{id}",
+	//		};
+	//	};
+	GetQyAdminFileLibConfig(context.Context, *GetQyAdminFileLibConfigRequest) (*GetQyAdminFileLibConfigReply, error)
 	CreateQyAdminFile(context.Context, *CreateQyAdminFileRequest) (*CreateQyAdminFileReply, error)
 	UpdateQyAdminFile(context.Context, *UpdateQyAdminFileRequest) (*UpdateQyAdminFileReply, error)
 	DeleteQyAdminFile(context.Context, *DeleteQyAdminFileRequest) (*DeleteQyAdminFileReply, error)
@@ -120,11 +174,23 @@ type QyAdminFileServer interface {
 type UnimplementedQyAdminFileServer struct {
 }
 
+func (UnimplementedQyAdminFileServer) CreateQyAdminFileLibType(context.Context, *CreateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateQyAdminFileLibType not implemented")
+}
 func (UnimplementedQyAdminFileServer) UpdateQyAdminFileLibType(context.Context, *UpdateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminFileLibType not implemented")
 }
 func (UnimplementedQyAdminFileServer) ListQyAdminFileLibType(context.Context, *ListQyAdminFileLibTypeRequest) (*ListQyAdminFileLibTypeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminFileLibType not implemented")
+}
+func (UnimplementedQyAdminFileServer) DeleteQyAdminFileLibType(context.Context, *DeleteQyAdminFileLibTypeRequest) (*DeleteQyAdminFileLibTypeReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteQyAdminFileLibType not implemented")
+}
+func (UnimplementedQyAdminFileServer) CreateQyAdminFileLibConfig(context.Context, *CreateQyAdminFileLibConfigRequest) (*CreateQyAdminFileLibConfigReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateQyAdminFileLibConfig not implemented")
+}
+func (UnimplementedQyAdminFileServer) GetQyAdminFileLibConfig(context.Context, *GetQyAdminFileLibConfigRequest) (*GetQyAdminFileLibConfigReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQyAdminFileLibConfig not implemented")
 }
 func (UnimplementedQyAdminFileServer) CreateQyAdminFile(context.Context, *CreateQyAdminFileRequest) (*CreateQyAdminFileReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateQyAdminFile not implemented")
@@ -152,6 +218,24 @@ type UnsafeQyAdminFileServer interface {
 
 func RegisterQyAdminFileServer(s grpc.ServiceRegistrar, srv QyAdminFileServer) {
 	s.RegisterService(&QyAdminFile_ServiceDesc, srv)
+}
+
+func _QyAdminFile_CreateQyAdminFileLibType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateQyAdminFileLibTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminFileServer).CreateQyAdminFileLibType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminFileServer).CreateQyAdminFileLibType(ctx, req.(*CreateQyAdminFileLibTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _QyAdminFile_UpdateQyAdminFileLibType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -186,6 +270,60 @@ func _QyAdminFile_ListQyAdminFileLibType_Handler(srv interface{}, ctx context.Co
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QyAdminFileServer).ListQyAdminFileLibType(ctx, req.(*ListQyAdminFileLibTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminFile_DeleteQyAdminFileLibType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteQyAdminFileLibTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminFileServer).DeleteQyAdminFileLibType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminFile/DeleteQyAdminFileLibType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminFileServer).DeleteQyAdminFileLibType(ctx, req.(*DeleteQyAdminFileLibTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminFile_CreateQyAdminFileLibConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateQyAdminFileLibConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminFileServer).CreateQyAdminFileLibConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminFile/CreateQyAdminFileLibConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminFileServer).CreateQyAdminFileLibConfig(ctx, req.(*CreateQyAdminFileLibConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminFile_GetQyAdminFileLibConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQyAdminFileLibConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminFileServer).GetQyAdminFileLibConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminFile/GetQyAdminFileLibConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminFileServer).GetQyAdminFileLibConfig(ctx, req.(*GetQyAdminFileLibConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -288,12 +426,28 @@ var QyAdminFile_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QyAdminFileServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CreateQyAdminFileLibType",
+			Handler:    _QyAdminFile_CreateQyAdminFileLibType_Handler,
+		},
+		{
 			MethodName: "UpdateQyAdminFileLibType",
 			Handler:    _QyAdminFile_UpdateQyAdminFileLibType_Handler,
 		},
 		{
 			MethodName: "ListQyAdminFileLibType",
 			Handler:    _QyAdminFile_ListQyAdminFileLibType_Handler,
+		},
+		{
+			MethodName: "DeleteQyAdminFileLibType",
+			Handler:    _QyAdminFile_DeleteQyAdminFileLibType_Handler,
+		},
+		{
+			MethodName: "CreateQyAdminFileLibConfig",
+			Handler:    _QyAdminFile_CreateQyAdminFileLibConfig_Handler,
+		},
+		{
+			MethodName: "GetQyAdminFileLibConfig",
+			Handler:    _QyAdminFile_GetQyAdminFileLibConfig_Handler,
 		},
 		{
 			MethodName: "CreateQyAdminFile",
