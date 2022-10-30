@@ -50,7 +50,9 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	fileLibTypeUsecase := biz.NewFileLibTypeUsecase(fileLibTypeRepo, logger)
 	fileLibConfigRepo := db.NewFileLibConfigRepo(dbData, logger)
 	fileLibConfigUsecase := biz.NewFileLibConfigUsecase(fileLibConfigRepo, logger)
-	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, qycms, auth)
+	fileLibRepo := db.NewFileLibRepo(dbData, logger)
+	fileLibUsecase := biz.NewFileLibUsecase(fileLibRepo, logger)
+	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, qycms, auth)
 	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {

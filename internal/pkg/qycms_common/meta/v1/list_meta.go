@@ -3,12 +3,13 @@ package v1
 import "math"
 
 type ListMeta struct {
-	TotalCount int64 `json:"totalCount,omitempty"`
-	PageSize   int64 `json:"size,omitempty"`
-	Current    int64 `json:"page,omitempty"`
-	Pages      int64 `json:"pages,omitempty"`
-	FirstFlag  bool  `json:"firstFlag,omitempty"`
-	LastFlag   bool  `json:"lastFlag,omitempty"`
+	TotalCount int64  `json:"totalCount,omitempty"`
+	PageSize   int64  `json:"size,omitempty"`
+	Current    int64  `json:"page,omitempty"`
+	Pages      int64  `json:"pages,omitempty"`
+	FirstFlag  bool   `json:"firstFlag,omitempty"`
+	LastFlag   bool   `json:"lastFlag,omitempty"`
+	Marker     string `json:"marker,omitempty"`
 }
 
 type ListOptions struct {

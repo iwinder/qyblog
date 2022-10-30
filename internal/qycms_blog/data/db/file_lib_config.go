@@ -14,6 +14,9 @@ import (
 var fileLibTypeConfigCacheKey = func(typeId string) string {
 	return "file_lib_config_" + typeId
 }
+var fileLibTypeTokenCacheKey = func(typeId string) string {
+	return "file_lib_token_" + typeId
+}
 
 type fileLibTypeConfigRepo struct {
 	data *Data
@@ -133,8 +136,29 @@ func (r *fileLibTypeConfigRepo) setFileLibConfigCache(ctx context.Context, data 
 	if err != nil {
 		r.log.Errorf("fail to set data cache:json.Marshal(%v) error(%v)", data, err)
 	}
-	err = r.data.RedisCli.Set(ctx, key, string(marshal), time.Minute*30).Err()
+	err = r.data.RedisCli.Set(ctx, key, string(marshal), -1).Err()
 	if err != nil {
 		r.log.Errorf("fail to set data cache:redis.Set(%v) error(%v)", data, err)
 	}
+}
+
+func (r *fileLibTypeConfigRepo) SetTokenByTypeId(ctx context.Context, id uint64, token string) (bool, error) {
+
+	key := fileLibTypeTokenCacheKey(fmt.Sprintf("%d", id))
+	err := r.data.RedisCli.Set(ctx, key, token, 3000*time.Second).Err()
+	if err != nil {
+		r.log.Errorf("fail to set data cache:(%v) error(%v)", token, err)
+		return false, err
+	}
+	return true, nil
+}
+func (r *fileLibTypeConfigRepo) GetTokenByTypeId(ctx context.Context, id uint64) (string, error) {
+
+	key := fileLibTypeTokenCacheKey(fmt.Sprintf("%d", id))
+	result, err := r.data.RedisCli.Get(ctx, key).Result()
+	if err != nil {
+		r.log.Errorf("fail to get data cache:(%v) error(%v)", key, err)
+		return "", err
+	}
+	return result, nil
 }

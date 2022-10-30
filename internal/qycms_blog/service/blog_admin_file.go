@@ -2,8 +2,14 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/go-kratos/kratos/v2/transport/http"
 	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/dateUtil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	fileStrategy "github.com/iwinder/qingyucms/internal/qycms_blog/biz/file_strategys"
+	"io"
 )
 
 func (s *BlogAdminUserService) CreateQyAdminFileLibType(ctx context.Context, in *v1.CreateQyAdminFileLibTypeRequest) (*v1.UpdateQyAdminFileLibTypeReply, error) {
@@ -112,6 +118,71 @@ func (s *BlogAdminUserService) GetQyAdminFileLibConfig(ctx context.Context, in *
 	}, nil
 }
 
+//func (s *BlogAdminUserService) UploadQyAdminFile(ctx http.Context) error {
+//	r := ctx.Request()
+//	file, header, _ := r.FormFile("file")
+//	var in *v1.GetQyAdminFileLibConfigRequest
+//	if err := ctx.BindVars(&in); err != nil {
+//		return err
+//	}
+//	//读取文件流为[]byte
+//	id := in.TypeId
+//
+//	fmt.Println("上传文件名:", header.Filename, id)
+//	return nil
+//}
+
+func (s *BlogAdminUserService) UploadQyAdminFile(ctx http.Context) error {
+	r := ctx.Request()
+	file, header, _ := r.FormFile("file")
+	var in *v1.GetQyAdminFileLibConfigRequest
+
+	if err := ctx.BindVars(&in); err != nil {
+		return err
+	}
+	//读取文件流为[]byte
+	typeId := in.TypeId
+	opt := fileStrategy.NewUploadOperator(typeId, s.fic, s.fi)
+	data, err := opt.Upload(ctx, file, header, typeId)
+	if err != nil {
+		return err
+	}
+	if typeId == 1 && data != nil {
+		_, aerr := s.fi.Save(ctx, data)
+		if aerr != nil {
+			return aerr
+		}
+	}
+
+	fmt.Println("上传文件名:", data.OriginFileName, typeId)
+	ret_json, _ := json.Marshal(data)
+	w := ctx.Response()
+	io.WriteString(w, string(ret_json))
+	return nil
+}
+func (s *BlogAdminUserService) ListQyAdminFileLibByType(ctx context.Context, in *v1.ListQyAdminFileRequest) (*v1.ListQyAdminFileReply, error) {
+	typeId := in.TypeId
+	opt := fileStrategy.NewUploadOperator(typeId, s.fic, s.fi)
+	objList, err := opt.ListAll(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	pageInfo := &v1.FilePageInfo{
+		Current:   objList.Current,
+		PageSize:  objList.PageSize,
+		Total:     objList.TotalCount,
+		Pages:     objList.Pages,
+		FirstFlag: objList.FirstFlag,
+		LastFlag:  objList.LastFlag,
+		Marker:    objList.Marker,
+	}
+	objs := make([]*v1.FileLibResponse, 0, len(objList.Items))
+	for _, item := range objList.Items {
+		titem := bizToFileLibResponse(item)
+		objs = append(objs, &titem)
+	}
+	return &v1.ListQyAdminFileReply{PageInfo: pageInfo, Items: objs}, nil
+}
 func bizToFileLibTypeResponse(obj *biz.FileLibTypeDO) v1.FileLibTypeResponse {
 	objInfoRsp := v1.FileLibTypeResponse{
 		Id:         obj.ID,
@@ -119,6 +190,24 @@ func bizToFileLibTypeResponse(obj *biz.FileLibTypeDO) v1.FileLibTypeResponse {
 		Identifier: int32(obj.Identifier),
 		Type:       obj.Ftype,
 		StatusFlag: int32(obj.StatusFlag),
+	}
+	return objInfoRsp
+}
+func bizToFileLibResponse(obj *biz.FileLibDO) v1.FileLibResponse {
+	objInfoRsp := v1.FileLibResponse{
+		Id:             obj.ID,
+		OriginFileName: obj.OriginFileName,
+		Fname:          obj.Fname,
+		Fsize:          obj.Fsize,
+		Extention:      obj.Extention,
+		MimeType:       obj.MimeType,
+		Fhash:          obj.Fhash,
+		RelativePath:   obj.RelativePath,
+		Ftype:          int32(obj.Ftype),
+		EndUser:        obj.EndUser,
+		Domain:         obj.Domain,
+		DefUrl:         obj.DefUrl,
+		UpdatedAt:      obj.UpdatedAt.Format(dateUtil.YYYY_MM_DD_k_HH_mm_ss),
 	}
 	return objInfoRsp
 }

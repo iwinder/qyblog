@@ -24,6 +24,8 @@ type FileLibConfigRepo interface {
 	Update(context.Context, *FileLibConfigDO) (*FileLibConfigDO, error)
 	FindByID(context.Context, uint64) (*FileLibConfigDO, error)
 	FindByTypeId(context.Context, uint64) (*FileLibConfigDO, error)
+	SetTokenByTypeId(context.Context, uint64, string) (bool, error)
+	GetTokenByTypeId(context.Context, uint64) (string, error)
 }
 
 type FileLibConfigUsecase struct {
@@ -72,6 +74,24 @@ func (uc *FileLibConfigUsecase) FindByTypeId(ctx context.Context, id uint64) (*F
 			return nil, ErrUserNotFound
 		}
 		return nil, err
+	}
+	return data, nil
+}
+
+func (uc *FileLibConfigUsecase) SetTokenByTypeId(ctx context.Context, id uint64, token string) bool {
+	uc.log.WithContext(ctx).Infof("FindByTypeId: %v", id)
+	data, _ := uc.repo.SetTokenByTypeId(ctx, id, token)
+	return data
+}
+
+func (uc *FileLibConfigUsecase) GetTokenByTypeId(ctx context.Context, id uint64) (string, error) {
+	uc.log.WithContext(ctx).Infof("FindByTypeId: %v", id)
+	data, err := uc.repo.GetTokenByTypeId(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return "", ErrUserNotFound
+		}
+		return "", err
 	}
 	return data, nil
 }

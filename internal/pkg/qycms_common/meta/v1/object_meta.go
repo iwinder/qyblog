@@ -13,6 +13,7 @@ type ObjectMeta struct {
 	StatusFlag   int                   `json:"status,omitempty" gorm:"column:status_flag;default:1;comment:启用标识，1 启用，2 禁用" validate:"omitempty"`
 	Extend       Extend                `json:"extend,omitempty" gorm:"-" validate:"omitempty"`
 	ExtendShadow string                `json:"-" gorm:"column:extend_shadow" validate:"omitempty"`
+	createdBy    uint64                `json:"-" gorm:"column:created_by;default:1;comment:创建者" `
 	CreatedAt    *time.Time            `json:"createdAt,omitempty" gorm:"column:created_at"`
 	UpdatedAt    *time.Time            `json:"updatedAt,omitempty" gorm:"column:updated_at"`
 	DeletedAt    *time.Time            `json:"-" gorm:"index;comment:删除时间"`

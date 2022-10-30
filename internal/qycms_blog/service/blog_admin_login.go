@@ -26,14 +26,15 @@ type BlogAdminUserService struct {
 	ra       *biz.RoleApiUsecase
 	fit      *biz.FileLibTypeUsecase
 	fic      *biz.FileLibConfigUsecase
+	fi       *biz.FileLibUsecase
 }
 
 func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.ApiUsecase, rm *biz.RoleMenusUsecase,
 	acg *biz.ApiGroupUsecase, mc *biz.MenusAdminUsecase, ra *biz.RoleApiUsecase,
-	fit *biz.FileLibTypeUsecase, fic *biz.FileLibConfigUsecase,
+	fit *biz.FileLibTypeUsecase, fic *biz.FileLibConfigUsecase, fi *biz.FileLibUsecase,
 	conf *conf.Qycms, authConf *conf.Auth) *BlogAdminUserService {
 	return &BlogAdminUserService{uc: uc, rc: rc, ac: ac, rm: rm,
-		acg: acg, mc: mc, ra: ra, fit: fit, fic: fic,
+		acg: acg, mc: mc, ra: ra, fit: fit, fic: fic, fi: fi,
 		conf: conf, authConf: authConf}
 }
 

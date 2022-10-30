@@ -1,6 +1,10 @@
 package stringUtil
 
 import (
+	"crypto/md5"
+	"fmt"
+	uuid "github.com/google/uuid"
+	shortuuid "github.com/lithammer/shortuuid/v4"
 	"strings"
 	"unicode/utf8"
 )
@@ -40,4 +44,24 @@ func SnakeStringWidthByteTag(str string, tag byte) string {
 	}
 	//ToLower把大写字母统一转小写
 	return strings.ToLower(string(data[:]))
+}
+
+func MD5(str []byte) string {
+	has := md5.Sum(str)
+	md5str := fmt.Sprintf("%x", has) //将[]byte转成16进制
+	return md5str
+}
+
+func MD5ByStr(str string) string {
+	data := []byte(str) //切片
+	return MD5(data)
+}
+
+func GetUUID() string {
+	key := uuid.New().String()
+	return strings.ReplaceAll(key, "-", "")
+}
+func GetShortUuid() string {
+	u := shortuuid.New()
+	return u
 }

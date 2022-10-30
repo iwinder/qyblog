@@ -37,14 +37,15 @@ service QyAdminFile {
 			body:"*"
 		};
 	};
-//	rpc GetQyAdminFileLibConfigByType (GetQyAdminFileLibConfigRequest) returns (GetQyAdminFileLibConfigReply){
-//		option (google.api.http) = {
-//			get: "/api/admin/v1/fileLibConfig/byType/{id}",
-//		};
-//	};
 	rpc GetQyAdminFileLibConfig (GetQyAdminFileLibConfigRequest) returns (GetQyAdminFileLibConfigReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/fileLibConfig/{typeId}",
+		};
+	};
+
+	rpc ListQyAdminFileLibByType (ListQyAdminFileRequest) returns (ListQyAdminFileReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/fileLib/byType/{typeId}",
 		};
 	};
 	rpc CreateQyAdminFile (CreateQyAdminFileRequest) returns (CreateQyAdminFileReply);
@@ -61,8 +62,24 @@ message FilePageInfo {
 	int64 pages = 4;
 	bool firstFlag = 5;
 	bool lastFlag = 6;
+	string marker = 7;
 }
+message FileLibResponse {
+	uint64 id = 1;
+	string originFileName = 3;
+	string fname = 4;
+	uint64 fsize = 5;
+	string extention = 6;
+	string mimeType = 7;
+	string fhash = 8;
+	string relativePath = 9;
+	int32 ftype = 10;
+	string endUser = 11;
+	string domain = 12;
+	string defUrl = 13;
+	string  updatedAt = 14;
 
+}
 message FileLibTypeResponse {
 	uint64 id = 1;
 	string name = 2;
@@ -148,5 +165,18 @@ message DeleteQyAdminFileReply {}
 message GetQyAdminFileRequest {}
 message GetQyAdminFileReply {}
 
-message ListQyAdminFileRequest {}
-message ListQyAdminFileReply {}
+message ListQyAdminFileRequest {
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool lastFlag = 6;
+	string searchText = 7;
+	uint64 typeId    = 8;
+	string marker = 9;
+}
+message ListQyAdminFileReply {
+	FilePageInfo pageInfo = 1;
+	repeated FileLibResponse items = 2;
+}
