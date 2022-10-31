@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.qycms_bff.web.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/web/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.web.v1";
+
+service QyWebSiteConfig {
+	rpc CreateQyWebSiteConfig (CreateQyWebSiteConfigRequest) returns (CreateQyWebSiteConfigReply);
+	rpc UpdateQyWebSiteConfig (UpdateQyWebSiteConfigRequest) returns (UpdateQyWebSiteConfigReply);
+	rpc DeleteQyWebSiteConfig (DeleteQyWebSiteConfigRequest) returns (DeleteQyWebSiteConfigReply);
+	rpc GetQyWebSiteConfig (GetQyWebSiteConfigRequest) returns (GetQyWebSiteConfigReply);
+	rpc ListQyWebSiteConfig (ListQyWebSiteConfigRequest) returns (ListQyWebSiteConfigReply);
+}
+
+message CreateQyWebSiteConfigRequest {}
+message CreateQyWebSiteConfigReply {}
+
+message UpdateQyWebSiteConfigRequest {}
+message UpdateQyWebSiteConfigReply {}
+
+message DeleteQyWebSiteConfigRequest {}
+message DeleteQyWebSiteConfigReply {}
+
+message GetQyWebSiteConfigRequest {}
+message GetQyWebSiteConfigReply {}
+
+message ListQyWebSiteConfigRequest {}
+message ListQyWebSiteConfigReply {}

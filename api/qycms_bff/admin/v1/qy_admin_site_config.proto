@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminSiteConfig {
+	rpc CreateQyAdminSiteConfig (CreateQyAdminSiteConfigRequest) returns (CreateQyAdminSiteConfigReply);
+	rpc UpdateQyAdminSiteConfig (UpdateQyAdminSiteConfigRequest) returns (UpdateQyAdminSiteConfigReply);
+	rpc DeleteQyAdminSiteConfig (DeleteQyAdminSiteConfigRequest) returns (DeleteQyAdminSiteConfigReply);
+	rpc GetQyAdminSiteConfig (GetQyAdminSiteConfigRequest) returns (GetQyAdminSiteConfigReply);
+	rpc ListQyAdminSiteConfig (ListQyAdminSiteConfigRequest) returns (ListQyAdminSiteConfigReply);
+}
+
+message CreateQyAdminSiteConfigRequest {}
+message CreateQyAdminSiteConfigReply {}
+
+message UpdateQyAdminSiteConfigRequest {}
+message UpdateQyAdminSiteConfigReply {}
+
+message DeleteQyAdminSiteConfigRequest {}
+message DeleteQyAdminSiteConfigReply {}
+
+message GetQyAdminSiteConfigRequest {}
+message GetQyAdminSiteConfigReply {}
+
+message ListQyAdminSiteConfigRequest {}
+message ListQyAdminSiteConfigReply {}

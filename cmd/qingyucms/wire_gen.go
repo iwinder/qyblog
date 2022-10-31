@@ -52,8 +52,11 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	fileLibConfigUsecase := biz.NewFileLibConfigUsecase(fileLibConfigRepo, logger)
 	fileLibRepo := db.NewFileLibRepo(dbData, logger)
 	fileLibUsecase := biz.NewFileLibUsecase(fileLibRepo, logger)
-	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, qycms, auth)
-	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, logger)
+	siteConfigRepo := db.NewSiteConfigRepo(dbData, logger)
+	siteConfigUsecase := biz.NewSiteConfigUsecase(siteConfigRepo, logger)
+	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, siteConfigUsecase, qycms, auth)
+	blogWebApiService := service.NewBlogWebApiService(siteConfigUsecase)
+	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, blogWebApiService, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {
 		cleanup()
