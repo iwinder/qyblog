@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type QyAdminSiteConfigClient interface {
 	CreateQyAdminSiteConfig(ctx context.Context, in *CreateQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*CreateQyAdminSiteConfigReply, error)
 	UpdateQyAdminSiteConfig(ctx context.Context, in *UpdateQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateQyAdminSiteConfigReply, error)
+	UpdateInBatchesQyAdminSiteConfig(ctx context.Context, in *UpdateBatchesQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateBatchesQyAdminSiteConfigReply, error)
 	DeleteQyAdminSiteConfig(ctx context.Context, in *DeleteQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*DeleteQyAdminSiteConfigReply, error)
 	GetQyAdminSiteConfig(ctx context.Context, in *GetQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*GetQyAdminSiteConfigReply, error)
 	ListQyAdminSiteConfig(ctx context.Context, in *ListQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*ListQyAdminSiteConfigReply, error)
@@ -49,6 +50,15 @@ func (c *qyAdminSiteConfigClient) CreateQyAdminSiteConfig(ctx context.Context, i
 func (c *qyAdminSiteConfigClient) UpdateQyAdminSiteConfig(ctx context.Context, in *UpdateQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateQyAdminSiteConfigReply, error) {
 	out := new(UpdateQyAdminSiteConfigReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminSiteConfig/UpdateQyAdminSiteConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminSiteConfigClient) UpdateInBatchesQyAdminSiteConfig(ctx context.Context, in *UpdateBatchesQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateBatchesQyAdminSiteConfigReply, error) {
+	out := new(UpdateBatchesQyAdminSiteConfigReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminSiteConfig/UpdateInBatchesQyAdminSiteConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +98,7 @@ func (c *qyAdminSiteConfigClient) ListQyAdminSiteConfig(ctx context.Context, in 
 type QyAdminSiteConfigServer interface {
 	CreateQyAdminSiteConfig(context.Context, *CreateQyAdminSiteConfigRequest) (*CreateQyAdminSiteConfigReply, error)
 	UpdateQyAdminSiteConfig(context.Context, *UpdateQyAdminSiteConfigRequest) (*UpdateQyAdminSiteConfigReply, error)
+	UpdateInBatchesQyAdminSiteConfig(context.Context, *UpdateBatchesQyAdminSiteConfigRequest) (*UpdateBatchesQyAdminSiteConfigReply, error)
 	DeleteQyAdminSiteConfig(context.Context, *DeleteQyAdminSiteConfigRequest) (*DeleteQyAdminSiteConfigReply, error)
 	GetQyAdminSiteConfig(context.Context, *GetQyAdminSiteConfigRequest) (*GetQyAdminSiteConfigReply, error)
 	ListQyAdminSiteConfig(context.Context, *ListQyAdminSiteConfigRequest) (*ListQyAdminSiteConfigReply, error)
@@ -103,6 +114,9 @@ func (UnimplementedQyAdminSiteConfigServer) CreateQyAdminSiteConfig(context.Cont
 }
 func (UnimplementedQyAdminSiteConfigServer) UpdateQyAdminSiteConfig(context.Context, *UpdateQyAdminSiteConfigRequest) (*UpdateQyAdminSiteConfigReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminSiteConfig not implemented")
+}
+func (UnimplementedQyAdminSiteConfigServer) UpdateInBatchesQyAdminSiteConfig(context.Context, *UpdateBatchesQyAdminSiteConfigRequest) (*UpdateBatchesQyAdminSiteConfigReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInBatchesQyAdminSiteConfig not implemented")
 }
 func (UnimplementedQyAdminSiteConfigServer) DeleteQyAdminSiteConfig(context.Context, *DeleteQyAdminSiteConfigRequest) (*DeleteQyAdminSiteConfigReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteQyAdminSiteConfig not implemented")
@@ -158,6 +172,24 @@ func _QyAdminSiteConfig_UpdateQyAdminSiteConfig_Handler(srv interface{}, ctx con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QyAdminSiteConfigServer).UpdateQyAdminSiteConfig(ctx, req.(*UpdateQyAdminSiteConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminSiteConfig_UpdateInBatchesQyAdminSiteConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBatchesQyAdminSiteConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminSiteConfigServer).UpdateInBatchesQyAdminSiteConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminSiteConfig/UpdateInBatchesQyAdminSiteConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminSiteConfigServer).UpdateInBatchesQyAdminSiteConfig(ctx, req.(*UpdateBatchesQyAdminSiteConfigRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -230,6 +262,10 @@ var QyAdminSiteConfig_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateQyAdminSiteConfig",
 			Handler:    _QyAdminSiteConfig_UpdateQyAdminSiteConfig_Handler,
+		},
+		{
+			MethodName: "UpdateInBatchesQyAdminSiteConfig",
+			Handler:    _QyAdminSiteConfig_UpdateInBatchesQyAdminSiteConfig_Handler,
 		},
 		{
 			MethodName: "DeleteQyAdminSiteConfig",

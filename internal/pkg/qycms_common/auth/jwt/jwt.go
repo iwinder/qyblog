@@ -6,6 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
+	"strings"
 )
 
 type SecurityUser struct {
@@ -35,6 +36,9 @@ func NewWhiteListMatcher() selector.MatchFunc {
 
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
+			return false
+		}
+		if strings.Contains(operation, "/api.qycms_bff.web.") {
 			return false
 		}
 		return true

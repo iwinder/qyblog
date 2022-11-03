@@ -4,6 +4,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
+	w1 "github.com/iwinder/qingyucms/api/qycms_bff/web/v1"
 	mid "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/middleware"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
@@ -12,7 +13,9 @@ import (
 
 // NewHTTPServer new a HTTP server.
 func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinData,
-	userService *service.BlogAdminUserService, logger log.Logger) *http.Server {
+	userService *service.BlogAdminUserService,
+	webService *service.BlogWebApiService,
+	logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		mid.NewMiddleware(authConf, casbinData, logger),
 	}
@@ -37,6 +40,9 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminMenusAdminHTTPServer(srv, userService)
 	v1.RegisterQyAdminApiGroupHTTPServer(srv, userService)
 	v1.RegisterQyAdminFileHTTPServer(srv, userService)
+	v1.RegisterQyAdminSiteConfigHTTPServer(srv, userService)
+
+	w1.RegisterQyWebSiteConfigHTTPServer(srv, webService)
 
 	return srv
 }

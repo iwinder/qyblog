@@ -20,14 +20,20 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationQyAdminSiteConfigCreateQyAdminSiteConfig = "/api.qycms_bff.admin.v1.QyAdminSiteConfig/CreateQyAdminSiteConfig"
+const OperationQyAdminSiteConfigListQyAdminSiteConfig = "/api.qycms_bff.admin.v1.QyAdminSiteConfig/ListQyAdminSiteConfig"
+const OperationQyAdminSiteConfigUpdateInBatchesQyAdminSiteConfig = "/api.qycms_bff.admin.v1.QyAdminSiteConfig/UpdateInBatchesQyAdminSiteConfig"
 
 type QyAdminSiteConfigHTTPServer interface {
 	CreateQyAdminSiteConfig(context.Context, *CreateQyAdminSiteConfigRequest) (*CreateQyAdminSiteConfigReply, error)
+	ListQyAdminSiteConfig(context.Context, *ListQyAdminSiteConfigRequest) (*ListQyAdminSiteConfigReply, error)
+	UpdateInBatchesQyAdminSiteConfig(context.Context, *UpdateBatchesQyAdminSiteConfigRequest) (*UpdateBatchesQyAdminSiteConfigReply, error)
 }
 
 func RegisterQyAdminSiteConfigHTTPServer(s *http.Server, srv QyAdminSiteConfigHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/siteConfig", _QyAdminSiteConfig_CreateQyAdminSiteConfig0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/siteConfig", _QyAdminSiteConfig_UpdateInBatchesQyAdminSiteConfig0_HTTP_Handler(srv))
+	r.GET("/api/admin/v1/siteConfig", _QyAdminSiteConfig_ListQyAdminSiteConfig0_HTTP_Handler(srv))
 }
 
 func _QyAdminSiteConfig_CreateQyAdminSiteConfig0_HTTP_Handler(srv QyAdminSiteConfigHTTPServer) func(ctx http.Context) error {
@@ -49,8 +55,48 @@ func _QyAdminSiteConfig_CreateQyAdminSiteConfig0_HTTP_Handler(srv QyAdminSiteCon
 	}
 }
 
+func _QyAdminSiteConfig_UpdateInBatchesQyAdminSiteConfig0_HTTP_Handler(srv QyAdminSiteConfigHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateBatchesQyAdminSiteConfigRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminSiteConfigUpdateInBatchesQyAdminSiteConfig)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateInBatchesQyAdminSiteConfig(ctx, req.(*UpdateBatchesQyAdminSiteConfigRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateBatchesQyAdminSiteConfigReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyAdminSiteConfig_ListQyAdminSiteConfig0_HTTP_Handler(srv QyAdminSiteConfigHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListQyAdminSiteConfigRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyAdminSiteConfigListQyAdminSiteConfig)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListQyAdminSiteConfig(ctx, req.(*ListQyAdminSiteConfigRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListQyAdminSiteConfigReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyAdminSiteConfigHTTPClient interface {
 	CreateQyAdminSiteConfig(ctx context.Context, req *CreateQyAdminSiteConfigRequest, opts ...http.CallOption) (rsp *CreateQyAdminSiteConfigReply, err error)
+	ListQyAdminSiteConfig(ctx context.Context, req *ListQyAdminSiteConfigRequest, opts ...http.CallOption) (rsp *ListQyAdminSiteConfigReply, err error)
+	UpdateInBatchesQyAdminSiteConfig(ctx context.Context, req *UpdateBatchesQyAdminSiteConfigRequest, opts ...http.CallOption) (rsp *UpdateBatchesQyAdminSiteConfigReply, err error)
 }
 
 type QyAdminSiteConfigHTTPClientImpl struct {
@@ -68,6 +114,32 @@ func (c *QyAdminSiteConfigHTTPClientImpl) CreateQyAdminSiteConfig(ctx context.Co
 	opts = append(opts, http.Operation(OperationQyAdminSiteConfigCreateQyAdminSiteConfig))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminSiteConfigHTTPClientImpl) ListQyAdminSiteConfig(ctx context.Context, in *ListQyAdminSiteConfigRequest, opts ...http.CallOption) (*ListQyAdminSiteConfigReply, error) {
+	var out ListQyAdminSiteConfigReply
+	pattern := "/api/admin/v1/siteConfig"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyAdminSiteConfigListQyAdminSiteConfig))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyAdminSiteConfigHTTPClientImpl) UpdateInBatchesQyAdminSiteConfig(ctx context.Context, in *UpdateBatchesQyAdminSiteConfigRequest, opts ...http.CallOption) (*UpdateBatchesQyAdminSiteConfigReply, error) {
+	var out UpdateBatchesQyAdminSiteConfigReply
+	pattern := "/api/admin/v1/siteConfig"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationQyAdminSiteConfigUpdateInBatchesQyAdminSiteConfig))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package api.qycms_bff.web.v1;
-
+import "google/api/annotations.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/web/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.web.v1";
@@ -12,8 +12,22 @@ service QyWebSiteConfig {
 	rpc DeleteQyWebSiteConfig (DeleteQyWebSiteConfigRequest) returns (DeleteQyWebSiteConfigReply);
 	rpc GetQyWebSiteConfig (GetQyWebSiteConfigRequest) returns (GetQyWebSiteConfigReply);
 	rpc ListQyWebSiteConfig (ListQyWebSiteConfigRequest) returns (ListQyWebSiteConfigReply);
+
+	rpc ListQyBaseSiteConfig (ListQyWebSiteConfigRequest) returns (ListQyWebSiteConfigReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/siteConfig/base"
+		};
+	};
 }
 
+message SiteConfigResponse {
+	uint64 id = 1;
+	string configKey = 2;
+	string configValue = 3;
+	string configName = 4;
+	string configTip = 5;
+	int32 ftype = 6;
+}
 message CreateQyWebSiteConfigRequest {}
 message CreateQyWebSiteConfigReply {}
 
@@ -27,4 +41,6 @@ message GetQyWebSiteConfigRequest {}
 message GetQyWebSiteConfigReply {}
 
 message ListQyWebSiteConfigRequest {}
-message ListQyWebSiteConfigReply {}
+message ListQyWebSiteConfigReply {
+	repeated SiteConfigResponse items = 1;
+}
