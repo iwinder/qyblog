@@ -7,8 +7,12 @@ import (
 )
 
 func (b *BlogWebApiService) ListQyBaseSiteConfig(ctx context.Context, request *v1.ListQyWebSiteConfigRequest) (*v1.ListQyWebSiteConfigReply, error) {
+
 	opts := biz.SiteConfigDOListOption{
 		Types: "1,2",
+	}
+	if len(request.Ftypes) > 0 {
+		opts.Types = request.Ftypes
 	}
 	obj, err := b.site.ListAll(ctx, opts)
 	if err != nil {

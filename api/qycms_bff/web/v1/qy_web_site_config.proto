@@ -40,7 +40,9 @@ message DeleteQyWebSiteConfigReply {}
 message GetQyWebSiteConfigRequest {}
 message GetQyWebSiteConfigReply {}
 
-message ListQyWebSiteConfigRequest {}
+message ListQyWebSiteConfigRequest {
+	string ftypes = 1;
+}
 message ListQyWebSiteConfigReply {
 	repeated SiteConfigResponse items = 1;
 }
