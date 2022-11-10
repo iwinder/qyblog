@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminMenus {
+	rpc CreateQyAdminMenus (CreateQyAdminMenusRequest) returns (CreateQyAdminMenusReply);
+	rpc UpdateQyAdminMenus (UpdateQyAdminMenusRequest) returns (UpdateQyAdminMenusReply);
+	rpc DeleteQyAdminMenus (DeleteQyAdminMenusRequest) returns (DeleteQyAdminMenusReply);
+	rpc GetQyAdminMenus (GetQyAdminMenusRequest) returns (GetQyAdminMenusReply);
+	rpc ListQyAdminMenus (ListQyAdminMenusRequest) returns (ListQyAdminMenusReply);
+}
+
+message CreateQyAdminMenusRequest {}
+message CreateQyAdminMenusReply {}
+
+message UpdateQyAdminMenusRequest {}
+message UpdateQyAdminMenusReply {}
+
+message DeleteQyAdminMenusRequest {}
+message DeleteQyAdminMenusReply {}
+
+message GetQyAdminMenusRequest {}
+message GetQyAdminMenusReply {}
+
+message ListQyAdminMenusRequest {}
+message ListQyAdminMenusReply {}
