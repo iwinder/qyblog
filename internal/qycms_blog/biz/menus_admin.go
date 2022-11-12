@@ -205,7 +205,6 @@ func (uc *MenusAdminUsecase) ListAllChildren(ctx context.Context, opts MenusAdmi
 		obj.Children = cobjPOs.Items
 		if aerr != nil {
 			log.Errorf("ListAllChildren 菜单列表获取异常%v", aerr)
-			cobjPOs = &MenusAdminDOList{}
 			obj.Children = make([]*MenusAdminDO, 0, 0)
 		}
 	}

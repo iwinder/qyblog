@@ -34,7 +34,7 @@ type QyAdminMenusHTTPServer interface {
 func RegisterQyAdminMenusHTTPServer(s *http.Server, srv QyAdminMenusHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/menus", _QyAdminMenus_CreateQyAdminMenus0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/menus", _QyAdminMenus_UpdateQyAdminMenus0_HTTP_Handler(srv))
+	r.PUT("/api/admin/v1/menus/{id}", _QyAdminMenus_UpdateQyAdminMenus0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/menus", _QyAdminMenus_DeleteQyAdminMenus0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/menus", _QyAdminMenus_ListQyAdminMenus0_HTTP_Handler(srv))
 }
@@ -62,6 +62,9 @@ func _QyAdminMenus_UpdateQyAdminMenus0_HTTP_Handler(srv QyAdminMenusHTTPServer) 
 	return func(ctx http.Context) error {
 		var in UpdateQyAdminMenusRequest
 		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationQyAdminMenusUpdateQyAdminMenus)
@@ -171,7 +174,7 @@ func (c *QyAdminMenusHTTPClientImpl) ListQyAdminMenus(ctx context.Context, in *L
 
 func (c *QyAdminMenusHTTPClientImpl) UpdateQyAdminMenus(ctx context.Context, in *UpdateQyAdminMenusRequest, opts ...http.CallOption) (*UpdateQyAdminMenusReply, error) {
 	var out UpdateQyAdminMenusReply
-	pattern := "/api/admin/v1/menus"
+	pattern := "/api/admin/v1/menus/{id}"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationQyAdminMenusUpdateQyAdminMenus))
 	opts = append(opts, http.PathTemplate(pattern))

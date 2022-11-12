@@ -1,16 +1,16 @@
 package po
 
 import (
+	"encoding/json"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/idUtil"
+	"gorm.io/gorm"
 )
 
 type MenusAgentPO struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
-	Name              string         `json:"name" gorm:"column:name;comment:展示名称"`                         // 展示名称
-	identifier        string         `json:"identifier" gorm:"unique;column:identifier;comment:路由名称，唯一英文"` // 路由名称
-	ftype          sql.NullInt64  `json:"ftype" gorm:"column:ftype;default: 0;comment:父菜单ID"`    // 父菜单ID
-
+	Name              string `json:"name" gorm:"column:name;comment:展示名称"`               // 展示名称
+	Ftype             string `json:"ftype" gorm:"column:ftype;default: USER;comment:类型"` // 父菜单ID
 }
 
 type MenusAgentPOList struct {
@@ -24,7 +24,7 @@ type MenusAgentPOListOption struct {
 }
 
 func (o *MenusAgentPO) TableName() string {
-	return "qy_sys_menus"
+	return "qy_sys_menus_agent"
 }
 
 func (o *MenusAgentPO) BeforeCreate(tx *gorm.DB) (er error) {

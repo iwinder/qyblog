@@ -38,9 +38,9 @@ func (r *linkRepo) Save(ctx context.Context, do *biz.LinkDO) (*biz.LinkDO, error
 	dataDO := &biz.LinkDO{Name: po.Name}
 	dataDO.ID = dataDO.ID
 	if do.Ftype == 1 {
-		r.FindIndexLinkAllWitchCache(ctx)
+		r.setLinkAllCache(ctx, nil, indexLinkCacheKey)
 	} else {
-		r.FindAllWitchCache(ctx)
+		r.setLinkAllCache(ctx, nil, allLinkCacheKey)
 	}
 	return dataDO, nil
 }
@@ -60,9 +60,9 @@ func (r *linkRepo) Update(ctx context.Context, do *biz.LinkDO) (*biz.LinkDO, err
 	dataDO := &biz.LinkDO{Name: po.Name}
 	dataDO.ID = dataDO.ID
 	if do.Ftype == 1 {
-		r.FindIndexLinkAllWitchCache(ctx)
+		r.setLinkAllCache(ctx, nil, indexLinkCacheKey)
 	} else {
-		r.FindAllWitchCache(ctx)
+		r.setLinkAllCache(ctx, nil, allLinkCacheKey)
 	}
 	return dataDO, nil
 }
@@ -74,12 +74,14 @@ func (r *linkRepo) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
-func (r *linkRepo) DeleteList(c context.Context, ids []uint64) error {
+func (r *linkRepo) DeleteList(ctx context.Context, ids []uint64) error {
 	userPO := &po.LinkPO{}
 	if ids == nil || len(ids) == 0 {
 		return nil
 	}
 	err := r.data.Db.Delete(&userPO, ids).Error
+	r.FindIndexLinkAllWitchCache(ctx)
+	r.FindAllWitchCache(ctx)
 	return err
 }
 
