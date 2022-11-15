@@ -13,4 +13,5 @@ var ProviderSet = wire.NewSet(NewGreeterUsecase,
 	NewArticleUsecase, NewArticleContentUsecase,
 	NewCommentAgentUsecase, NewCommentIndexUsecase, NewCommentContentUsecase,
 	NewLinkUsecase, NewShortLinkUsecase, NewMenusUsecase, NewMenusAgentUsecase,
+	NewTagsUsecase, NewCategoryUsecase,
 )

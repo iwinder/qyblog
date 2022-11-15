@@ -32,7 +32,7 @@ func (o *MenusAgentPO) BeforeCreate(tx *gorm.DB) (er error) {
 }
 
 func (o *MenusAgentPO) AfterCreate(tx *gorm.DB) (err error) {
-	o.InstanceID = idUtil.GetInstanceID(o.ID, "menus-")
+	o.InstanceID = idUtil.GetInstanceID(o.ID, "menus-agent-")
 	return tx.Save(o).Error
 }
 

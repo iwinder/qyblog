@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+import "google/api/annotations.proto";
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminCategory {
+	rpc CreateQyAdminCategory (CreateQyAdminCategoryRequest) returns (CreateQyAdminCategoryReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/category",
+			body:"*"
+		};
+	};
+	rpc UpdateQyAdminCategory (UpdateQyAdminCategoryRequest) returns (UpdateQyAdminCategoryReply){
+		option (google.api.http) = {
+			put: "/api/admin/v1/category/{id}",
+			body:"*"
+		};
+	};
+	rpc DeleteQyAdminCategory (DeleteQyAdminCategoryRequest) returns (DeleteQyAdminCategoryReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/category",
+			body:"*"
+		};
+	};
+	rpc GetQyAdminCategory (GetQyAdminCategoryRequest) returns (GetQyAdminCategoryReply);
+	rpc ListQyAdminCategory (ListQyAdminCategoryRequest) returns (ListQyAdminCategoryReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/category",
+		};
+	};
+}
+
+message CategoryResponse {
+	uint64 id = 1;
+	string name =2;
+	string identifier =3;
+	string description =4;
+	uint64 parentId =5;
+	repeated CategoryResponse children =6;
+}
+
+message CategoryPageInfo {
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool lastFlag = 6;
+}
+
+message CreateQyAdminCategoryRequest {
+	string name =1;
+	string identifier =2;
+	string description =3;
+	uint64 parentId =4;
+}
+message CreateQyAdminCategoryReply {
+	uint64 id = 1;
+}
+
+message UpdateQyAdminCategoryRequest {
+	uint64 id = 1;
+	string name =2;
+	string identifier =3;
+	string description =4;
+	uint64 parentId =5;
+}
+message UpdateQyAdminCategoryReply {
+	uint64 id = 1;
+}
+
+message DeleteQyAdminCategoryRequest {
+	repeated uint64 ids = 1;
+}
+message DeleteQyAdminCategoryReply {}
+
+message GetQyAdminCategoryRequest {}
+message GetQyAdminCategoryReply {}
+
+message ListQyAdminCategoryRequest {
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool lastFlag = 6;
+	string name = 7;
+	uint64 parentId =8;
+}
+message ListQyAdminCategoryReply {
+	CategoryPageInfo pageInfo = 1;
+	repeated CategoryResponse items = 2;
+}
+

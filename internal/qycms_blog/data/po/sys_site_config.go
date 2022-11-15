@@ -9,7 +9,7 @@ import (
 
 type SiteConfigPO struct {
 	metaV1.ObjectMeta
-	ConfigKey   string `json:"configKey" gorm:"column:config_key;comment:配置key"`
+	ConfigKey   string `json:"configKey" gorm:"unique;column:config_key;comment:配置key"`
 	ConfigValue string `json:"configValue" gorm:"column:config_value;comment:配置value"`
 	ConfigName  string `json:"configName" gorm:"column:config_name;comment:配置名称"`
 	ConfigTip   string `json:"configTip" gorm:"column:config_tip;comment:配置说明"`

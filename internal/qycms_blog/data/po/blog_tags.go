@@ -7,41 +7,45 @@ import (
 	"gorm.io/gorm"
 )
 
-type ApiGroupPO struct {
+type TagsPO struct {
 	metaV1.ObjectMeta `json:"metadata,omitempty"`
 	Name              string `json:"name" gorm:"column:name;comment:分组名称""`
 	Identifier        string `json:"identifier" gorm:"unique;column:identifier;comment:分组标识，唯一英文"`
+	Description       string `json:"description" gorm:"column:description;comment:简述"`
 }
 
-type ApiGroupPOList struct {
+type TagsPOList struct {
 	metaV1.ListMeta `json:",inline"`
-	Items           []*ApiGroupPO `json:"items"`
+	Items           []*TagsPO `json:"items"`
 }
 
-type ApiGroupPOListOption struct {
+type TagsPOListOption struct {
 	metaV1.ListOptions `json:"page"`
-	ApiGroupPO         `json:"item"`
+	TagsPO             `json:"item"`
 }
 
-func (o *ApiGroupPO) TableName() string {
-	return "qy_sys_api_group"
+func (o *TagsPO) TableName() string {
+	return "qy_blog_tags"
 }
 
-func (o *ApiGroupPO) BeforeCreate(tx *gorm.DB) (er error) {
+func (o *TagsPO) BeforeCreate(tx *gorm.DB) (er error) {
 	return
 }
 
-func (o *ApiGroupPO) AfterCreate(tx *gorm.DB) (err error) {
-	o.InstanceID = idUtil.GetInstanceID(o.ID, "apis-group-")
+func (o *TagsPO) AfterCreate(tx *gorm.DB) (err error) {
+	o.InstanceID = idUtil.GetInstanceID(o.ID, "tags-")
+	if o.Sort <= 0 {
+		o.Sort = int(o.ID)
+	}
 	return tx.Save(o).Error
 }
 
-func (o *ApiGroupPO) BeforeUpdate(tx *gorm.DB) (err error) {
+func (o *TagsPO) BeforeUpdate(tx *gorm.DB) (err error) {
 	o.ExtendShadow = o.Extend.String()
 	return err
 }
 
-func (o *ApiGroupPO) AfterFind(tx *gorm.DB) (err error) {
+func (o *TagsPO) AfterFind(tx *gorm.DB) (err error) {
 	if err := json.Unmarshal([]byte(o.ExtendShadow), &o.Extend); err != nil {
 		return err
 	}

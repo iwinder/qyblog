@@ -11,7 +11,7 @@ type ShortLinkPO struct {
 	metaV1.ObjectMeta
 	Url         string `json:"url" gorm:"column:url;comment:原地址"`
 	Description string `json:"description" gorm:"column:description;comment:描述"`
-	Identifier  string `json:"identifier" gorm:"column:identifier;comment:短地址"`
+	Identifier  string `json:"identifier" gorm:"unique;column:identifier;comment:短地址"`
 }
 
 type ShortLinkPOList struct {

@@ -18,6 +18,7 @@ type BlogAdminUserService struct {
 	v1.UnsafeQyAdminSiteConfigServer
 	v1.UnimplementedQyAdminLinkServer
 	v1.UnimplementedQyAdminShortLinkServer
+	v1.UnimplementedQyAdminTagsServer
 	conf     *conf.Qycms
 	authConf *conf.Auth
 	uc       *biz.UserUsecase
@@ -35,6 +36,8 @@ type BlogAdminUserService struct {
 	slk      *biz.ShortLinkUsecase
 	mau      *biz.MenusAgentUsecase
 	mu       *biz.MenusUsecase
+	tau      *biz.TagsUsecase
+	cu       *biz.CategoryUsecase
 }
 
 func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.ApiUsecase, rm *biz.RoleMenusUsecase,
@@ -42,10 +45,12 @@ func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.A
 	fit *biz.FileLibTypeUsecase, fic *biz.FileLibConfigUsecase, fi *biz.FileLibUsecase,
 	site *biz.SiteConfigUsecase, lk *biz.LinkUsecase, slk *biz.ShortLinkUsecase,
 	mau *biz.MenusAgentUsecase, mu *biz.MenusUsecase,
+	tau *biz.TagsUsecase, cu *biz.CategoryUsecase,
 	conf *conf.Qycms, authConf *conf.Auth) *BlogAdminUserService {
 	return &BlogAdminUserService{uc: uc, rc: rc, ac: ac, rm: rm,
 		acg: acg, mc: mc, ra: ra, fit: fit, fic: fic, fi: fi,
 		site: site, lk: lk, slk: slk, mau: mau, mu: mu,
+		tau: tau, cu: cu,
 		conf: conf, authConf: authConf}
 }
 

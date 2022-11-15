@@ -11,6 +11,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/lithammer/shortuuid/v4 v4.0.0
+	github.com/mozillazg/go-pinyin v0.19.0
 	github.com/qiniu/go-sdk/v7 v7.13.0
 	github.com/speps/go-hashids v2.0.0+incompatible
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4

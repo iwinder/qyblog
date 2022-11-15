@@ -27,7 +27,6 @@ type ArticleDO struct {
 	Password       string
 	Status         int
 	Atype          int
-	AuthorId       uint64
 	CategoryId     uint64
 	CommentAgentId uint64
 	Published      bool
@@ -35,6 +34,7 @@ type ArticleDO struct {
 	LikeCount      int32
 	HateCount      int32
 	PublishedAt    time.Time
+	Tags           []*TagsDO
 }
 
 type ArticleDOList struct {
@@ -127,7 +127,6 @@ func (uc *ArticleUsecase) FindOneByID(ctx context.Context, id uint64) (*ArticleD
 		Password:       g.Password,
 		Status:         g.Status,
 		Atype:          g.Atype,
-		AuthorId:       g.AuthorId,
 		CategoryId:     g.CategoryId,
 		CommentAgentId: g.CommentAgentId,
 		Published:      g.Published,
@@ -162,7 +161,6 @@ func (uc *ArticleUsecase) ListAll(ctx context.Context, opts ArticleDOListOption)
 			Password:       data.Password,
 			Status:         data.Status,
 			Atype:          data.Atype,
-			AuthorId:       data.AuthorId,
 			CategoryId:     data.CategoryId,
 			CommentAgentId: data.CommentAgentId,
 			Published:      data.Published,

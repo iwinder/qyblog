@@ -5,6 +5,8 @@ import (
 	"fmt"
 	uuid "github.com/google/uuid"
 	shortuuid "github.com/lithammer/shortuuid/v4"
+	pinyin "github.com/mozillazg/go-pinyin"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
@@ -64,4 +66,24 @@ func GetUUID() string {
 func GetShortUuid() string {
 	u := shortuuid.New()
 	return u
+}
+
+var pinyinArgs = pinyin.NewArgs()
+
+func PinyinConvert(data string) string {
+
+	pinyinArgs.Separator = ""
+	pinyinArgs.Fallback = func(r rune, a pinyin.Args) []string {
+		return []string{string(r)}
+	}
+	sampleRegexp := regexp.MustCompile(`\s`)
+	newStr := strings.ToLower(pinyin.Slug(data, pinyinArgs))
+	result1 := sampleRegexp.ReplaceAllString(newStr, "-")
+	sampleRegexp = regexp.MustCompile(`[^\w]`)
+	result := sampleRegexp.ReplaceAllString(result1, "-")
+	if strings.Index(result, "-") == 0 {
+		result = result[1:len(result)]
+	}
+
+	return result
 }
