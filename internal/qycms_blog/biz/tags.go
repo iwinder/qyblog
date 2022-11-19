@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
@@ -32,7 +33,10 @@ type TagsRepo interface {
 	//Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*TagsDO, error)
+	FindOneByName(context.Context, string) (*TagsDO, error)
+	CountByIdentifier(ctx context.Context, str string) (int64, error)
 	ListAll(c context.Context, opts TagsDOListOption) (*TagsDOList, error)
+	FindAllByArticleID(ctx context.Context, articleId uint64) ([]*TagsDO, error)
 }
 
 type TagsUsecase struct {
@@ -48,6 +52,10 @@ func (uc *TagsUsecase) Create(ctx context.Context, obj *TagsDO) (*TagsDO, error)
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", obj.Name)
 	if obj.Identifier == "" || len(obj.Identifier) == 0 {
 		obj.Identifier = stringUtil.PinyinConvert(obj.Name)
+	}
+	count, _ := uc.repo.CountByIdentifier(ctx, obj.Identifier)
+	if count > 0 {
+		obj.Identifier = fmt.Sprintf("%s-%d", obj.Identifier, count)
 	}
 	objDO, err := uc.repo.Save(ctx, obj)
 	if err != nil {
@@ -80,6 +88,17 @@ func (uc *TagsUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
 	return uc.repo.DeleteList(ctx, ids)
 }
+func (uc *TagsUsecase) FindOneByName(ctx context.Context, name string) (*TagsDO, error) {
+	uc.log.WithContext(ctx).Infof("FindOneByName: %v", name)
+	obj, err := uc.repo.FindOneByName(ctx, name)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return obj, nil
+}
 
 // FindOneByID 根据ID查询用户信息
 func (uc *TagsUsecase) FindOneByID(ctx context.Context, id uint64) (*TagsDO, error) {
@@ -98,6 +117,18 @@ func (uc *TagsUsecase) FindOneByID(ctx context.Context, id uint64) (*TagsDO, err
 func (uc *TagsUsecase) ListAll(ctx context.Context, opts TagsDOListOption) (*TagsDOList, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")
 	objDOs, err := uc.repo.ListAll(ctx, opts)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+
+	return objDOs, nil
+}
+func (uc *TagsUsecase) FindAllByArticleID(ctx context.Context, articleId uint64) ([]*TagsDO, error) {
+	uc.log.WithContext(ctx).Infof("FindAllByArticleID")
+	objDOs, err := uc.repo.FindAllByArticleID(ctx, articleId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

@@ -95,6 +95,15 @@ func (r *categoryRepo) FindByID(ctx context.Context, id uint64) (*biz.CategoryDO
 	return objDO, nil
 }
 
+func (r *categoryRepo) CountByIdentifier(ctx context.Context, str string) (int64, error) {
+	var obj int64
+	err := r.data.Db.Model(&po.CategoryPO{}).Where("identifier like ?", str+"%").Count(&obj).Error
+	if err != nil {
+		return 0, err
+	}
+	return obj, nil
+}
+
 // ListAll 批量查询
 func (r *categoryRepo) ListAll(c context.Context, opts biz.CategoryDOListOption) (*biz.CategoryDOList, error) {
 	ret := &po.CategoryPOList{}

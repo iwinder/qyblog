@@ -33,6 +33,10 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	r.POST("/upload/byType/{typeId}", func(ctx http.Context) error {
 		return userService.UploadQyAdminFile(ctx)
 	})
+	r.POST("/upload", func(ctx http.Context) error {
+		return userService.UploadQyAdminFileDef(ctx)
+	})
+
 	v1.RegisterQyAdminLoginHTTPServer(srv, userService)
 	v1.RegisterQyAdminRoleHTTPServer(srv, userService)
 	v1.RegisterQyAdminUserHTTPServer(srv, userService)
@@ -47,6 +51,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminMenusHTTPServer(srv, userService)
 	v1.RegisterQyAdminTagsHTTPServer(srv, userService)
 	v1.RegisterQyAdminCategoryHTTPServer(srv, userService)
+	v1.RegisterQyAdminArticleHTTPServer(srv, userService)
 
 	w1.RegisterQyWebSiteConfigHTTPServer(srv, webService)
 

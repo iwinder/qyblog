@@ -81,19 +81,14 @@ func (uc *SiteConfigUsecase) UpdateInBatches(ctx context.Context, data []*SiteCo
 	return nil
 }
 
-//func (uc *SiteConfigUsecase) DeleteList(ctx context.Context, ids []uint64) error {
-//	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
-//	return uc.repo.DeleteList(ctx, ids)
-//}
-//func (uc *SiteConfigUsecase) FindByMd5(ctx context.Context, fmd5 string) (*SiteConfigDO, error) {
-//	uc.log.WithContext(ctx).Infof("FindByMd5: %v", fmd5)
-//	return uc.repo.FindByMd5(ctx, fmd5)
-//}
-//func (uc *SiteConfigUsecase) CountByMd5(ctx context.Context, fmd5 string) int64 {
-//	uc.log.WithContext(ctx).Infof("CountByMd5: %v", fmd5)
-//	count, _ := uc.repo.CountByMd5(ctx, fmd5)
-//	return count
-//}
+func (uc *SiteConfigUsecase) FindValueByKey(ctx context.Context, key string) string {
+	uc.log.WithContext(ctx).Infof("findByKey: %v", key)
+	val, ok := uc.repo.GetValueByKey(key)
+	if ok {
+		return val.(string)
+	}
+	return ""
+}
 
 func (uc *SiteConfigUsecase) ListAll(ctx context.Context, opts SiteConfigDOListOption) ([]*SiteConfigDO, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")

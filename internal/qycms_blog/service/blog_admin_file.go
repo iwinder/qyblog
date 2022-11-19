@@ -10,6 +10,7 @@ import (
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	fileStrategy "github.com/iwinder/qingyucms/internal/qycms_blog/biz/file_strategys"
 	"io"
+	"strconv"
 )
 
 func (s *BlogAdminUserService) CreateQyAdminFileLibType(ctx context.Context, in *v1.CreateQyAdminFileLibTypeRequest) (*v1.UpdateQyAdminFileLibTypeReply, error) {
@@ -142,6 +143,35 @@ func (s *BlogAdminUserService) UploadQyAdminFile(ctx http.Context) error {
 	}
 	//读取文件流为[]byte
 	typeId := in.TypeId
+	opt := fileStrategy.NewUploadOperator(typeId, s.fic, s.fi)
+	data, err := opt.Upload(ctx, file, header, typeId)
+	if err != nil {
+		return err
+	}
+	if typeId == 1 && data != nil {
+		_, aerr := s.fi.Save(ctx, data)
+		if aerr != nil {
+			return aerr
+		}
+	}
+
+	fmt.Println("上传文件名:", data.OriginFileName, typeId)
+	ret_json, _ := json.Marshal(data)
+	w := ctx.Response()
+	io.WriteString(w, string(ret_json))
+	return nil
+}
+func (s *BlogAdminUserService) UploadQyAdminFileDef(ctx http.Context) error {
+	r := ctx.Request()
+	file, header, _ := r.FormFile("file")
+	var typeId uint64
+	typeIdStr := s.site.FindValueByKey(ctx, "site_default_file_lib")
+	typeIdInt, err := strconv.ParseInt(typeIdStr, 10, 64)
+	if err != nil {
+		return err
+	}
+	//读取文件流为[]byte
+	typeId = uint64(typeIdInt)
 	opt := fileStrategy.NewUploadOperator(typeId, s.fic, s.fi)
 	data, err := opt.Upload(ctx, file, header, typeId)
 	if err != nil {

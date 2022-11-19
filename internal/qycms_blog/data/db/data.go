@@ -25,7 +25,7 @@ var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewCasbinRuleRepo,
 	NewArticleRepo, NewArticleContentRepo,
 	NewCommentAgentRepo, NewCommentIndexRepo, NewCommentContentRepo,
 	NewLinkRepo, NewShortLinkRepo, NewMenusRepo, NewMenusAgentRepo,
-	NewTagsRepo, NewCategoryRepo,
+	NewTagsRepo, NewCategoryRepo, NewArticleTagsRepo,
 )
 
 // Data .
@@ -100,15 +100,16 @@ func NewData(conf *conf.Data, logger log.Logger) (*Data, func(), error) {
 
 // AutoMigrateTable 初始化table
 func AutoMigrateTable(dbIns *gorm.DB) {
-	dbIns.AutoMigrate(&blogPo.ArticlePO{},
+	dbIns.AutoMigrate(
 		&blogPo.UserPO{}, &blogPo.RolePO{}, &blogPo.SiteConfigPO{},
 		&blogPo.ApiPO{}, &blogPo.ApiGroupPO{}, &blogPo.MenusAdminPO{},
 		&blogPo.UserRolePO{}, &blogPo.RoleApiPO{}, &blogPo.RoleMenusPO{},
 		&blogPo.FileLibTypePO{}, &blogPo.FileLibConfigPO{}, &blogPo.FileLibPO{},
 		&blogPo.LinkPO{}, &blogPo.ShortLinkPO{}, &blogPo.MenusAgentPO{}, &blogPo.MenusPO{},
 		&blogPo.TagsPO{}, &blogPo.CategoryPO{},
+		&blogPo.CommentAgentPO{}, &blogPo.CommentIndexPO{}, &blogPo.CommentContentPO{},
+		&blogPo.ArticlePO{}, &blogPo.ArticleContentPO{}, &blogPo.ArticleTagsPO{},
 	)
-	//&commentsPo.CommentAgentPO{}, &commentsPo.CommentIndexPO{}, &commentsPo.CommentContentPO{},
 
 }
 

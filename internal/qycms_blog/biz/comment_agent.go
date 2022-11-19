@@ -92,7 +92,6 @@ func (uc *CommentAgentUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 		Count:      g.Count,
 		RootCount:  g.RootCount,
 		AllCount:   g.AllCount,
-		State:      g.State,
 		Attrs:      g.Attrs,
 	}
 	return data, nil

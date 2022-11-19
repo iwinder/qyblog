@@ -17,7 +17,6 @@ func NewArticleContentService(uc *biz.ArticleContentUsecase) *ArticleContentServ
 // CreateArticleContent 创建
 func (s *ArticleContentService) CreateArticleContent(ctx context.Context, in *v1.CreateArticleRequest) error {
 	data := &biz.ArticleContentDO{
-		Status:      int(in.Status),
 		Atype:       int(in.Atype),
 		Content:     in.Content,
 		ContentHtml: in.ContentHtml,
@@ -33,7 +32,6 @@ func (s *ArticleContentService) CreateArticleContent(ctx context.Context, in *v1
 // UpdateArticleContent 更新
 func (s *ArticleContentService) UpdateArticleContent(ctx context.Context, in *v1.UpdateArticleRequest) error {
 	data := &biz.ArticleContentDO{
-		Status:      int(in.Status),
 		Atype:       int(in.Atype),
 		Content:     in.Content,
 		ContentHtml: in.ContentHtml,

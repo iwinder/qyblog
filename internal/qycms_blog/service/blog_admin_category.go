@@ -59,6 +59,7 @@ func (s *BlogAdminUserService) ListQyAdminCategory(ctx context.Context, in *v1.L
 		opts.ListOptions.PageSize = in.PageSize
 	}
 	opts.Name = in.Name
+	opts.ParentId = in.ParentId
 	opts.ListOptions.Init()
 	objList, err := s.cu.ListAll(ctx, opts)
 	if err != nil {

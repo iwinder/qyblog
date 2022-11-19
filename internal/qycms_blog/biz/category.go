@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
@@ -34,6 +35,7 @@ type CategoryRepo interface {
 	//Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*CategoryDO, error)
+	CountByIdentifier(ctx context.Context, str string) (int64, error)
 	ListAll(c context.Context, opts CategoryDOListOption) (*CategoryDOList, error)
 	ListAllWithChildren(c context.Context, opts CategoryDOListOption) (*CategoryDOList, error)
 }
@@ -51,6 +53,10 @@ func (uc *CategoryUsecase) Create(ctx context.Context, obj *CategoryDO) (*Catego
 	uc.log.WithContext(ctx).Infof("CreateUser: %v", obj.Name)
 	if obj.Identifier == "" || len(obj.Identifier) == 0 {
 		obj.Identifier = stringUtil.PinyinConvert(obj.Name)
+	}
+	count, _ := uc.repo.CountByIdentifier(ctx, obj.Identifier)
+	if count > 0 {
+		obj.Identifier = fmt.Sprintf("%s-%d", obj.Identifier, count)
 	}
 	objDO, err := uc.repo.Save(ctx, obj)
 	if err != nil {

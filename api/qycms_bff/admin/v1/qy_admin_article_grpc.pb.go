@@ -26,6 +26,7 @@ type QyAdminArticleClient interface {
 	UpdateQyAdminArticle(ctx context.Context, in *UpdateQyAdminArticleRequest, opts ...grpc.CallOption) (*UpdateQyAdminArticleReply, error)
 	DeleteQyAdminArticle(ctx context.Context, in *DeleteQyAdminArticleRequest, opts ...grpc.CallOption) (*DeleteQyAdminArticleReply, error)
 	GetQyAdminArticle(ctx context.Context, in *GetQyAdminArticleRequest, opts ...grpc.CallOption) (*GetQyAdminArticleReply, error)
+	InitQyAdminArticlePermaLink(ctx context.Context, in *InitQyAdminArticlePermaLinkRequest, opts ...grpc.CallOption) (*InitQyAdminArticlePermaLinkReply, error)
 	ListQyAdminArticle(ctx context.Context, in *ListQyAdminArticleRequest, opts ...grpc.CallOption) (*ListQyAdminArticleReply, error)
 }
 
@@ -73,6 +74,15 @@ func (c *qyAdminArticleClient) GetQyAdminArticle(ctx context.Context, in *GetQyA
 	return out, nil
 }
 
+func (c *qyAdminArticleClient) InitQyAdminArticlePermaLink(ctx context.Context, in *InitQyAdminArticlePermaLinkRequest, opts ...grpc.CallOption) (*InitQyAdminArticlePermaLinkReply, error) {
+	out := new(InitQyAdminArticlePermaLinkReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminArticle/InitQyAdminArticlePermaLink", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *qyAdminArticleClient) ListQyAdminArticle(ctx context.Context, in *ListQyAdminArticleRequest, opts ...grpc.CallOption) (*ListQyAdminArticleReply, error) {
 	out := new(ListQyAdminArticleReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminArticle/ListQyAdminArticle", in, out, opts...)
@@ -90,6 +100,7 @@ type QyAdminArticleServer interface {
 	UpdateQyAdminArticle(context.Context, *UpdateQyAdminArticleRequest) (*UpdateQyAdminArticleReply, error)
 	DeleteQyAdminArticle(context.Context, *DeleteQyAdminArticleRequest) (*DeleteQyAdminArticleReply, error)
 	GetQyAdminArticle(context.Context, *GetQyAdminArticleRequest) (*GetQyAdminArticleReply, error)
+	InitQyAdminArticlePermaLink(context.Context, *InitQyAdminArticlePermaLinkRequest) (*InitQyAdminArticlePermaLinkReply, error)
 	ListQyAdminArticle(context.Context, *ListQyAdminArticleRequest) (*ListQyAdminArticleReply, error)
 	mustEmbedUnimplementedQyAdminArticleServer()
 }
@@ -109,6 +120,9 @@ func (UnimplementedQyAdminArticleServer) DeleteQyAdminArticle(context.Context, *
 }
 func (UnimplementedQyAdminArticleServer) GetQyAdminArticle(context.Context, *GetQyAdminArticleRequest) (*GetQyAdminArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQyAdminArticle not implemented")
+}
+func (UnimplementedQyAdminArticleServer) InitQyAdminArticlePermaLink(context.Context, *InitQyAdminArticlePermaLinkRequest) (*InitQyAdminArticlePermaLinkReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InitQyAdminArticlePermaLink not implemented")
 }
 func (UnimplementedQyAdminArticleServer) ListQyAdminArticle(context.Context, *ListQyAdminArticleRequest) (*ListQyAdminArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminArticle not implemented")
@@ -198,6 +212,24 @@ func _QyAdminArticle_GetQyAdminArticle_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminArticle_InitQyAdminArticlePermaLink_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InitQyAdminArticlePermaLinkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminArticleServer).InitQyAdminArticlePermaLink(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminArticle/InitQyAdminArticlePermaLink",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminArticleServer).InitQyAdminArticlePermaLink(ctx, req.(*InitQyAdminArticlePermaLinkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QyAdminArticle_ListQyAdminArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListQyAdminArticleRequest)
 	if err := dec(in); err != nil {
@@ -238,6 +270,10 @@ var QyAdminArticle_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetQyAdminArticle",
 			Handler:    _QyAdminArticle_GetQyAdminArticle_Handler,
+		},
+		{
+			MethodName: "InitQyAdminArticlePermaLink",
+			Handler:    _QyAdminArticle_InitQyAdminArticlePermaLink_Handler,
 		},
 		{
 			MethodName: "ListQyAdminArticle",

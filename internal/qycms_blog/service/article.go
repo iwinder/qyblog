@@ -32,7 +32,6 @@ func (s *ArticleService) CreateArticle(ctx context.Context, in *v1.CreateArticle
 		Summary:        in.Summary,
 		Thumbnail:      in.Thumbnail,
 		Password:       in.Password,
-		Status:         int(in.Status),
 		Atype:          int(in.Atype),
 		CategoryId:     in.CategoryId,
 		CommentAgentId: in.CommentAgentId,
@@ -40,9 +39,8 @@ func (s *ArticleService) CreateArticle(ctx context.Context, in *v1.CreateArticle
 		ViewCount:      in.ViewCount,
 		LikeCount:      in.LikeCount,
 		HateCount:      in.HateCount,
-		PublishedAt:    in.PublishedAt.AsTime(),
 	}
-	data, err := s.auc.CreateArticle(ctx, data)
+	data, err := s.auc.Create(ctx, data)
 	if err != nil {
 		return nil, err
 	}
@@ -60,15 +58,10 @@ func (s *ArticleService) UpdateArticle(ctx context.Context, in *v1.UpdateArticle
 		Summary:        in.Summary,
 		Thumbnail:      in.Thumbnail,
 		Password:       in.Password,
-		Status:         int(in.Status),
 		Atype:          int(in.Atype),
 		CategoryId:     in.CategoryId,
 		CommentAgentId: in.CommentAgentId,
 		Published:      in.Published,
-		ViewCount:      in.ViewCount,
-		LikeCount:      in.LikeCount,
-		HateCount:      in.HateCount,
-		PublishedAt:    in.PublishedAt.AsTime(),
 	}
 	data, err := s.auc.Update(ctx, ArticleDO)
 	if err != nil {
@@ -144,7 +137,6 @@ func (s *ArticleService) ListArticle(ctx context.Context, in *v1.ListArticleRequ
 			Summary:        data.Summary,
 			Thumbnail:      data.Thumbnail,
 			Password:       data.Password,
-			Status:         int32(data.Status),
 			Atype:          int32(data.Atype),
 			CategoryId:     data.CategoryId,
 			CommentAgentId: data.CommentAgentId,
@@ -175,7 +167,6 @@ func articleResponse(data *biz.ArticleDO) v1.ArticleInfoResponse {
 		Summary:        data.Summary,
 		Thumbnail:      data.Thumbnail,
 		Password:       data.Password,
-		Status:         int32(data.Status),
 		Atype:          int32(data.Atype),
 		CategoryId:     data.CategoryId,
 		CommentAgentId: data.CommentAgentId,

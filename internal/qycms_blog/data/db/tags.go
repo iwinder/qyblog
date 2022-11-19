@@ -87,6 +87,27 @@ func (r *tagsRepo) FindByID(ctx context.Context, id uint64) (*biz.TagsDO, error)
 	}
 	return objDO, nil
 }
+func (r *tagsRepo) FindOneByName(ctx context.Context, name string) (*biz.TagsDO, error) {
+	obj := &po.TagsPO{}
+	err := r.data.Db.Where("name = ?", name).First(&obj).Error
+	if err != nil {
+		return nil, err
+	}
+	objDO := &biz.TagsDO{
+		ObjectMeta: obj.ObjectMeta,
+		Name:       obj.Name,
+		Identifier: obj.Identifier,
+	}
+	return objDO, nil
+}
+func (r *tagsRepo) CountByIdentifier(ctx context.Context, str string) (int64, error) {
+	var obj int64
+	err := r.data.Db.Model(&po.TagsPO{}).Where("identifier like ?", str+"%").Count(&obj).Error
+	if err != nil {
+		return 0, err
+	}
+	return obj, nil
+}
 
 // ListAll 批量查询
 func (r *tagsRepo) ListAll(c context.Context, opts biz.TagsDOListOption) (*biz.TagsDOList, error) {
@@ -140,4 +161,24 @@ func (r *tagsRepo) ListAll(c context.Context, opts biz.TagsDOListOption) (*biz.T
 		})
 	}
 	return &biz.TagsDOList{ListMeta: ret.ListMeta, Items: infos}, err
+}
+
+func (r *tagsRepo) FindAllByArticleID(ctx context.Context, articleId uint64) ([]*biz.TagsDO, error) {
+	tagsPO := make([]*po.TagsPO, 0, 0)
+	db := r.data.Db
+	e := db.Where("ID in (?)", db.Table("qy_blog_article_tags").Select("tag_id ").Where(" article_id = ?", articleId)).Find(&tagsPO)
+	if e.Error != nil {
+		return nil, e.Error
+	}
+	infos := make([]*biz.TagsDO, 0, len(tagsPO))
+	for _, obj := range tagsPO {
+		infos = append(infos, &biz.TagsDO{
+			ObjectMeta: metaV1.ObjectMeta{
+				ID: obj.ID,
+			},
+			Name:       obj.Name,
+			Identifier: obj.Identifier,
+		})
+	}
+	return infos, nil
 }

@@ -11,6 +11,10 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	SUMMARYDEFNUM = 99
+)
+
 func Reverse(s string) string {
 	size := len(s)
 	buf := make([]byte, size)
@@ -76,8 +80,8 @@ func PinyinConvert(data string) string {
 	pinyinArgs.Fallback = func(r rune, a pinyin.Args) []string {
 		return []string{string(r)}
 	}
-	sampleRegexp := regexp.MustCompile(`\s`)
 	newStr := strings.ToLower(pinyin.Slug(data, pinyinArgs))
+	sampleRegexp := regexp.MustCompile(`\s`)
 	result1 := sampleRegexp.ReplaceAllString(newStr, "-")
 	sampleRegexp = regexp.MustCompile(`[^\w]`)
 	result := sampleRegexp.ReplaceAllString(result1, "-")
@@ -86,4 +90,23 @@ func PinyinConvert(data string) string {
 	}
 
 	return result
+}
+
+func RemoveHtml(data string) string {
+	sampleRegexp := regexp.MustCompile(".*?<body.*?>(.*?)<\\/body>")
+	result1 := sampleRegexp.ReplaceAllString(data, "$1")
+	sampleRegexp = regexp.MustCompile("</?[a-zA-Z]+[^><]*>")
+	result := sampleRegexp.ReplaceAllString(result1, "")
+	content := strings.ReplaceAll(result, "\n", "")
+	return content
+}
+
+func RemoveHtmlAndSubstring(data string) string {
+	str := RemoveHtml(data)
+	temp := []rune(str)
+	length := SUMMARYDEFNUM
+	if len(temp) < SUMMARYDEFNUM {
+		length = len(temp)
+	}
+	return string(temp[:length])
 }

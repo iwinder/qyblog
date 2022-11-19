@@ -4,14 +4,13 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
 )
 
 type ArticleContentDO struct {
-	metaV1.ObjectMeta
-	Status      int
+	ID          uint64
+	StatusFlag  int
 	Atype       int
 	Content     string
 	ContentHtml string
@@ -50,6 +49,19 @@ func (uc *ArticleContentUsecase) Create(ctx context.Context, g *ArticleContentDO
 	return data, nil
 }
 
+func (uc *ArticleContentUsecase) CreateByArticle(ctx context.Context, g *ArticleDO) (*ArticleContentDO, error) {
+	uc.log.WithContext(ctx).Infof("CreateArticle: %v", g.ID)
+	data := &ArticleContentDO{
+		ID:          g.ID,
+		StatusFlag:  g.StatusFlag,
+		Atype:       g.Atype,
+		Content:     g.Content,
+		ContentHtml: g.ContentHtml,
+	}
+	dataDO, err := uc.Create(ctx, data)
+	return dataDO, err
+}
+
 // Update 更新
 func (uc *ArticleContentUsecase) Update(ctx context.Context, g *ArticleContentDO) (*ArticleContentDO, error) {
 	uc.log.WithContext(ctx).Infof("Update: %v", g.ID)
@@ -63,6 +75,18 @@ func (uc *ArticleContentUsecase) Update(ctx context.Context, g *ArticleContentDO
 	data := &ArticleContentDO{}
 	data.ID = dataPO.ID
 	return data, nil
+}
+func (uc *ArticleContentUsecase) UpdateByArticle(ctx context.Context, g *ArticleDO) (*ArticleContentDO, error) {
+	uc.log.WithContext(ctx).Infof("CreateArticle: %v", g.ID)
+	data := &ArticleContentDO{
+		ID:          g.ID,
+		StatusFlag:  g.StatusFlag,
+		Atype:       g.Atype,
+		Content:     g.Content,
+		ContentHtml: g.ContentHtml,
+	}
+	dataDO, err := uc.Update(ctx, data)
+	return dataDO, err
 }
 
 // Delete 根据ID删除
@@ -88,8 +112,7 @@ func (uc *ArticleContentUsecase) FindOneByID(ctx context.Context, id uint64) (*A
 		return nil, err
 	}
 	data := &ArticleContentDO{
-		ObjectMeta:  g.ObjectMeta,
-		Status:      g.Status,
+		ID:          g.ID,
 		Atype:       g.Atype,
 		Content:     g.Content,
 		ContentHtml: g.ContentHtml,

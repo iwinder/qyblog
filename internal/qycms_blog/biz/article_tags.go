@@ -17,33 +17,68 @@ type ArticleTagsRepo interface {
 }
 
 type ArticleTagsUsecase struct {
-	repo      ArticleTagsRepo
-	cabinRepo CasbinRuleRepo
-	log       *log.Helper
+	repo ArticleTagsRepo
+	tu   *TagsUsecase
+	log  *log.Helper
 }
 
 // NewArticleTagsUsecase new a ArticleDO usecase.
-func NewArticleTagsUsecase(repo ArticleTagsRepo, cabinRepo CasbinRuleRepo, logger log.Logger) *ArticleTagsUsecase {
-	return &ArticleTagsUsecase{repo: repo, cabinRepo: cabinRepo, log: log.NewHelper(logger)}
+func NewArticleTagsUsecase(repo ArticleTagsRepo, tu *TagsUsecase, logger log.Logger) *ArticleTagsUsecase {
+	return &ArticleTagsUsecase{repo: repo, tu: tu, log: log.NewHelper(logger)}
 }
 
-func (uc *ArticleTagsUsecase) SaveRoleForUser(ctx context.Context, article *ArticleDO) error {
+func (uc *ArticleTagsUsecase) SaveTagsForArticle(ctx context.Context, article *ArticleDO) error {
+	oldTsgs, err := uc.tu.FindAllByArticleID(ctx, article.ID)
+	if err != nil {
+		uc.log.WithContext(ctx).Error(err)
+	}
+	oldTsgMap := make(map[string]*TagsDO, len(oldTsgs))
+	for _, tag := range oldTsgs {
+		oldTsgMap[tag.Name] = tag
+	}
 
-	if article.Tags != nil && len(article.Tags) > 0 {
-		rlen := len(article.Tags)
-		articleTagss := make([]*ArticleTagsDO, 0, rlen)
-		for _, obj := range article.Tags {
-			articleTagss = append(articleTagss, &ArticleTagsDO{
-				ArticleID: article.ID,
-				TagID:     obj.ID,
-			})
+	if article.TagStrings != nil && len(article.TagStrings) > 0 {
+		articleTagss := make([]*ArticleTagsDO, 0, 0)
+		tagss := make([]*TagsDO, 0, 0)
+		for _, obj := range article.TagStrings {
+			tag, ok := oldTsgMap[obj]
+			if ok {
+				tagss = append(tagss, tag)
+				articleTagss = append(articleTagss, &ArticleTagsDO{
+					ArticleID: article.ID,
+					TagID:     tag.ID,
+				})
+			} else {
+				newTag, _ := uc.tu.FindOneByName(ctx, obj)
+				if newTag == nil {
+					newTag = &TagsDO{Name: obj}
+					tagDo, terr := uc.tu.Create(ctx, newTag)
+					if terr != nil {
+						uc.log.WithContext(ctx).Error(terr)
+					} else {
+						articleTagss = append(articleTagss, &ArticleTagsDO{
+							ArticleID: article.ID,
+							TagID:     tagDo.ID,
+						})
+					}
+				}
+				articleTagss = append(articleTagss, &ArticleTagsDO{
+					ArticleID: article.ID,
+					TagID:     newTag.ID,
+				})
+
+			}
+		}
+		aerr := uc.repo.DeleteByArticleID(ctx, article.ID)
+		if aerr != nil {
+			uc.log.WithContext(ctx).Error(aerr)
 		}
 		// 关联关系
 		if len(articleTagss) > 0 {
 			// 关联
-			err := uc.repo.CreateInBatches(ctx, articleTagss)
-			if err != nil {
-				return err
+			cierr := uc.repo.CreateInBatches(ctx, articleTagss)
+			if cierr != nil {
+				return cierr
 			}
 		}
 
@@ -80,4 +115,11 @@ func (uc *ArticleTagsUsecase) UpdateRoleForUser(ctx context.Context, article *Ar
 		}
 	}
 	return nil
+}
+func (uc *ArticleTagsUsecase) FindAllByArticleID(ctx context.Context, aid uint64) ([]*TagsDO, error) {
+	oldTsgs, err := uc.tu.FindAllByArticleID(ctx, aid)
+	if err != nil {
+		uc.log.WithContext(ctx).Error(err)
+	}
+	return oldTsgs, nil
 }

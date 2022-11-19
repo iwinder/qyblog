@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 )
@@ -24,8 +23,8 @@ func NewArticleContentRepo(data *Data, logger log.Logger) biz.ArticleContentRepo
 // Save 新增
 func (r *articleContentRepo) Save(ctx context.Context, g *biz.ArticleContentDO) (*po.ArticleContentPO, error) {
 	newData := &po.ArticleContentPO{
-		ObjectMeta:  metaV1.ObjectMeta{},
-		Status:      g.Status,
+		ID:          g.ID,
+		StatusFlag:  g.StatusFlag,
 		Atype:       g.Atype,
 		Content:     g.Content,
 		ContentHtml: g.ContentHtml,
@@ -40,8 +39,8 @@ func (r *articleContentRepo) Save(ctx context.Context, g *biz.ArticleContentDO) 
 // Update 根据ID更新
 func (r *articleContentRepo) Update(ctx context.Context, g *biz.ArticleContentDO) (*po.ArticleContentPO, error) {
 	newData := &po.ArticleContentPO{
-		ObjectMeta:  metaV1.ObjectMeta{},
-		Status:      g.Status,
+		ID:          g.ID,
+		StatusFlag:  g.StatusFlag,
 		Atype:       g.Atype,
 		Content:     g.Content,
 		ContentHtml: g.ContentHtml,

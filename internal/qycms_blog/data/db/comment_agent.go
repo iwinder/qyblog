@@ -12,7 +12,7 @@ type CommentAgentRepo struct {
 	log  *log.Helper
 }
 
-// NewCommentIndexRepo .
+// NewCommentAgentRepo .
 func NewCommentAgentRepo(data *Data, logger log.Logger) biz.CommentAgentRepo {
 	return &CommentAgentRepo{
 		data: data,
@@ -29,7 +29,6 @@ func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*po
 		Count:      g.Count,
 		RootCount:  g.RootCount,
 		AllCount:   g.AllCount,
-		State:      g.State,
 		Attrs:      g.Attrs,
 	}
 	err := r.data.Db.Create(newData).Error
@@ -47,7 +46,6 @@ func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*
 		Count:     g.Count,
 		RootCount: g.RootCount,
 		AllCount:  g.AllCount,
-		State:     g.State,
 		Attrs:     g.Attrs,
 	}
 	tData := &po.CommentAgentPO{}
