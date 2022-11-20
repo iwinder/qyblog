@@ -145,6 +145,35 @@ func (r *articleRepo) FindByID(ctx context.Context, id uint64) (*biz.ArticleDO, 
 	return data, nil
 }
 
+// FindByID 根据ID查询
+func (r *articleRepo) FindByAgentID(ctx context.Context, id uint64) (*biz.ArticleDO, error) {
+	g := &po.ArticlePO{}
+	err := r.data.Db.Where("comment_agent_id = ?", id).First(&g).Error
+	if err != nil {
+		return nil, err
+	}
+	data := &biz.ArticleDO{
+		ObjectMeta:     g.ObjectMeta,
+		Title:          g.Title,
+		PermaLink:      g.PermaLink,
+		CanonicalLink:  g.CanonicalLink,
+		Summary:        g.Summary,
+		Thumbnail:      g.Thumbnail,
+		Password:       g.Password,
+		Atype:          g.Atype,
+		CategoryId:     g.CategoryId,
+		CategoryName:   g.CategoryName,
+		CommentAgentId: g.CommentAgentId,
+		Published:      g.Published.Bool,
+		ViewCount:      g.ViewCount,
+		LikeCount:      g.LikeCount,
+		HateCount:      g.HateCount,
+		PublishedAt:    g.PublishedAt,
+		Nickname:       g.Nickname,
+	}
+	return data, nil
+}
+
 // ListAll 批量查询
 func (r *articleRepo) ListAll(ctx context.Context, opts biz.ArticleDOListOption) (*biz.ArticleDOList, error) {
 	ret := &po.ArticlePOList{}

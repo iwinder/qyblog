@@ -3,7 +3,6 @@ package biz
 import (
 	"context"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
 
 	"github.com/go-kratos/kratos/v2/errors"
@@ -31,9 +30,9 @@ type CommentAgentDO struct {
 
 // CommentAgentRepo is a Greater repo.
 type CommentAgentRepo interface {
-	Save(context.Context, *CommentAgentDO) (*po.CommentAgentPO, error)
-	Update(context.Context, *CommentAgentDO) (*po.CommentAgentPO, error)
-	FindByID(context.Context, uint64) (*po.CommentAgentPO, error)
+	Save(context.Context, *CommentAgentDO) (*CommentAgentDO, error)
+	Update(context.Context, *CommentAgentDO) (*CommentAgentDO, error)
+	FindByID(context.Context, uint64) (*CommentAgentDO, error)
 }
 
 // CommentIndexUsecase is a CommentAgentDO usecase.
@@ -50,12 +49,11 @@ func NewCommentAgentUsecase(repo CommentAgentRepo, logger log.Logger) *CommentAg
 // CreateCommentAgent creates a CommentAgentDO, and returns the new CommentAgentDO.
 func (uc *CommentAgentUsecase) CreateCommentAgent(ctx context.Context, g *CommentAgentDO) (*CommentAgentDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateCommentAgent: %v-%v", g.ObjId, g.ObjType)
-	dataPO, err := uc.repo.Save(ctx, g)
+	data, err := uc.repo.Save(ctx, g)
 	if err != nil {
 		return nil, err
 	}
-	data := &CommentAgentDO{ObjId: dataPO.ObjId, ObjType: g.ObjType}
-	data.ID = dataPO.ID
+
 	return data, nil
 }
 
@@ -84,15 +82,6 @@ func (uc *CommentAgentUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 		}
 		return nil, err
 	}
-	data := &CommentAgentDO{
-		ObjectMeta: g.ObjectMeta,
-		ObjId:      g.ObjId,
-		ObjType:    g.ObjType,
-		MemberId:   g.MemberId,
-		Count:      g.Count,
-		RootCount:  g.RootCount,
-		AllCount:   g.AllCount,
-		Attrs:      g.Attrs,
-	}
-	return data, nil
+
+	return g, nil
 }

@@ -2,7 +2,10 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
+	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	biz "github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 )
@@ -20,9 +23,10 @@ func NewCommentContentRepo(data *Data, logger log.Logger) biz.CommentContentRepo
 	}
 }
 
-func (r *CommentContentRepo) Save(ctx context.Context, g *biz.CommentContentDO) (*po.CommentContentPO, error) {
+func (r *CommentContentRepo) Save(ctx context.Context, g *biz.CommentContentDO) (*biz.CommentContentDO, error) {
 	newData := &po.CommentContentPO{
 		ObjectMeta:  g.ObjectMeta,
+		AgentId:     g.AgentId,
 		MemberId:    g.MemberId,
 		AtMemberIds: g.AtMemberIds,
 		Agent:       g.Agent,
@@ -30,19 +34,25 @@ func (r *CommentContentRepo) Save(ctx context.Context, g *biz.CommentContentDO) 
 		Ip:          g.Ip,
 		Email:       g.Email,
 		Url:         g.Url,
-		RootId:      g.RootId,
-		Content:     g.Content,
-		Meta:        g.Meta,
+		RootId: sql.NullInt64{
+			Int64: int64(g.RootId),
+			Valid: true,
+		},
+		Content: g.Content,
+		Meta:    g.Meta,
 	}
 	err := r.data.Db.Create(newData).Error
 	if err != nil {
 		return nil, err
 	}
-	return newData, nil
+	data := &biz.CommentContentDO{MemberId: g.MemberId, MemberName: g.MemberName}
+	data.ID = newData.ID
+	return data, nil
 }
 
-func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO) (*po.CommentContentPO, error) {
+func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO) (*biz.CommentContentDO, error) {
 	newData := &po.CommentContentPO{
+		AgentId:     g.AgentId,
 		MemberId:    g.MemberId,
 		AtMemberIds: g.AtMemberIds,
 		Agent:       g.Agent,
@@ -50,9 +60,12 @@ func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO
 		Ip:          g.Ip,
 		Email:       g.Email,
 		Url:         g.Url,
-		RootId:      g.RootId,
-		Content:     g.Content,
-		Meta:        g.Meta,
+		//RootId: sql.NullInt64{
+		//	Int64: int64(g.RootId),
+		//	Valid: true,
+		//},
+		Content: g.Content,
+		Meta:    g.Meta,
 	}
 	tData := &po.CommentContentPO{}
 	tData.ID = g.ID
@@ -60,15 +73,107 @@ func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO
 	if err != nil {
 		return nil, err
 	}
-	return newData, nil
+	data := &biz.CommentContentDO{MemberId: g.MemberId, MemberName: g.MemberName}
+	data.ID = newData.ID
+	return data, nil
 }
 
-func (r *CommentContentRepo) FindByID(cxt context.Context, id uint64) (*po.CommentContentPO, error) {
-	tData := &po.CommentContentPO{}
-	err := r.data.Db.Where("id = ?", id).First(&tData).Error
+func (r *CommentContentRepo) UpdaeStateByIDs(cxt context.Context, ids []uint64, state int) error {
+	return r.data.Db.Model(&po.CommentContentPO{}).Where("id IN ?", ids).Update("status_flag", state).Error
+}
+func (r *CommentContentRepo) DeleteList(ctx context.Context, ids []uint64) error {
+	userPO := &po.CommentContentPO{}
+	if ids == nil || len(ids) == 0 {
+		return nil
+	}
+	err := r.data.Db.Delete(&userPO, ids).Error
+	return err
+}
+func (r *CommentContentRepo) CountByState(ctx context.Context, state int) (int64, error) {
+	var obj int64
+	var err error
+	if state > 0 {
+		err = r.data.Db.Model(&po.CommentContentPO{}).Where("status_flag = ?", state).Count(&obj).Error
+	} else {
+		err = r.data.Db.Model(&po.CommentContentPO{}).Count(&obj).Error
+	}
+	if err != nil {
+		return 0, err
+	}
+	return obj, nil
+}
+func (r *CommentContentRepo) FindByID(cxt context.Context, id uint64) (*biz.CommentContentDO, error) {
+	g := &po.CommentContentPO{}
+	err := r.data.Db.Where("id = ?", id).First(&g).Error
 	if err != nil {
 		return nil, err
 	}
+	data := &biz.CommentContentDO{
+		ObjectMeta:  g.ObjectMeta,
+		AgentId:     g.AgentId,
+		MemberId:    g.MemberId,
+		AtMemberIds: g.AtMemberIds,
+		Agent:       g.Agent,
+		MemberName:  g.MemberName,
+		Ip:          g.Ip,
+		Email:       g.Email,
+		Url:         g.Url,
+		RootId:      uint64(g.RootId.Int64),
+		Content:     g.Content,
+		Meta:        g.Meta,
+	}
+	return data, nil
+}
 
-	return tData, nil
+func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentContentDOListOption) (*biz.CommentContentDOList, error) {
+	ret := &po.CommentContentPOList{}
+
+	var err error
+	query := r.data.Db.Model(&po.CommentContentPO{})
+	if len(opts.Content) > 0 {
+		query.Scopes(withFilterKeyLikeValue("content", "%"+opts.Content+"%"))
+	}
+	if opts.StatusFlag > 0 {
+		query.Scopes(withFilterKeyEquarlsValue("status_flag", opts.StatusFlag))
+	}
+	if opts.PageFlag {
+		ol := gormutil.Unpointer(opts.Offset, opts.Limit)
+		d := query.
+			Offset(ol.Offset).
+			Limit(ol.Limit).
+			Order("updated_at desc,created_at desc,id desc ").
+			Find(&ret.Items).
+			Offset(-1).
+			Limit(-1).
+			Count(&ret.TotalCount)
+		err = d.Error
+	} else {
+		d := query.
+			Find(&ret.Items).
+			Count(&ret.TotalCount)
+		err = d.Error
+	}
+	opts.TotalCount = ret.TotalCount
+	opts.IsLast()
+	ret.FirstFlag = opts.FirstFlag
+	ret.Current = opts.Current
+	ret.PageSize = opts.PageSize
+	ret.LastFlag = opts.LastFlag
+	infos := make([]*biz.CommentContentDO, 0, len(ret.Items))
+	for _, obj := range ret.Items {
+		infos = append(infos, &biz.CommentContentDO{
+			ObjectMeta:  metaV1.ObjectMeta{},
+			MemberId:    obj.MemberId,
+			AtMemberIds: obj.AtMemberIds,
+			Agent:       obj.Agent,
+			MemberName:  obj.MemberName,
+			Ip:          obj.Ip,
+			Email:       obj.Email,
+			Url:         obj.Url,
+			RootId:      uint64(obj.RootId.Int64),
+			Content:     obj.Content,
+			Meta:        obj.Meta,
+		})
+	}
+	return &biz.CommentContentDOList{ListMeta: ret.ListMeta, Items: infos}, err
 }

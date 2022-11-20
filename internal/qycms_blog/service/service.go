@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
+	"github.com/go-kratos/kratos/v2/transport"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
 	"github.com/google/wire"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
@@ -26,4 +27,16 @@ func GetUserInfo(ctx context.Context) *biz.UserInfoDO {
 		userIndo.Nickname = c["NickName"].(string)
 	}
 	return userIndo
+}
+
+func GetHeardInfo(ctx context.Context) (string, string) {
+	userAgent := ""
+	userIp := ""
+	if header, ok := transport.FromServerContext(ctx); ok {
+		header.Operation()
+		userAgent = header.RequestHeader().Get("X-Remoteaddr")
+		userIp = header.RequestHeader().Get("User-Agent")
+
+	}
+	return userAgent, userIp
 }

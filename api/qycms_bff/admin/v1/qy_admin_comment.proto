@@ -1,30 +1,143 @@
 syntax = "proto3";
 
 package api.qycms_bff.admin.v1;
-
+import "google/api/annotations.proto";
+import  "google/protobuf/timestamp.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
 service QyAdminComment {
-	rpc CreateQyAdminComment (CreateQyAdminCommentRequest) returns (CreateQyAdminCommentReply);
-	rpc UpdateQyAdminComment (UpdateQyAdminCommentRequest) returns (UpdateQyAdminCommentReply);
-	rpc DeleteQyAdminComment (DeleteQyAdminCommentRequest) returns (DeleteQyAdminCommentReply);
+	// 创建
+	rpc CreateQyAdminComment (CreateQyAdminCommentRequest) returns (CreateQyAdminCommentReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/comment",
+			body:"*"
+		};
+	};
+	// 更新
+	rpc UpdateQyAdminComment (UpdateQyAdminCommentRequest) returns (UpdateQyAdminCommentReply){
+		option (google.api.http) = {
+			put: "/api/admin/v1/comment/{id}",
+			body:"*"
+		};
+	};
+	// 更新状态 批准、驳回
+	rpc UpdateQyAdminCommentState (UpdateQyAdminCommentStateRequest) returns (UpdateQyAdminCommentStateReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/comment/state",
+			body:"*"
+		};
+	};
+	// 删除
+	rpc DeleteQyAdminComment (DeleteQyAdminCommentRequest) returns (DeleteQyAdminCommentReply){
+		option (google.api.http) = {
+			delete: "/api/admin/v1/comment",
+			body:"*"
+		};
+	};
 	rpc GetQyAdminComment (GetQyAdminCommentRequest) returns (GetQyAdminCommentReply);
-	rpc ListQyAdminComment (ListQyAdminCommentRequest) returns (ListQyAdminCommentReply);
+	// 获取列表
+	rpc ListQyAdminComment (ListQyAdminCommentRequest) returns (ListQyAdminCommentReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/comment",
+		};
+	};
+	rpc GetQyAdminCommentCount (GetQyAdminCommentCountRequest) returns (GetQyAdminCommentCountReply){
+		option (google.api.http) = {
+			get: "/api/admin/v1/comment/total",
+		};
+	};
+}
+message CommentInfoResponse {
+	uint64 id = 1;
+	int32 statusFlag = 2;
+	uint64 agentId = 3;
+	uint64 memberId = 4;
+	string atMemberIds= 5;
+	string agent= 6;
+	string memberName= 7;
+	string ip= 8;
+	string email= 9;
+	string url= 10;
+	uint64 rootId= 11;
+	string content= 12;
+	string meta= 13;
+	string parentUserName= 14;
+	string objTitle= 15;
+	string objLink= 16;
+	string avatar= 17;
+	google.protobuf.Timestamp createdAt = 18;
+}
+message CommentPageInfo {
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool lastFlag = 6;
 }
 
-message CreateQyAdminCommentRequest {}
-message CreateQyAdminCommentReply {}
+message CreateQyAdminCommentRequest {
+	int32 statusFlag = 2;
+	uint64 agentId = 3;
+	string atMemberIds= 5;
+	string email= 9;
+	string url= 10;
+	uint64 rootId= 11;
+	string content= 12;
+	string meta= 13;
+}
+message CreateQyAdminCommentReply {
+	uint64 id = 1;
+}
 
-message UpdateQyAdminCommentRequest {}
-message UpdateQyAdminCommentReply {}
+message UpdateQyAdminCommentRequest {
+	uint64 id = 1;
+	int32 statusFlag = 2;
+	uint64 agentId = 3;
+	string atMemberIds= 5;
+	string email= 9;
+	string url= 10;
+	uint64 rootId= 11;
+	string content= 12;
+	string meta= 13;
 
-message DeleteQyAdminCommentRequest {}
+}
+message UpdateQyAdminCommentReply {
+	uint64 id = 1;
+}
+
+message UpdateQyAdminCommentStateRequest {
+	repeated uint64 ids = 1;
+	int32 statusFlag = 2;
+}
+message UpdateQyAdminCommentStateReply {}
+
+message DeleteQyAdminCommentRequest {
+	repeated uint64 ids = 1;
+}
 message DeleteQyAdminCommentReply {}
 
 message GetQyAdminCommentRequest {}
 message GetQyAdminCommentReply {}
+message GetQyAdminCommentCountRequest {}
+message GetQyAdminCommentCountReply {
+	int64 nowTotal = 1;
+	int64 pendingTotal = 2;
+	int64 total = 3;
+}
 
-message ListQyAdminCommentRequest {}
-message ListQyAdminCommentReply {}
+message ListQyAdminCommentRequest {
+	int64 current = 1;
+	int64 pageSize = 2;
+	int64 total = 3;
+	int64 pages = 4;
+	bool firstFlag = 5;
+	bool lastFlag = 6;
+	string SearchText = 7;
+}
+message ListQyAdminCommentReply {
+	CommentPageInfo pageInfo = 1;
+	repeated CommentInfoResponse items = 2;
+}

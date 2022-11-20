@@ -20,7 +20,7 @@ func NewCommentAgentRepo(data *Data, logger log.Logger) biz.CommentAgentRepo {
 	}
 }
 
-func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*po.CommentAgentPO, error) {
+func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*biz.CommentAgentDO, error) {
 	newData := &po.CommentAgentPO{
 		ObjectMeta: g.ObjectMeta,
 		ObjId:      g.ObjId,
@@ -35,10 +35,12 @@ func (r *CommentAgentRepo) Save(ctx context.Context, g *biz.CommentAgentDO) (*po
 	if err != nil {
 		return nil, err
 	}
-	return newData, nil
+	data := &biz.CommentAgentDO{ObjId: newData.ObjId, ObjType: g.ObjType}
+	data.ID = newData.ID
+	return data, nil
 }
 
-func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*po.CommentAgentPO, error) {
+func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*biz.CommentAgentDO, error) {
 	newData := &po.CommentAgentPO{
 		ObjId:     g.ObjId,
 		ObjType:   g.ObjType,
@@ -54,15 +56,26 @@ func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*
 	if err != nil {
 		return nil, err
 	}
-	return newData, nil
+	data := &biz.CommentAgentDO{ObjId: newData.ObjId, ObjType: g.ObjType}
+	data.ID = newData.ID
+	return data, nil
 }
 
-func (r *CommentAgentRepo) FindByID(cxt context.Context, id uint64) (*po.CommentAgentPO, error) {
-	tData := &po.CommentAgentPO{}
-	err := r.data.Db.Where("id = ?", id).First(&tData).Error
+func (r *CommentAgentRepo) FindByID(cxt context.Context, id uint64) (*biz.CommentAgentDO, error) {
+	g := &po.CommentAgentPO{}
+	err := r.data.Db.Where("id = ?", id).First(&g).Error
 	if err != nil {
 		return nil, err
 	}
-
-	return tData, nil
+	data := &biz.CommentAgentDO{
+		ObjectMeta: g.ObjectMeta,
+		ObjId:      g.ObjId,
+		ObjType:    g.ObjType,
+		MemberId:   g.MemberId,
+		Count:      g.Count,
+		RootCount:  g.RootCount,
+		AllCount:   g.AllCount,
+		Attrs:      g.Attrs,
+	}
+	return data, nil
 }

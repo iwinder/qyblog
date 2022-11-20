@@ -59,6 +59,7 @@ type ArticleRepo interface {
 	Delete(context.Context, uint64) error
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*ArticleDO, error)
+	FindByAgentID(context.Context, uint64) (*ArticleDO, error)
 	CountByPermaLink(ctx context.Context, str string) (int64, error)
 	ListAll(context.Context, ArticleDOListOption) (*ArticleDOList, error)
 }
@@ -187,6 +188,19 @@ func (uc *ArticleUsecase) FindOneByID(ctx context.Context, id uint64) (*ArticleD
 
 	// 标签
 	g.TagStrings = uc.getTagsStringByAid(ctx, id)
+	return g, nil
+}
+
+// FindOneByAgentID 根据ID查询信息
+func (uc *ArticleUsecase) FindOneByAgentID(ctx context.Context, id uint64) (*ArticleDO, error) {
+	uc.log.WithContext(ctx).Infof("FindOneByAgentID: %v", id)
+	g, err := uc.repo.FindByAgentID(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
 	return g, nil
 }
 

@@ -67,6 +67,7 @@ func (s *BlogAdminUserService) InitQyAdminArticlePermaLink(ctx context.Context, 
 
 // ListQyAdminArticle 获取列表
 func (s *BlogAdminUserService) ListQyAdminArticle(ctx context.Context, in *v1.ListQyAdminArticleRequest) (*v1.ListQyAdminArticleReply, error) {
+	GetHeardInfo(ctx)
 	opts := biz.ArticleDOListOption{}
 	opts.ListOptions.Pages = 0
 	opts.ListOptions.Current = -1

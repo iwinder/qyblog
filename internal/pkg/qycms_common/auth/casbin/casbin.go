@@ -12,6 +12,7 @@ import (
 	jwtV4 "github.com/golang-jwt/jwt/v4"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
+	"strings"
 	//"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 	//db "github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 )
@@ -55,8 +56,11 @@ func Server(opts ...Option) middleware.Middleware {
 			if header, ok := transport.FromServerContext(ctx); ok {
 				header.Operation()
 				httpReq := header.(*http.Transport)
-				method := httpReq.Request().Method
 				url := httpReq.PathTemplate()
+				if strings.Contains(url, "/api/web/v1/") {
+					return handler(ctx, req)
+				}
+				method := httpReq.Request().Method
 
 				claims, cok := jwt.FromContext(ctx)
 				if !cok {

@@ -22,11 +22,18 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminCommentClient interface {
+	// 创建
 	CreateQyAdminComment(ctx context.Context, in *CreateQyAdminCommentRequest, opts ...grpc.CallOption) (*CreateQyAdminCommentReply, error)
+	// 更新
 	UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error)
+	// 更新状态 批准、驳回
+	UpdateQyAdminCommentState(ctx context.Context, in *UpdateQyAdminCommentStateRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentStateReply, error)
+	// 删除
 	DeleteQyAdminComment(ctx context.Context, in *DeleteQyAdminCommentRequest, opts ...grpc.CallOption) (*DeleteQyAdminCommentReply, error)
 	GetQyAdminComment(ctx context.Context, in *GetQyAdminCommentRequest, opts ...grpc.CallOption) (*GetQyAdminCommentReply, error)
+	// 获取列表
 	ListQyAdminComment(ctx context.Context, in *ListQyAdminCommentRequest, opts ...grpc.CallOption) (*ListQyAdminCommentReply, error)
+	GetQyAdminCommentCount(ctx context.Context, in *GetQyAdminCommentCountRequest, opts ...grpc.CallOption) (*GetQyAdminCommentCountReply, error)
 }
 
 type qyAdminCommentClient struct {
@@ -49,6 +56,15 @@ func (c *qyAdminCommentClient) CreateQyAdminComment(ctx context.Context, in *Cre
 func (c *qyAdminCommentClient) UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error) {
 	out := new(UpdateQyAdminCommentReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminCommentClient) UpdateQyAdminCommentState(ctx context.Context, in *UpdateQyAdminCommentStateRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentStateReply, error) {
+	out := new(UpdateQyAdminCommentStateReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -82,15 +98,31 @@ func (c *qyAdminCommentClient) ListQyAdminComment(ctx context.Context, in *ListQ
 	return out, nil
 }
 
+func (c *qyAdminCommentClient) GetQyAdminCommentCount(ctx context.Context, in *GetQyAdminCommentCountRequest, opts ...grpc.CallOption) (*GetQyAdminCommentCountReply, error) {
+	out := new(GetQyAdminCommentCountReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminComment/GetQyAdminCommentCount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QyAdminCommentServer is the server API for QyAdminComment service.
 // All implementations must embed UnimplementedQyAdminCommentServer
 // for forward compatibility
 type QyAdminCommentServer interface {
+	// 创建
 	CreateQyAdminComment(context.Context, *CreateQyAdminCommentRequest) (*CreateQyAdminCommentReply, error)
+	// 更新
 	UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
+	// 更新状态 批准、驳回
+	UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error)
+	// 删除
 	DeleteQyAdminComment(context.Context, *DeleteQyAdminCommentRequest) (*DeleteQyAdminCommentReply, error)
 	GetQyAdminComment(context.Context, *GetQyAdminCommentRequest) (*GetQyAdminCommentReply, error)
+	// 获取列表
 	ListQyAdminComment(context.Context, *ListQyAdminCommentRequest) (*ListQyAdminCommentReply, error)
+	GetQyAdminCommentCount(context.Context, *GetQyAdminCommentCountRequest) (*GetQyAdminCommentCountReply, error)
 	mustEmbedUnimplementedQyAdminCommentServer()
 }
 
@@ -104,6 +136,9 @@ func (UnimplementedQyAdminCommentServer) CreateQyAdminComment(context.Context, *
 func (UnimplementedQyAdminCommentServer) UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminComment not implemented")
 }
+func (UnimplementedQyAdminCommentServer) UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminCommentState not implemented")
+}
 func (UnimplementedQyAdminCommentServer) DeleteQyAdminComment(context.Context, *DeleteQyAdminCommentRequest) (*DeleteQyAdminCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteQyAdminComment not implemented")
 }
@@ -112,6 +147,9 @@ func (UnimplementedQyAdminCommentServer) GetQyAdminComment(context.Context, *Get
 }
 func (UnimplementedQyAdminCommentServer) ListQyAdminComment(context.Context, *ListQyAdminCommentRequest) (*ListQyAdminCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyAdminComment not implemented")
+}
+func (UnimplementedQyAdminCommentServer) GetQyAdminCommentCount(context.Context, *GetQyAdminCommentCountRequest) (*GetQyAdminCommentCountReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQyAdminCommentCount not implemented")
 }
 func (UnimplementedQyAdminCommentServer) mustEmbedUnimplementedQyAdminCommentServer() {}
 
@@ -158,6 +196,24 @@ func _QyAdminComment_UpdateQyAdminComment_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QyAdminCommentServer).UpdateQyAdminComment(ctx, req.(*UpdateQyAdminCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminComment_UpdateQyAdminCommentState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQyAdminCommentStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminCommentServer).UpdateQyAdminCommentState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminCommentServer).UpdateQyAdminCommentState(ctx, req.(*UpdateQyAdminCommentStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -216,6 +272,24 @@ func _QyAdminComment_ListQyAdminComment_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyAdminComment_GetQyAdminCommentCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQyAdminCommentCountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminCommentServer).GetQyAdminCommentCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminComment/GetQyAdminCommentCount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminCommentServer).GetQyAdminCommentCount(ctx, req.(*GetQyAdminCommentCountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QyAdminComment_ServiceDesc is the grpc.ServiceDesc for QyAdminComment service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -232,6 +306,10 @@ var QyAdminComment_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _QyAdminComment_UpdateQyAdminComment_Handler,
 		},
 		{
+			MethodName: "UpdateQyAdminCommentState",
+			Handler:    _QyAdminComment_UpdateQyAdminCommentState_Handler,
+		},
+		{
 			MethodName: "DeleteQyAdminComment",
 			Handler:    _QyAdminComment_DeleteQyAdminComment_Handler,
 		},
@@ -242,6 +320,10 @@ var QyAdminComment_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQyAdminComment",
 			Handler:    _QyAdminComment_ListQyAdminComment_Handler,
+		},
+		{
+			MethodName: "GetQyAdminCommentCount",
+			Handler:    _QyAdminComment_GetQyAdminCommentCount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

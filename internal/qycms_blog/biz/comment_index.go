@@ -5,17 +5,17 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
 )
 
 type CommentIndexDO struct {
 	metaV1.ObjectMeta
-	ObjId     int64
+	AgentId   uint64
+	ObjId     uint64
 	ObjType   int32
-	MemberId  int64
-	RootId    int64
-	OarentId  int64
+	MemberId  uint64
+	RootId    uint64
+	ParentId  uint64
 	Floor     int32
 	Count     int32
 	RootCount int32
@@ -26,9 +26,10 @@ type CommentIndexDO struct {
 
 // CommentAgentRepo is a Greater repo.
 type CommentIndexRepo interface {
-	Save(context.Context, *CommentIndexDO) (*po.CommentIndexPO, error)
-	Update(context.Context, *CommentIndexDO) (*po.CommentIndexPO, error)
-	FindByID(context.Context, uint64) (*po.CommentIndexPO, error)
+	Save(context.Context, *CommentIndexDO) (*CommentIndexDO, error)
+	Update(context.Context, *CommentIndexDO) (*CommentIndexDO, error)
+	FindByID(context.Context, uint64) (*CommentIndexDO, error)
+	DeleteList(c context.Context, uids []uint64) error
 }
 
 // CommentIndexUsecase is a CommentAgentDO usecase.
@@ -45,28 +46,47 @@ func NewCommentIndexUsecase(repo CommentIndexRepo, logger log.Logger) *CommentIn
 // CreateCommentIndex creates a CommentIndexDO, and returns the new CommentIndexDO.
 func (uc *CommentIndexUsecase) CreateCommentIndex(ctx context.Context, g *CommentIndexDO) (*CommentIndexDO, error) {
 	uc.log.WithContext(ctx).Infof("CreateCommentIndex: %v-%v", g.ObjId, g.ObjType)
-	dataPO, err := uc.repo.Save(ctx, g)
+	data, err := uc.repo.Save(ctx, g)
 	if err != nil {
 		return nil, err
 	}
-	data := &CommentIndexDO{ObjId: dataPO.ObjId, ObjType: g.ObjType}
-	data.ID = dataPO.ID
+	return data, nil
+}
+func (uc *CommentIndexUsecase) CreateCommentIndexByContent(ctx context.Context, g *CommentContentDO) (*CommentIndexDO, error) {
+	uc.log.WithContext(ctx).Infof("CreateCommentIndex: %v-%v", g.AgentId, g.ID)
+	gd := &CommentIndexDO{
+		ObjectMeta: metaV1.ObjectMeta{
+			ID:         g.ID,
+			StatusFlag: g.StatusFlag,
+		},
+		AgentId:  g.AgentId,
+		MemberId: g.MemberId,
+		ParentId: g.RootId,
+	}
+	data, err := uc.CreateCommentIndex(ctx, gd)
+	if err != nil {
+		return nil, err
+	}
 	return data, nil
 }
 
 // Update 更新
 func (uc *CommentIndexUsecase) Update(ctx context.Context, g *CommentIndexDO) (*CommentIndexDO, error) {
 	uc.log.WithContext(ctx).Infof("Update:  %v-%v", g.ObjId, g.ObjType)
-	dataPO, err := uc.repo.Update(ctx, g)
+	data, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
 		return nil, err
 	}
-	data := &CommentIndexDO{ObjId: dataPO.ObjId, ObjType: g.ObjType}
-	data.ID = dataPO.ID
+
 	return data, nil
+}
+
+func (uc *CommentIndexUsecase) DeleteList(ctx context.Context, ids []uint64) error {
+	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
+	return uc.repo.DeleteList(ctx, ids)
 }
 
 // FindByID 根据ID查询
@@ -79,19 +99,6 @@ func (uc *CommentIndexUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 		}
 		return nil, err
 	}
-	data := &CommentIndexDO{
-		ObjectMeta: g.ObjectMeta,
-		ObjId:      g.ObjId,
-		ObjType:    g.ObjType,
-		MemberId:   g.MemberId,
-		RootId:     g.RootId,
-		OarentId:   g.OarentId,
-		Floor:      g.Floor,
-		Count:      g.Count,
-		RootCount:  g.RootCount,
-		LikeCount:  g.LikeCount,
-		HateCount:  g.HateCount,
-		Attrs:      g.Attrs,
-	}
-	return data, nil
+
+	return g, nil
 }

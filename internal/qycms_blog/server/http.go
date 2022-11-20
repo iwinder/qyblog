@@ -6,9 +6,11 @@ import (
 	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
 	w1 "github.com/iwinder/qingyucms/api/qycms_bff/web/v1"
 	mid "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/middleware"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/filter"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // NewHTTPServer new a HTTP server.
@@ -18,6 +20,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		mid.NewMiddleware(authConf, casbinData, logger),
+		filter.NewFilter(),
 	}
 	if c.Http.Network != "" {
 		opts = append(opts, http.Network(c.Http.Network))
@@ -29,13 +32,19 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	r := srv.Route("/api/admin/v1/file")
-	r.POST("/upload/byType/{typeId}", func(ctx http.Context) error {
+	r := srv.Route("/api/admin/v1")
+	r.POST("/file/upload/byType/{typeId}", func(ctx http.Context) error {
 		return userService.UploadQyAdminFile(ctx)
 	})
-	r.POST("/upload", func(ctx http.Context) error {
+	r.POST("/file/upload", func(ctx http.Context) error {
 		return userService.UploadQyAdminFileDef(ctx)
 	})
+	r.GET("/metrics", func(ctx http.Context) error {
+		promhttp.Handler().ServeHTTP(ctx.Response(), ctx.Request())
+		return nil
+	})
+
+	//srv.Route("", )
 
 	v1.RegisterQyAdminLoginHTTPServer(srv, userService)
 	v1.RegisterQyAdminRoleHTTPServer(srv, userService)
@@ -52,6 +61,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminTagsHTTPServer(srv, userService)
 	v1.RegisterQyAdminCategoryHTTPServer(srv, userService)
 	v1.RegisterQyAdminArticleHTTPServer(srv, userService)
+	v1.RegisterQyAdminCommentHTTPServer(srv, userService)
 
 	w1.RegisterQyWebSiteConfigHTTPServer(srv, webService)
 
