@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.qycms_bff.web.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/web/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.web.v1";
+
+service QyWebMenus {
+	rpc CreateQyWebMenus (CreateQyWebMenusRequest) returns (CreateQyWebMenusReply);
+	rpc UpdateQyWebMenus (UpdateQyWebMenusRequest) returns (UpdateQyWebMenusReply);
+	rpc DeleteQyWebMenus (DeleteQyWebMenusRequest) returns (DeleteQyWebMenusReply);
+	rpc GetQyWebMenus (GetQyWebMenusRequest) returns (GetQyWebMenusReply);
+	rpc ListQyWebMenus (ListQyWebMenusRequest) returns (ListQyWebMenusReply);
+}
+
+message CreateQyWebMenusRequest {}
+message CreateQyWebMenusReply {}
+
+message UpdateQyWebMenusRequest {}
+message UpdateQyWebMenusReply {}
+
+message DeleteQyWebMenusRequest {}
+message DeleteQyWebMenusReply {}
+
+message GetQyWebMenusRequest {}
+message GetQyWebMenusReply {}
+
+message ListQyWebMenusRequest {}
+message ListQyWebMenusReply {}

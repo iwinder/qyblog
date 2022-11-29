@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.qycms_bff.web.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/web/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.web.v1";
+
+service QyWebLinks {
+	rpc CreateQyWebLinks (CreateQyWebLinksRequest) returns (CreateQyWebLinksReply);
+	rpc UpdateQyWebLinks (UpdateQyWebLinksRequest) returns (UpdateQyWebLinksReply);
+	rpc DeleteQyWebLinks (DeleteQyWebLinksRequest) returns (DeleteQyWebLinksReply);
+	rpc GetQyWebLinks (GetQyWebLinksRequest) returns (GetQyWebLinksReply);
+	rpc ListQyWebLinks (ListQyWebLinksRequest) returns (ListQyWebLinksReply);
+}
+
+message CreateQyWebLinksRequest {}
+message CreateQyWebLinksReply {}
+
+message UpdateQyWebLinksRequest {}
+message UpdateQyWebLinksReply {}
+
+message DeleteQyWebLinksRequest {}
+message DeleteQyWebLinksReply {}
+
+message GetQyWebLinksRequest {}
+message GetQyWebLinksReply {}
+
+message ListQyWebLinksRequest {}
+message ListQyWebLinksReply {}

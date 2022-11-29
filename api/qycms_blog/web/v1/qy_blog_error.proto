@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package qycms_user.v1;
+
+option go_package = "github.com/iwinder/qingyucms/api/server/v1;v1";
+option java_multiple_files = true;
+option java_package = "server.v1";
+option objc_class_prefix = "APIQycmsUserV1";
+
+enum ErrorReason {
+GEETER_UNSPECIFIED = 0;
+USER_NOT_FOUND = 1;
+LOGIN_FAILED = 2;
+REGISTER_FAILED = 3;
+}
