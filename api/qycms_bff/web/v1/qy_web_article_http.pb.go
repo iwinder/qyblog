@@ -19,15 +19,46 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationQyWebArticleGetQyWebArticle = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebArticle"
+const OperationQyWebArticleGetQyWebCategory = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebCategory"
+const OperationQyWebArticleGetQyWebTag = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebTag"
 const OperationQyWebArticleListQyWebArticle = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticle"
 
 type QyWebArticleHTTPServer interface {
+	GetQyWebArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebArticleReply, error)
+	GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error)
+	GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error)
 	ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
 }
 
 func RegisterQyWebArticleHTTPServer(s *http.Server, srv QyWebArticleHTTPServer) {
 	r := s.Route("/")
+	r.GET("/api/web/v1/article/{name}", _QyWebArticle_GetQyWebArticle0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/article", _QyWebArticle_ListQyWebArticle0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/tag/{name}", _QyWebArticle_GetQyWebTag0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/category/{name}", _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv))
+}
+
+func _QyWebArticle_GetQyWebArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetQyWebArticleRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleGetQyWebArticle)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetQyWebArticle(ctx, req.(*GetQyWebArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetQyWebArticleReply)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _QyWebArticle_ListQyWebArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
@@ -49,7 +80,54 @@ func _QyWebArticle_ListQyWebArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) fu
 	}
 }
 
+func _QyWebArticle_GetQyWebTag0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetQyWebTagRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleGetQyWebTag)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetQyWebTag(ctx, req.(*GetQyWebTagRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetQyWebTagReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetQyWebCategoryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleGetQyWebCategory)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetQyWebCategory(ctx, req.(*GetQyWebCategoryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetQyWebCategoryReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyWebArticleHTTPClient interface {
+	GetQyWebArticle(ctx context.Context, req *GetQyWebArticleRequest, opts ...http.CallOption) (rsp *GetQyWebArticleReply, err error)
+	GetQyWebCategory(ctx context.Context, req *GetQyWebCategoryRequest, opts ...http.CallOption) (rsp *GetQyWebCategoryReply, err error)
+	GetQyWebTag(ctx context.Context, req *GetQyWebTagRequest, opts ...http.CallOption) (rsp *GetQyWebTagReply, err error)
 	ListQyWebArticle(ctx context.Context, req *ListQyWebArticleRequest, opts ...http.CallOption) (rsp *ListQyWebArticleReply, err error)
 }
 
@@ -59,6 +137,45 @@ type QyWebArticleHTTPClientImpl struct {
 
 func NewQyWebArticleHTTPClient(client *http.Client) QyWebArticleHTTPClient {
 	return &QyWebArticleHTTPClientImpl{client}
+}
+
+func (c *QyWebArticleHTTPClientImpl) GetQyWebArticle(ctx context.Context, in *GetQyWebArticleRequest, opts ...http.CallOption) (*GetQyWebArticleReply, error) {
+	var out GetQyWebArticleReply
+	pattern := "/api/web/v1/article/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleGetQyWebArticle))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyWebArticleHTTPClientImpl) GetQyWebCategory(ctx context.Context, in *GetQyWebCategoryRequest, opts ...http.CallOption) (*GetQyWebCategoryReply, error) {
+	var out GetQyWebCategoryReply
+	pattern := "/api/web/v1/category/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleGetQyWebCategory))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyWebArticleHTTPClientImpl) GetQyWebTag(ctx context.Context, in *GetQyWebTagRequest, opts ...http.CallOption) (*GetQyWebTagReply, error) {
+	var out GetQyWebTagReply
+	pattern := "/api/web/v1/tag/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleGetQyWebTag))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *QyWebArticleHTTPClientImpl) ListQyWebArticle(ctx context.Context, in *ListQyWebArticleRequest, opts ...http.CallOption) (*ListQyWebArticleReply, error) {

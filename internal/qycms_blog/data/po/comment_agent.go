@@ -17,7 +17,7 @@ type CommentAgentPO struct {
 	RootCount         int32  `json:"root_count" gorm:"column:root_count;default: 0;comment: 根评论总数"  `
 	AllCount          int32  `json:"all_count" gorm:"column:all_count;default: 0;comment: 评论+回复总数 "  `
 	//State             int8   `json:"state" gorm:"column:state;default: 0;comment::状态,是否开启：0不开启， 1开启  "  `
-	Attrs int32 `json:"attrs" gorm:"column:attrs;default: 0;comment: 属性预留"  `
+	Attrs string `json:"attrs" gorm:"column:attrs;default: 0;comment: 属性预留"  `
 }
 
 type CommentAgentPOList struct {

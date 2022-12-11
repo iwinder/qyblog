@@ -23,7 +23,7 @@ const OperationQyAdminCommentCreateQyAdminComment = "/api.qycms_bff.admin.v1.QyA
 const OperationQyAdminCommentDeleteQyAdminComment = "/api.qycms_bff.admin.v1.QyAdminComment/DeleteQyAdminComment"
 const OperationQyAdminCommentGetQyAdminCommentCount = "/api.qycms_bff.admin.v1.QyAdminComment/GetQyAdminCommentCount"
 const OperationQyAdminCommentListQyAdminComment = "/api.qycms_bff.admin.v1.QyAdminComment/ListQyAdminComment"
-const OperationQyAdminCommentUpdateQyAdminComment = "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminComment"
+const OperationQyAdminCommentUpdateQyAdminCommentContent = "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentContent"
 const OperationQyAdminCommentUpdateQyAdminCommentState = "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentState"
 
 type QyAdminCommentHTTPServer interface {
@@ -31,14 +31,14 @@ type QyAdminCommentHTTPServer interface {
 	DeleteQyAdminComment(context.Context, *DeleteQyAdminCommentRequest) (*DeleteQyAdminCommentReply, error)
 	GetQyAdminCommentCount(context.Context, *GetQyAdminCommentCountRequest) (*GetQyAdminCommentCountReply, error)
 	ListQyAdminComment(context.Context, *ListQyAdminCommentRequest) (*ListQyAdminCommentReply, error)
-	UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
+	UpdateQyAdminCommentContent(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
 	UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error)
 }
 
 func RegisterQyAdminCommentHTTPServer(s *http.Server, srv QyAdminCommentHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/admin/v1/comment", _QyAdminComment_CreateQyAdminComment0_HTTP_Handler(srv))
-	r.PUT("/api/admin/v1/comment/{id}", _QyAdminComment_UpdateQyAdminComment0_HTTP_Handler(srv))
+	r.POST("/api/admin/v1/comment/content", _QyAdminComment_UpdateQyAdminCommentContent0_HTTP_Handler(srv))
 	r.POST("/api/admin/v1/comment/state", _QyAdminComment_UpdateQyAdminCommentState0_HTTP_Handler(srv))
 	r.DELETE("/api/admin/v1/comment", _QyAdminComment_DeleteQyAdminComment0_HTTP_Handler(srv))
 	r.GET("/api/admin/v1/comment", _QyAdminComment_ListQyAdminComment0_HTTP_Handler(srv))
@@ -64,18 +64,15 @@ func _QyAdminComment_CreateQyAdminComment0_HTTP_Handler(srv QyAdminCommentHTTPSe
 	}
 }
 
-func _QyAdminComment_UpdateQyAdminComment0_HTTP_Handler(srv QyAdminCommentHTTPServer) func(ctx http.Context) error {
+func _QyAdminComment_UpdateQyAdminCommentContent0_HTTP_Handler(srv QyAdminCommentHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UpdateQyAdminCommentRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationQyAdminCommentUpdateQyAdminComment)
+		http.SetOperation(ctx, OperationQyAdminCommentUpdateQyAdminCommentContent)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateQyAdminComment(ctx, req.(*UpdateQyAdminCommentRequest))
+			return srv.UpdateQyAdminCommentContent(ctx, req.(*UpdateQyAdminCommentRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -167,7 +164,7 @@ type QyAdminCommentHTTPClient interface {
 	DeleteQyAdminComment(ctx context.Context, req *DeleteQyAdminCommentRequest, opts ...http.CallOption) (rsp *DeleteQyAdminCommentReply, err error)
 	GetQyAdminCommentCount(ctx context.Context, req *GetQyAdminCommentCountRequest, opts ...http.CallOption) (rsp *GetQyAdminCommentCountReply, err error)
 	ListQyAdminComment(ctx context.Context, req *ListQyAdminCommentRequest, opts ...http.CallOption) (rsp *ListQyAdminCommentReply, err error)
-	UpdateQyAdminComment(ctx context.Context, req *UpdateQyAdminCommentRequest, opts ...http.CallOption) (rsp *UpdateQyAdminCommentReply, err error)
+	UpdateQyAdminCommentContent(ctx context.Context, req *UpdateQyAdminCommentRequest, opts ...http.CallOption) (rsp *UpdateQyAdminCommentReply, err error)
 	UpdateQyAdminCommentState(ctx context.Context, req *UpdateQyAdminCommentStateRequest, opts ...http.CallOption) (rsp *UpdateQyAdminCommentStateReply, err error)
 }
 
@@ -231,13 +228,13 @@ func (c *QyAdminCommentHTTPClientImpl) ListQyAdminComment(ctx context.Context, i
 	return &out, err
 }
 
-func (c *QyAdminCommentHTTPClientImpl) UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...http.CallOption) (*UpdateQyAdminCommentReply, error) {
+func (c *QyAdminCommentHTTPClientImpl) UpdateQyAdminCommentContent(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...http.CallOption) (*UpdateQyAdminCommentReply, error) {
 	var out UpdateQyAdminCommentReply
-	pattern := "/api/admin/v1/comment/{id}"
+	pattern := "/api/admin/v1/comment/content"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationQyAdminCommentUpdateQyAdminComment))
+	opts = append(opts, http.Operation(OperationQyAdminCommentUpdateQyAdminCommentContent))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

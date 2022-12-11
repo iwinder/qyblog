@@ -78,8 +78,9 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	commentIndexRepo := db.NewCommentIndexRepo(dbData, logger)
 	commentIndexUsecase := biz.NewCommentIndexUsecase(commentIndexRepo, logger)
 	commentContentUsecase := biz.NewCommentContentUsecase(commentContentRepo, logger, articleUsecase, commentIndexUsecase, userUsecase)
-	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, siteConfigUsecase, linkUsecase, shortLinkUsecase, menusAgentUsecase, menusUsecase, tagsUsecase, categoryUsecase, articleUsecase, commentContentUsecase, qycms, auth)
-	blogWebApiService := service.NewBlogWebApiService(siteConfigUsecase, articleUsecase, menusUsecase, linkUsecase, shortLinkUsecase, categoryUsecase, tagsUsecase)
+	commentUsecase := biz.NewCommentUsecase(logger, commentAgentUsecase, commentIndexUsecase, userUsecase, articleUsecase, commentContentUsecase)
+	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, siteConfigUsecase, linkUsecase, shortLinkUsecase, menusAgentUsecase, menusUsecase, tagsUsecase, categoryUsecase, articleUsecase, commentContentUsecase, commentUsecase, qycms, auth)
+	blogWebApiService := service.NewBlogWebApiService(siteConfigUsecase, articleUsecase, menusUsecase, linkUsecase, shortLinkUsecase, categoryUsecase, tagsUsecase, commentUsecase)
 	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, blogWebApiService, logger)
 	app := newApp(logger, httpServer)
 	return app, func() {

@@ -17,8 +17,15 @@ service QyAdminComment {
 	};
 	// 更新
 	rpc UpdateQyAdminComment (UpdateQyAdminCommentRequest) returns (UpdateQyAdminCommentReply){
+//		option (google.api.http) = {
+//			put: "/api/admin/v1/comment/{id}",
+//			body:"*"
+//		};
+	};
+	// 更新内容
+	rpc UpdateQyAdminCommentContent (UpdateQyAdminCommentRequest) returns (UpdateQyAdminCommentReply){
 		option (google.api.http) = {
-			put: "/api/admin/v1/comment/{id}",
+			post: "/api/admin/v1/comment/content",
 			body:"*"
 		};
 	};
@@ -62,7 +69,7 @@ message CommentInfoResponse {
 	string url= 10;
 	uint64 rootId= 11;
 	string content= 12;
-	string meta= 13;
+	string  attrs = 13;
 	string parentUserName= 14;
 	string objTitle= 15;
 	string objLink= 16;
@@ -86,7 +93,8 @@ message CreateQyAdminCommentRequest {
 	string url= 10;
 	uint64 rootId= 11;
 	string content= 12;
-	string meta= 13;
+	string  attrs = 13;
+	uint64 parentId = 14;
 }
 message CreateQyAdminCommentReply {
 	uint64 id = 1;
@@ -101,7 +109,7 @@ message UpdateQyAdminCommentRequest {
 	string url= 10;
 	uint64 rootId= 11;
 	string content= 12;
-	string meta= 13;
+	string attrs= 13;
 
 }
 message UpdateQyAdminCommentReply {
@@ -136,6 +144,7 @@ message ListQyAdminCommentRequest {
 	bool firstFlag = 5;
 	bool lastFlag = 6;
 	string SearchText = 7;
+	int32 statusFlag = 8;
 }
 message ListQyAdminCommentReply {
 	CommentPageInfo pageInfo = 1;

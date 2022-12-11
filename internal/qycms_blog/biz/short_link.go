@@ -32,6 +32,7 @@ type ShortLinkRepo interface {
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*ShortLinkDO, error)
 	ListAll(c context.Context, opts ShortLinkDOListOption) (*ShortLinkDOList, error)
+	FindAllWitchCache(context.Context) ([]*ShortLinkDO, error)
 }
 
 type ShortLinkUsecase struct {
@@ -96,6 +97,17 @@ func (uc *ShortLinkUsecase) FindOneByID(ctx context.Context, id uint64) (*ShortL
 func (uc *ShortLinkUsecase) ListAll(ctx context.Context, opts ShortLinkDOListOption) (*ShortLinkDOList, error) {
 	uc.log.WithContext(ctx).Infof("ListAll")
 	objDOs, err := uc.repo.ListAll(ctx, opts)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return objDOs, nil
+}
+func (uc *ShortLinkUsecase) FindAllWitchCache(ctx context.Context) ([]*ShortLinkDO, error) {
+	uc.log.WithContext(ctx).Infof("FindAllWitchCache")
+	objDOs, err := uc.repo.FindAllWitchCache(ctx)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

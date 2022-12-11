@@ -3,8 +3,10 @@ package biz
 import (
 	"context"
 	"fmt"
+	v1 "github.com/iwinder/qingyucms/api/qycms_blog/web/v1"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
+
 	"gorm.io/gorm"
 	"time"
 
@@ -13,8 +15,8 @@ import (
 )
 
 var (
-// ErrUserNotFound is user not found.
-// ErrUserNotFound = errors.NotFound(v1.ErrorReason_DATA_NOT_FOUND.String(), "user not found")
+	// ErrUserNotFound is user not found.
+	ErrDataNotFound = errors.NotFound(v1.BLogErrorReason_BLOG_DATA_NOT_FOUND.String(), "data not found")
 )
 
 // ArticleDO is a ArticleDO model.
@@ -30,16 +32,20 @@ type ArticleDO struct {
 	CategoryId     uint64
 	CategoryName   string
 	CommentAgentId uint64
+	CommentFlag    bool
 	Published      bool
 	ViewCount      int32
+	CommentCount   int32
 	LikeCount      int32
 	HateCount      int32
 	Nickname       string
 	PublishedAt    time.Time
 	TagStrings     []string
 	Tags           []*TagsDO
+	Category       *CategoryDO
 	Content        string
 	ContentHtml    string
+	TagName        string
 }
 
 type ArticleDOList struct {
@@ -62,6 +68,9 @@ type ArticleRepo interface {
 	FindByAgentID(context.Context, uint64) (*ArticleDO, error)
 	CountByPermaLink(ctx context.Context, str string) (int64, error)
 	ListAll(context.Context, ArticleDOListOption) (*ArticleDOList, error)
+	FindByLink(ctx context.Context, link string) (*ArticleDO, error)
+	SetArticleCache(ctx context.Context, user *ArticleDO, key string)
+	GetUserFromCache(ctx context.Context, key string) (*ArticleDO, error)
 }
 
 // ArticleUsecase   is a ArticleDO usecase.
@@ -71,14 +80,16 @@ type ArticleUsecase struct {
 	ac   *ArticleContentUsecase
 	at   *ArticleTagsUsecase
 	ca   *CommentAgentUsecase
+	cu   *CategoryUsecase
 }
 
 // NewArticleUsecase new a ArticleDO usecase.
 func NewArticleUsecase(repo ArticleRepo, logger log.Logger,
 	ac *ArticleContentUsecase, at *ArticleTagsUsecase, ca *CommentAgentUsecase,
+	cu *CategoryUsecase,
 ) *ArticleUsecase {
 	return &ArticleUsecase{repo: repo, log: log.NewHelper(logger),
-		ac: ac, at: at, ca: ca,
+		ac: ac, at: at, ca: ca, cu: cu,
 	}
 }
 
@@ -92,8 +103,9 @@ func (uc *ArticleUsecase) Create(ctx context.Context, g *ArticleDO) (*ArticleDO,
 		Count:     0,
 		RootCount: 0,
 		AllCount:  0,
-		Attrs:     0,
+		Attrs:     "",
 	}
+
 	cad.CreatedBy = g.CreatedBy
 	cado, caErr := uc.ca.CreateCommentAgent(ctx, cad)
 	if caErr != nil {
@@ -190,6 +202,47 @@ func (uc *ArticleUsecase) FindOneByID(ctx context.Context, id uint64) (*ArticleD
 	g.TagStrings = uc.getTagsStringByAid(ctx, id)
 	return g, nil
 }
+func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*ArticleDO, error) {
+	uc.log.WithContext(ctx).Infof("FindOneByLink: %v", link)
+	dataDo, err := uc.repo.GetUserFromCache(ctx, link)
+	if err != nil {
+		g, aerr := uc.repo.FindByLink(ctx, link)
+		if aerr != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				dataDo = &ArticleDO{PermaLink: "err404"}
+				uc.repo.SetArticleCache(ctx, dataDo, link)
+				return nil, ErrDataNotFound
+			} else if err.Error() == "redis: nil" {
+				return nil, ErrDataNotFound
+			}
+			return nil, err
+		}
+		// 内容
+		cont, cerr := uc.ac.FindOneByID(ctx, g.ID)
+		if cerr != nil {
+			uc.log.WithContext(ctx).Error(cerr)
+		}
+		g.ContentHtml = cont.ContentHtml
+
+		// 标签
+		tsgs, _ := uc.at.FindAllByArticleID(ctx, g.ID)
+		g.Tags = tsgs
+		if g.CategoryId > 0 {
+			// 分类
+			category, _ := uc.cu.FindOneByID(ctx, g.CategoryId)
+			g.Category = category
+		}
+
+		g.ViewCount = g.ViewCount + 1
+		dataDo = g
+		uc.repo.SetArticleCache(ctx, dataDo, link)
+	}
+	if dataDo.PermaLink == "err404" {
+		return nil, ErrDataNotFound
+	}
+
+	return dataDo, nil
+}
 
 // FindOneByAgentID 根据ID查询信息
 func (uc *ArticleUsecase) FindOneByAgentID(ctx context.Context, id uint64) (*ArticleDO, error) {
@@ -216,6 +269,26 @@ func (uc *ArticleUsecase) ListAll(ctx context.Context, opts ArticleDOListOption)
 	}
 	for i, _ := range dataDOs.Items {
 		dataDOs.Items[i].TagStrings = uc.getTagsStringByAid(ctx, dataDOs.Items[i].ID)
+	}
+
+	return dataDOs, nil
+}
+
+func (uc *ArticleUsecase) ListAllForWeb(ctx context.Context, opts ArticleDOListOption) (*ArticleDOList, error) {
+	uc.log.WithContext(ctx).Infof("ListAll")
+	dataDOs, err := uc.repo.ListAll(ctx, opts)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	for i, dataDo := range dataDOs.Items {
+		tsgs, _ := uc.at.FindAllByArticleID(ctx, dataDo.ID)
+		dataDOs.Items[i].Tags = tsgs
+		// 分类
+		category, _ := uc.cu.FindOneByID(ctx, dataDo.CategoryId)
+		dataDOs.Items[i].Category = category
 	}
 
 	return dataDOs, nil

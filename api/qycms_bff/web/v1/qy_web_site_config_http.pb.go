@@ -20,14 +20,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationQyWebSiteConfigListQyBaseSiteConfig = "/api.qycms_bff.web.v1.QyWebSiteConfig/ListQyBaseSiteConfig"
+const OperationQyWebSiteConfigListQyOtherSiteConfig = "/api.qycms_bff.web.v1.QyWebSiteConfig/ListQyOtherSiteConfig"
 
 type QyWebSiteConfigHTTPServer interface {
 	ListQyBaseSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error)
+	ListQyOtherSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error)
 }
 
 func RegisterQyWebSiteConfigHTTPServer(s *http.Server, srv QyWebSiteConfigHTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/web/v1/siteConfig/base", _QyWebSiteConfig_ListQyBaseSiteConfig0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/siteConfig/other", _QyWebSiteConfig_ListQyOtherSiteConfig0_HTTP_Handler(srv))
 }
 
 func _QyWebSiteConfig_ListQyBaseSiteConfig0_HTTP_Handler(srv QyWebSiteConfigHTTPServer) func(ctx http.Context) error {
@@ -49,8 +52,28 @@ func _QyWebSiteConfig_ListQyBaseSiteConfig0_HTTP_Handler(srv QyWebSiteConfigHTTP
 	}
 }
 
+func _QyWebSiteConfig_ListQyOtherSiteConfig0_HTTP_Handler(srv QyWebSiteConfigHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListQyWebSiteConfigRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebSiteConfigListQyOtherSiteConfig)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListQyOtherSiteConfig(ctx, req.(*ListQyWebSiteConfigRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListQyWebSiteConfigReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyWebSiteConfigHTTPClient interface {
 	ListQyBaseSiteConfig(ctx context.Context, req *ListQyWebSiteConfigRequest, opts ...http.CallOption) (rsp *ListQyWebSiteConfigReply, err error)
+	ListQyOtherSiteConfig(ctx context.Context, req *ListQyWebSiteConfigRequest, opts ...http.CallOption) (rsp *ListQyWebSiteConfigReply, err error)
 }
 
 type QyWebSiteConfigHTTPClientImpl struct {
@@ -66,6 +89,19 @@ func (c *QyWebSiteConfigHTTPClientImpl) ListQyBaseSiteConfig(ctx context.Context
 	pattern := "/api/web/v1/siteConfig/base"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyWebSiteConfigListQyBaseSiteConfig))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyWebSiteConfigHTTPClientImpl) ListQyOtherSiteConfig(ctx context.Context, in *ListQyWebSiteConfigRequest, opts ...http.CallOption) (*ListQyWebSiteConfigReply, error) {
+	var out ListQyWebSiteConfigReply
+	pattern := "/api/web/v1/siteConfig/other"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebSiteConfigListQyOtherSiteConfig))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

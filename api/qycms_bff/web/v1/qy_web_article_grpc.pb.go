@@ -27,6 +27,8 @@ type QyWebArticleClient interface {
 	DeleteQyWebArticle(ctx context.Context, in *DeleteQyWebArticleRequest, opts ...grpc.CallOption) (*DeleteQyWebArticleReply, error)
 	GetQyWebArticle(ctx context.Context, in *GetQyWebArticleRequest, opts ...grpc.CallOption) (*GetQyWebArticleReply, error)
 	ListQyWebArticle(ctx context.Context, in *ListQyWebArticleRequest, opts ...grpc.CallOption) (*ListQyWebArticleReply, error)
+	GetQyWebTag(ctx context.Context, in *GetQyWebTagRequest, opts ...grpc.CallOption) (*GetQyWebTagReply, error)
+	GetQyWebCategory(ctx context.Context, in *GetQyWebCategoryRequest, opts ...grpc.CallOption) (*GetQyWebCategoryReply, error)
 }
 
 type qyWebArticleClient struct {
@@ -82,6 +84,24 @@ func (c *qyWebArticleClient) ListQyWebArticle(ctx context.Context, in *ListQyWeb
 	return out, nil
 }
 
+func (c *qyWebArticleClient) GetQyWebTag(ctx context.Context, in *GetQyWebTagRequest, opts ...grpc.CallOption) (*GetQyWebTagReply, error) {
+	out := new(GetQyWebTagReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebTag", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyWebArticleClient) GetQyWebCategory(ctx context.Context, in *GetQyWebCategoryRequest, opts ...grpc.CallOption) (*GetQyWebCategoryReply, error) {
+	out := new(GetQyWebCategoryReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebCategory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QyWebArticleServer is the server API for QyWebArticle service.
 // All implementations must embed UnimplementedQyWebArticleServer
 // for forward compatibility
@@ -91,6 +111,8 @@ type QyWebArticleServer interface {
 	DeleteQyWebArticle(context.Context, *DeleteQyWebArticleRequest) (*DeleteQyWebArticleReply, error)
 	GetQyWebArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebArticleReply, error)
 	ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
+	GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error)
+	GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error)
 	mustEmbedUnimplementedQyWebArticleServer()
 }
 
@@ -112,6 +134,12 @@ func (UnimplementedQyWebArticleServer) GetQyWebArticle(context.Context, *GetQyWe
 }
 func (UnimplementedQyWebArticleServer) ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyWebArticle not implemented")
+}
+func (UnimplementedQyWebArticleServer) GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQyWebTag not implemented")
+}
+func (UnimplementedQyWebArticleServer) GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetQyWebCategory not implemented")
 }
 func (UnimplementedQyWebArticleServer) mustEmbedUnimplementedQyWebArticleServer() {}
 
@@ -216,6 +244,42 @@ func _QyWebArticle_ListQyWebArticle_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyWebArticle_GetQyWebTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQyWebTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyWebArticleServer).GetQyWebTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebTag",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyWebArticleServer).GetQyWebTag(ctx, req.(*GetQyWebTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyWebArticle_GetQyWebCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQyWebCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyWebArticleServer).GetQyWebCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebCategory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyWebArticleServer).GetQyWebCategory(ctx, req.(*GetQyWebCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QyWebArticle_ServiceDesc is the grpc.ServiceDesc for QyWebArticle service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +306,14 @@ var QyWebArticle_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQyWebArticle",
 			Handler:    _QyWebArticle_ListQyWebArticle_Handler,
+		},
+		{
+			MethodName: "GetQyWebTag",
+			Handler:    _QyWebArticle_GetQyWebTag_Handler,
+		},
+		{
+			MethodName: "GetQyWebCategory",
+			Handler:    _QyWebArticle_GetQyWebCategory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -38,6 +38,7 @@ type CategoryRepo interface {
 	CountByIdentifier(ctx context.Context, str string) (int64, error)
 	ListAll(c context.Context, opts CategoryDOListOption) (*CategoryDOList, error)
 	ListAllWithChildren(c context.Context, opts CategoryDOListOption) (*CategoryDOList, error)
+	FindByIdentifier(ctx context.Context, name string) (*CategoryDO, error)
 }
 
 type CategoryUsecase struct {
@@ -88,6 +89,17 @@ func (uc *CategoryUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 func (uc *CategoryUsecase) FindOneByID(ctx context.Context, id uint64) (*CategoryDO, error) {
 	uc.log.WithContext(ctx).Infof("FindOneByID: %v", id)
 	obj, err := uc.repo.FindByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return obj, nil
+}
+func (uc *CategoryUsecase) FindByIdentifier(ctx context.Context, name string) (*CategoryDO, error) {
+	uc.log.WithContext(ctx).Infof("FindByIdentifier: %v", name)
+	obj, err := uc.repo.FindByIdentifier(ctx, name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

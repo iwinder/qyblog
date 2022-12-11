@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package api.qycms_bff.web.v1;
-
+import "google/api/annotations.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/web/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.web.v1";
@@ -11,7 +11,33 @@ service QyWebLinks {
 	rpc UpdateQyWebLinks (UpdateQyWebLinksRequest) returns (UpdateQyWebLinksReply);
 	rpc DeleteQyWebLinks (DeleteQyWebLinksRequest) returns (DeleteQyWebLinksReply);
 	rpc GetQyWebLinks (GetQyWebLinksRequest) returns (GetQyWebLinksReply);
-	rpc ListQyWebLinks (ListQyWebLinksRequest) returns (ListQyWebLinksReply);
+	rpc ListQyWebShortLinks (ListQyWebLinksRequest) returns (ListQyWebShortLinksReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/link/short",
+		};
+	};
+	rpc ListQyWebLinks (ListQyWebLinksRequest) returns (ListQyWebLinksReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/link/all",
+		};
+	};
+	rpc ListQyWebIndexLinks (ListQyWebLinksRequest) returns (ListQyWebLinksReply) {
+		option (google.api.http) = {
+			get: "/api/web/v1/link/index",
+		};
+	};
+}
+
+message WebLinkInfo {
+	uint64 id = 1;
+	string name = 2;
+	string url = 3;
+	string description = 4;
+}
+
+message WebShortLinkInfo {
+	string url = 3;
+	string identifier  = 5;
 }
 
 message CreateQyWebLinksRequest {}
@@ -27,4 +53,9 @@ message GetQyWebLinksRequest {}
 message GetQyWebLinksReply {}
 
 message ListQyWebLinksRequest {}
-message ListQyWebLinksReply {}
+message ListQyWebLinksReply {
+	repeated WebLinkInfo items = 1;
+}
+message ListQyWebShortLinksReply {
+	repeated WebShortLinkInfo items = 1;
+}

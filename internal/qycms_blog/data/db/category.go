@@ -94,6 +94,19 @@ func (r *categoryRepo) FindByID(ctx context.Context, id uint64) (*biz.CategoryDO
 	}
 	return objDO, nil
 }
+func (r *categoryRepo) FindByIdentifier(ctx context.Context, name string) (*biz.CategoryDO, error) {
+	obj := &po.CategoryPO{}
+	err := r.data.Db.Where("identifier = ?", name).First(&obj).Error
+	if err != nil {
+		return nil, err
+	}
+	objDO := &biz.CategoryDO{
+		ObjectMeta: obj.ObjectMeta,
+		Name:       obj.Name,
+		Identifier: obj.Identifier,
+	}
+	return objDO, nil
+}
 
 func (r *categoryRepo) CountByIdentifier(ctx context.Context, str string) (int64, error) {
 	var obj int64

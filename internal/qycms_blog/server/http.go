@@ -64,6 +64,10 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminCommentHTTPServer(srv, userService)
 
 	w1.RegisterQyWebSiteConfigHTTPServer(srv, webService)
+	w1.RegisterQyWebArticleHTTPServer(srv, webService)
+	w1.RegisterQyWebMenusHTTPServer(srv, webService)
+	w1.RegisterQyWebLinksHTTPServer(srv, webService)
+	w1.RegisterQyWebCommentHTTPServer(srv, webService)
 
 	return srv
 }

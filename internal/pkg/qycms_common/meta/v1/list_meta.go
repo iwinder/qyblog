@@ -22,6 +22,7 @@ type ListOptions struct {
 	Offset         *int64 `json:"offset,omitempty" form:"offset"`
 	Limit          *int64 `json:"limit,omitempty" form:"limit"`
 	PageFlag       bool   `json:"pageFlag,omitempty" form:"pageFlag"`
+	Order          string `json:"order,omitempty" form:"order"`
 }
 
 func (page *ListOptions) Init() *ListOptions {

@@ -37,6 +37,7 @@ type TagsRepo interface {
 	CountByIdentifier(ctx context.Context, str string) (int64, error)
 	ListAll(c context.Context, opts TagsDOListOption) (*TagsDOList, error)
 	FindAllByArticleID(ctx context.Context, articleId uint64) ([]*TagsDO, error)
+	FindOneByIdentifier(ctx context.Context, name string) (*TagsDO, error)
 }
 
 type TagsUsecase struct {
@@ -91,6 +92,17 @@ func (uc *TagsUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 func (uc *TagsUsecase) FindOneByName(ctx context.Context, name string) (*TagsDO, error) {
 	uc.log.WithContext(ctx).Infof("FindOneByName: %v", name)
 	obj, err := uc.repo.FindOneByName(ctx, name)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return obj, nil
+}
+func (uc *TagsUsecase) FindOneByIdentifier(ctx context.Context, name string) (*TagsDO, error) {
+	uc.log.WithContext(ctx).Infof("FindOneByIdentifier: %v", name)
+	obj, err := uc.repo.FindOneByIdentifier(ctx, name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

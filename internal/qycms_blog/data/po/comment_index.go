@@ -17,12 +17,12 @@ type CommentIndexPO struct {
 	MemberId          sql.NullInt64 `json:"memberId" gorm:"column:member_id;default:0;comment: 发布者用户ID，0 游客 "  `
 	RootId            sql.NullInt64 `json:"rootId" gorm:"column:root_id;default:0;comment: 根评论ID，不为0是回复评论 "  `
 	ParentId          sql.NullInt64 `json:"parentId" gorm:"column:parent_id;default: 0;comment: 父级评论ID，为0是 root 评论"  `
-	Floor             int32         `json:"floor" gorm:"column:floor;default: 0;comment: 评论楼层 "  `
+	Floor             int32         `json:"floor" gorm:"column:floor;default: 0;comment: 评论楼层，楼中楼不算层数 "  `
 	Count             int32         `json:"count" gorm:"column:count;default: 0;comment:评论总数，不包含已删除 "  `
 	RootCount         int32         `json:"rootCount" gorm:"column:root_count;default: 0;comment: 根评论总数"  `
 	LikeCount         int32         `json:"likeCount" gorm:"column:like_Count;default: 0;comment: 点赞数"  `
 	HateCount         int32         `json:"hateCount" gorm:"column:hate_Count;default: 0;comment: 点踩数"  `
-	Attrs             int32         `json:"attrs" gorm:"column:attrs;default: 0;comment: 属性预留"  `
+	Attrs             string        `json:"attrs" gorm:"column:attrs;default: 0;comment: 属性预留"  `
 }
 
 type CommentIndexPOList struct {

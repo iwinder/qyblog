@@ -22,7 +22,7 @@ type CommentContentPO struct {
 	Url               string        `json:"url" gorm:"column:url;comment:评论者网址"  `
 	RootId            sql.NullInt64 `json:"rootId" gorm:"column:root_id;default: 0;comment: 根评论ID，不为0是回复评论 "  `
 	Content           string        `json:"content" gorm:"column:content;type:longtext;comment: 评论内容"  `
-	Meta              string        `json:"attrs" gorm:"column:attrs;comment: 属性预留"  `
+	Attrs             string        `json:"attrs" gorm:"column:attrs;comment: 属性预留"  `
 }
 
 type CommentContentPOList struct {

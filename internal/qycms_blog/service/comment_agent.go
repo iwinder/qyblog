@@ -27,7 +27,6 @@ func (s *CommentAgentService) CreateCommentAgent(ctx context.Context, in *v1.Cre
 		Count:     in.Count,
 		RootCount: in.RootCount,
 		AllCount:  in.AllCount,
-		State:     int8(in.State),
 		Attrs:     in.Attrs,
 	})
 	if err != nil {
@@ -46,7 +45,6 @@ func (s *CommentAgentService) UpdateArticle(ctx context.Context, in *v1.UpdateCo
 		Count:     in.Count,
 		RootCount: in.RootCount,
 		AllCount:  in.AllCount,
-		State:     int8(in.State),
 		Attrs:     in.Attrs,
 	}
 	data, err := s.uc.Update(ctx, dataDO)
@@ -76,7 +74,6 @@ func dataResponse(data *biz.CommentAgentDO) v1.CommentAgentResponse {
 		Count:     data.Count,
 		RootCount: data.RootCount,
 		AllCount:  data.AllCount,
-		State:     int32(data.State),
 		Attrs:     data.Attrs,
 	}
 

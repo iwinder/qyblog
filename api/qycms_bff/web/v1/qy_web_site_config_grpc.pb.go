@@ -28,6 +28,7 @@ type QyWebSiteConfigClient interface {
 	GetQyWebSiteConfig(ctx context.Context, in *GetQyWebSiteConfigRequest, opts ...grpc.CallOption) (*GetQyWebSiteConfigReply, error)
 	ListQyWebSiteConfig(ctx context.Context, in *ListQyWebSiteConfigRequest, opts ...grpc.CallOption) (*ListQyWebSiteConfigReply, error)
 	ListQyBaseSiteConfig(ctx context.Context, in *ListQyWebSiteConfigRequest, opts ...grpc.CallOption) (*ListQyWebSiteConfigReply, error)
+	ListQyOtherSiteConfig(ctx context.Context, in *ListQyWebSiteConfigRequest, opts ...grpc.CallOption) (*ListQyWebSiteConfigReply, error)
 }
 
 type qyWebSiteConfigClient struct {
@@ -92,6 +93,15 @@ func (c *qyWebSiteConfigClient) ListQyBaseSiteConfig(ctx context.Context, in *Li
 	return out, nil
 }
 
+func (c *qyWebSiteConfigClient) ListQyOtherSiteConfig(ctx context.Context, in *ListQyWebSiteConfigRequest, opts ...grpc.CallOption) (*ListQyWebSiteConfigReply, error) {
+	out := new(ListQyWebSiteConfigReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.web.v1.QyWebSiteConfig/ListQyOtherSiteConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QyWebSiteConfigServer is the server API for QyWebSiteConfig service.
 // All implementations must embed UnimplementedQyWebSiteConfigServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type QyWebSiteConfigServer interface {
 	GetQyWebSiteConfig(context.Context, *GetQyWebSiteConfigRequest) (*GetQyWebSiteConfigReply, error)
 	ListQyWebSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error)
 	ListQyBaseSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error)
+	ListQyOtherSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error)
 	mustEmbedUnimplementedQyWebSiteConfigServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedQyWebSiteConfigServer) ListQyWebSiteConfig(context.Context, *
 }
 func (UnimplementedQyWebSiteConfigServer) ListQyBaseSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQyBaseSiteConfig not implemented")
+}
+func (UnimplementedQyWebSiteConfigServer) ListQyOtherSiteConfig(context.Context, *ListQyWebSiteConfigRequest) (*ListQyWebSiteConfigReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListQyOtherSiteConfig not implemented")
 }
 func (UnimplementedQyWebSiteConfigServer) mustEmbedUnimplementedQyWebSiteConfigServer() {}
 
@@ -248,6 +262,24 @@ func _QyWebSiteConfig_ListQyBaseSiteConfig_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyWebSiteConfig_ListQyOtherSiteConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListQyWebSiteConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyWebSiteConfigServer).ListQyOtherSiteConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.web.v1.QyWebSiteConfig/ListQyOtherSiteConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyWebSiteConfigServer).ListQyOtherSiteConfig(ctx, req.(*ListQyWebSiteConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // QyWebSiteConfig_ServiceDesc is the grpc.ServiceDesc for QyWebSiteConfig service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var QyWebSiteConfig_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQyBaseSiteConfig",
 			Handler:    _QyWebSiteConfig_ListQyBaseSiteConfig_Handler,
+		},
+		{
+			MethodName: "ListQyOtherSiteConfig",
+			Handler:    _QyWebSiteConfig_ListQyOtherSiteConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

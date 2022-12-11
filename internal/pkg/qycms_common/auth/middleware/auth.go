@@ -26,12 +26,12 @@ func NewMiddleware(authConf *conf.Auth, casbinData *db.CasbinData, logger log.Lo
 		logging.Server(logger),
 		// 默认 bbr limiter
 		ratelimit.Server(),
-		cors.MiddlewareCors(),
 		metrics.Server(
 			metrics.WithSeconds(prom.NewHistogram(qyMetrics.MetricSeconds)),
 			metrics.WithRequests(prom.NewCounter(qyMetrics.MetricRequests)),
 		),
 		selector.Server(
+			cors.MiddlewareCors(),
 			jwt.Server(
 				func(token *jwtV4.Token) (interface{}, error) {
 					return []byte(authConf.Jwt.JwtSecret), nil

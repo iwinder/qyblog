@@ -79,8 +79,10 @@ func (s *BlogAdminUserService) ListQyAdminArticle(ctx context.Context, in *v1.Li
 	}
 	opts.Title = in.SearchText
 	opts.Atype = int(in.Atype)
+
 	opts.StatusFlag = int(in.StatusFlag)
 	opts.ListOptions.Init()
+
 	objList, err := s.au.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
@@ -117,15 +119,13 @@ func bizToArticleDO(in *v1.CreateQyAdminArticleRequest) *biz.ArticleDO {
 		TagStrings:     in.TagStrings,
 		Content:        in.Content,
 		ContentHtml:    in.ContentHtml,
+		CommentFlag:    in.CommentFlag,
 	}
 
 	objDO.StatusFlag = 1
 	if in.Published {
 		objDO.StatusFlag = 2
 		objDO.PublishedAt = time.Now()
-	}
-	if in.StatusFlag > 0 {
-		objDO.StatusFlag = int(in.StatusFlag)
 	}
 	return objDO
 }
@@ -146,15 +146,13 @@ func bizToArticleDOByUpdate(in *v1.UpdateQyAdminArticleRequest) *biz.ArticleDO {
 		TagStrings:     in.TagStrings,
 		Content:        in.Content,
 		ContentHtml:    in.ContentHtml,
+		CommentFlag:    in.CommentFlag,
 	}
 	objDO.ID = in.Id
 	objDO.StatusFlag = 1
 	if in.Published {
 		objDO.StatusFlag = 2
 		objDO.PublishedAt = time.Now()
-	}
-	if in.StatusFlag > 0 {
-		objDO.StatusFlag = int(in.StatusFlag)
 	}
 	return objDO
 }
@@ -179,6 +177,7 @@ func bizToArticleResponse(obj *biz.ArticleDO) v1.ArticleInfoResponse {
 		CanonicalLink:  obj.CanonicalLink,
 		Content:        obj.Content,
 		ContentHtml:    obj.ContentHtml,
+		CommentFlag:    obj.CommentFlag,
 	}
 	return objInfoRsp
 }

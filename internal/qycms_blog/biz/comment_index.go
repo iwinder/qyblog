@@ -21,14 +21,18 @@ type CommentIndexDO struct {
 	RootCount int32
 	LikeCount int32
 	HateCount int32
-	Attrs     int32
+	Attrs     string
 }
 
 // CommentAgentRepo is a Greater repo.
 type CommentIndexRepo interface {
 	Save(context.Context, *CommentIndexDO) (*CommentIndexDO, error)
 	Update(context.Context, *CommentIndexDO) (*CommentIndexDO, error)
+	UpdaeStateByIDs(context.Context, []uint64, int) error
+	UpdateAddCountById(context.Context, uint64, bool) error
+	UpdateMinusCountById(context.Context, uint64, bool) error
 	FindByID(context.Context, uint64) (*CommentIndexDO, error)
+	FindByParentID(context.Context, uint64) (*CommentIndexDO, error)
 	DeleteList(c context.Context, uids []uint64) error
 }
 
@@ -83,6 +87,21 @@ func (uc *CommentIndexUsecase) Update(ctx context.Context, g *CommentIndexDO) (*
 
 	return data, nil
 }
+func (uc *CommentIndexUsecase) UpdateStateByIDs(ctx context.Context, ids []uint64, state int) error {
+	uc.log.WithContext(ctx).Infof("UpdaeStateByIDs: %v", ids)
+	err := uc.repo.UpdaeStateByIDs(ctx, ids, state)
+	return err
+}
+func (uc *CommentIndexUsecase) UpdateAddCountById(ctx context.Context, id uint64, isRoot bool) error {
+	uc.log.WithContext(ctx).Infof("UpdateAddCountById:  %v-%v", id, isRoot)
+	err := uc.repo.UpdateAddCountById(ctx, id, isRoot)
+	return err
+}
+func (uc *CommentIndexUsecase) UpdateMinusCountById(ctx context.Context, id uint64, isRoot bool) error {
+	uc.log.WithContext(ctx).Infof("UpdateAddCountById:  %v-%v", id, isRoot)
+	err := uc.repo.UpdateMinusCountById(ctx, id, isRoot)
+	return err
+}
 
 func (uc *CommentIndexUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
@@ -93,6 +112,18 @@ func (uc *CommentIndexUsecase) DeleteList(ctx context.Context, ids []uint64) err
 func (uc *CommentIndexUsecase) FindByID(ctx context.Context, id uint64) (*CommentIndexDO, error) {
 	uc.log.WithContext(ctx).Infof("FindOneByID: %v", id)
 	g, err := uc.repo.FindByID(ctx, id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+
+	return g, nil
+}
+func (uc *CommentIndexUsecase) FindByParentID(ctx context.Context, id uint64) (*CommentIndexDO, error) {
+	uc.log.WithContext(ctx).Infof("FindByParentID: %v", id)
+	g, err := uc.repo.FindByParentID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

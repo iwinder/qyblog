@@ -34,8 +34,8 @@ func GetHeardInfo(ctx context.Context) (string, string) {
 	userIp := ""
 	if header, ok := transport.FromServerContext(ctx); ok {
 		header.Operation()
-		userAgent = header.RequestHeader().Get("X-Remoteaddr")
-		userIp = header.RequestHeader().Get("User-Agent")
+		userIp = header.RequestHeader().Get("X-Remoteaddr")
+		userAgent = header.RequestHeader().Get("User-Agent")
 
 	}
 	return userAgent, userIp

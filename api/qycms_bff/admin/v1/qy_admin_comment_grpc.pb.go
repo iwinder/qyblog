@@ -26,6 +26,8 @@ type QyAdminCommentClient interface {
 	CreateQyAdminComment(ctx context.Context, in *CreateQyAdminCommentRequest, opts ...grpc.CallOption) (*CreateQyAdminCommentReply, error)
 	// 更新
 	UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error)
+	// 更新内容
+	UpdateQyAdminCommentContent(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error)
 	// 更新状态 批准、驳回
 	UpdateQyAdminCommentState(ctx context.Context, in *UpdateQyAdminCommentStateRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentStateReply, error)
 	// 删除
@@ -56,6 +58,15 @@ func (c *qyAdminCommentClient) CreateQyAdminComment(ctx context.Context, in *Cre
 func (c *qyAdminCommentClient) UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error) {
 	out := new(UpdateQyAdminCommentReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *qyAdminCommentClient) UpdateQyAdminCommentContent(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error) {
+	out := new(UpdateQyAdminCommentReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentContent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,6 +126,8 @@ type QyAdminCommentServer interface {
 	CreateQyAdminComment(context.Context, *CreateQyAdminCommentRequest) (*CreateQyAdminCommentReply, error)
 	// 更新
 	UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
+	// 更新内容
+	UpdateQyAdminCommentContent(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
 	// 更新状态 批准、驳回
 	UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error)
 	// 删除
@@ -135,6 +148,9 @@ func (UnimplementedQyAdminCommentServer) CreateQyAdminComment(context.Context, *
 }
 func (UnimplementedQyAdminCommentServer) UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminComment not implemented")
+}
+func (UnimplementedQyAdminCommentServer) UpdateQyAdminCommentContent(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminCommentContent not implemented")
 }
 func (UnimplementedQyAdminCommentServer) UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateQyAdminCommentState not implemented")
@@ -196,6 +212,24 @@ func _QyAdminComment_UpdateQyAdminComment_Handler(srv interface{}, ctx context.C
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QyAdminCommentServer).UpdateQyAdminComment(ctx, req.(*UpdateQyAdminCommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _QyAdminComment_UpdateQyAdminCommentContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateQyAdminCommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyAdminCommentServer).UpdateQyAdminCommentContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.admin.v1.QyAdminComment/UpdateQyAdminCommentContent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyAdminCommentServer).UpdateQyAdminCommentContent(ctx, req.(*UpdateQyAdminCommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -304,6 +338,10 @@ var QyAdminComment_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateQyAdminComment",
 			Handler:    _QyAdminComment_UpdateQyAdminComment_Handler,
+		},
+		{
+			MethodName: "UpdateQyAdminCommentContent",
+			Handler:    _QyAdminComment_UpdateQyAdminCommentContent_Handler,
 		},
 		{
 			MethodName: "UpdateQyAdminCommentState",

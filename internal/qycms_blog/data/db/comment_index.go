@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	biz "github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
@@ -72,9 +73,9 @@ func (r *CommentIndexRepo) Update(ctx context.Context, g *biz.CommentIndexDO) (*
 			Int64: int64(g.ParentId),
 			Valid: true,
 		},
-		Floor:     g.Floor,
-		Count:     g.Count,
-		RootCount: g.RootCount,
+		Floor: g.Floor,
+		//Count:     g.Count,
+		//RootCount: g.RootCount,
 		LikeCount: g.LikeCount,
 		HateCount: g.HateCount,
 		Attrs:     g.Attrs,
@@ -88,6 +89,29 @@ func (r *CommentIndexRepo) Update(ctx context.Context, g *biz.CommentIndexDO) (*
 	data := &biz.CommentIndexDO{ObjId: newData.ObjId, ObjType: g.ObjType}
 	data.ID = newData.ID
 	return data, nil
+}
+
+func (r *CommentIndexRepo) UpdaeStateByIDs(cxt context.Context, ids []uint64, state int) error {
+	return r.data.Db.Model(&po.CommentIndexPO{}).Where("id IN ?", ids).Update("status_flag", state).Error
+}
+
+func (r *CommentIndexRepo) UpdateAddCountById(ctx context.Context, id uint64, isRoot bool) error {
+	//r.data.Db.Model(&po.CommentAgentPO{}).Where("id = ?", id).Update("name = 1")
+	str := "UPDATE qy_blog_comment_index set count = count+1 "
+	if isRoot {
+		str += " , root_count = root_count +1 "
+	}
+	str += " where id = " + fmt.Sprintf("%d", id)
+	return r.data.Db.Exec(str).Error
+}
+func (r *CommentIndexRepo) UpdateMinusCountById(ctx context.Context, id uint64, isRoot bool) error {
+	//r.data.Db.Model(&po.CommentAgentPO{}).Where("id = ?", id).Update("name = 1")
+	str := "UPDATE qy_blog_comment_index set count = count-1 "
+	if isRoot {
+		str += " , root_count = root_count - 1 "
+	}
+	str += " where id = " + fmt.Sprintf("%d", id)
+	return r.data.Db.Exec(str).Error
 }
 func (r *CommentIndexRepo) DeleteList(ctx context.Context, ids []uint64) error {
 	userPO := &po.CommentIndexPO{}
@@ -103,6 +127,20 @@ func (r *CommentIndexRepo) FindByID(cxt context.Context, id uint64) (*biz.Commen
 	if err != nil {
 		return nil, err
 	}
+	data := doToCommentIndexDO(g)
+	return data, nil
+}
+func (r *CommentIndexRepo) FindByParentID(cxt context.Context, id uint64) (*biz.CommentIndexDO, error) {
+	g := &po.CommentIndexPO{}
+	err := r.data.Db.Where("parent_id = ?", id).First(&g).Error
+	if err != nil {
+		return nil, err
+	}
+	data := doToCommentIndexDO(g)
+	return data, nil
+}
+
+func doToCommentIndexDO(g *po.CommentIndexPO) *biz.CommentIndexDO {
 	data := &biz.CommentIndexDO{
 		AgentId:    g.AgentId,
 		ObjectMeta: g.ObjectMeta,
@@ -118,5 +156,5 @@ func (r *CommentIndexRepo) FindByID(cxt context.Context, id uint64) (*biz.Commen
 		HateCount:  g.HateCount,
 		Attrs:      g.Attrs,
 	}
-	return data, nil
+	return data
 }

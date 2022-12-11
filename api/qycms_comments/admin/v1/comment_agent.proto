@@ -23,7 +23,7 @@ message CommentAgentResponse {
 	int32  Root_count =6;
 	int32  All_count  =7;
 	int32  State      =8;
-	int32  Attrs      =9;
+	string  attrs      =9;
 }
 message CreateCommentAgentRequest {
 	uint64 Uid      	=1;
@@ -34,7 +34,7 @@ message CreateCommentAgentRequest {
 	int32  Root_count =6;
 	int32  All_count  =7;
 	int32  State      =8;
-	int32  Attrs      =9;
+	string  Attrs      =9;
 }
 message CreateCommentAgentReply {
 		CommentAgentResponse content = 1;
@@ -49,7 +49,7 @@ message UpdateCommentAgentRequest {
 	int32  Root_count =6;
 	int32  All_count  =7;
 	int32  State      =8;
-	int32  Attrs      =9;
+	string  Attrs      =9;
 }
 message UpdateCommentAgentReply {
 	CommentAgentResponse content = 1;

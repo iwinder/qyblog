@@ -80,6 +80,7 @@ message ArticleInfoResponse {
 	string nickName = 20;
 	repeated string tagStrings = 21;
 	string categoryName = 22;
+	bool commentFlag = 23;
 }
 
 message CreateQyAdminArticleRequest {
@@ -100,6 +101,7 @@ message CreateQyAdminArticleRequest {
 	string nickName = 20;
 	repeated string tagStrings = 21;
 	string categoryName = 22;
+	bool commentFlag = 23;
 }
 message CreateQyAdminArticleReply {
 	uint64 id = 1;
@@ -124,6 +126,7 @@ message UpdateQyAdminArticleRequest {
 	string nickName = 20;
 	repeated string tagStrings = 21;
 	string categoryName = 22;
+	bool commentFlag = 23;
 }
 message UpdateQyAdminArticleReply {
 	uint64 id = 1;

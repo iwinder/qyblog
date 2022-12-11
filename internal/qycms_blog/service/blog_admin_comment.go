@@ -9,35 +9,29 @@ import (
 )
 
 func (s *BlogAdminUserService) CreateQyAdminComment(ctx context.Context, in *v1.CreateQyAdminCommentRequest) (*v1.CreateQyAdminCommentReply, error) {
-	objDO := &biz.CommentContentDO{
-		AgentId:     in.AgentId,
-		AtMemberIds: in.AtMemberIds,
-		Email:       in.Email,
-		Url:         in.Url,
-		RootId:      in.RootId,
-		Content:     in.Content,
-		Meta:        in.Meta,
+	opt := &biz.CommentDO{
+		AgentId:  in.AgentId,
+		ParentId: in.ParentId,
+		Content:  in.Content,
 	}
-	if objDO.StatusFlag == 0 {
-		objDO.StatusFlag = 1
-	}
-	userAgent, ip := GetHeardInfo(ctx)
+	opt.StatusFlag = 1
+	agent, ip := GetHeardInfo(ctx)
+	opt.Agent = agent
+	opt.Ip = ip
 	user := GetUserInfo(ctx)
 	if user != nil {
-		objDO.MemberId = user.ID
-		objDO.MemberName = user.Nickname
+		opt.MemberId = user.ID
+		opt.MemberName = user.Nickname
 		auser, _ := s.uc.FindOneByID(ctx, user.ID)
 		if auser != nil {
-			objDO.Email = auser.Email
+			opt.Email = auser.Email
 		}
 	}
-	objDO.Agent = userAgent
-	objDO.Ip = ip
-	obj, err := s.cc.CreateCommentContent(ctx, objDO)
+	data, err := s.ctu.CreateComment(ctx, opt)
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CreateQyAdminCommentReply{Id: obj.ID}, nil
+	return &v1.CreateQyAdminCommentReply{Id: data.ID}, nil
 }
 
 // UpdateQyAdminComment 更新
@@ -57,11 +51,21 @@ func (s *BlogAdminUserService) UpdateQyAdminComment(ctx context.Context, in *v1.
 }
 
 func (s *BlogAdminUserService) UpdateQyAdminCommentState(ctx context.Context, in *v1.UpdateQyAdminCommentStateRequest) (*v1.UpdateQyAdminCommentStateReply, error) {
-	err := s.cc.UpdaeStateByIDs(ctx, in.Ids, int(in.StatusFlag))
+	err := s.ctu.UpdateCommentState(ctx, in.Ids, int(in.StatusFlag))
 	if err != nil {
 		return nil, err
 	}
 	return &v1.UpdateQyAdminCommentStateReply{}, nil
+}
+func (s *BlogAdminUserService) UpdateQyAdminCommentContent(ctx context.Context, in *v1.UpdateQyAdminCommentRequest) (*v1.UpdateQyAdminCommentReply, error) {
+	data := &biz.CommentDO{}
+	data.ID = in.Id
+	data.Content = in.Content
+	err := s.ctu.UpdateCommentComent(ctx, data)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.UpdateQyAdminCommentReply{}, nil
 }
 
 // GetQyAdminCommentCount 获取总数
@@ -76,7 +80,7 @@ func (s *BlogAdminUserService) GetQyAdminCommentCount(ctx context.Context, in *v
 
 // DeleteQyAdminComment 根据ID批量删除
 func (s *BlogAdminUserService) DeleteQyAdminComment(ctx context.Context, in *v1.DeleteQyAdminCommentRequest) (*v1.DeleteQyAdminCommentReply, error) {
-	err := s.cc.DeleteList(ctx, in.Ids)
+	err := s.ctu.DeleteList(ctx, in.Ids)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +99,9 @@ func (s *BlogAdminUserService) ListQyAdminComment(ctx context.Context, in *v1.Li
 		opts.ListOptions.PageSize = in.PageSize
 	}
 	opts.Content = in.SearchText
+	opts.StatusFlag = int(in.StatusFlag)
 	opts.ListOptions.Init()
+	opts.Order = "status_flag desc ,created_at desc,id desc"
 	objList, err := s.cc.ListAll(ctx, opts)
 	if err != nil {
 		return nil, err
@@ -130,7 +136,7 @@ func bizToCommentResponse(obj *biz.CommentContentDO) v1.CommentInfoResponse {
 		Url:            obj.Url,
 		RootId:         obj.RootId,
 		Content:        obj.Content,
-		Meta:           obj.Meta,
+		Attrs:          obj.Attrs,
 		ParentUserName: obj.ParentUserName,
 		ObjTitle:       obj.ObjTitle,
 		ObjLink:        obj.ObjLink,

@@ -18,15 +18,16 @@ service QyWebSiteConfig {
 			get: "/api/web/v1/siteConfig/base"
 		};
 	};
+	rpc ListQyOtherSiteConfig (ListQyWebSiteConfigRequest) returns (ListQyWebSiteConfigReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/siteConfig/other"
+		};
+	};
 }
 
 message SiteConfigResponse {
-	uint64 id = 1;
 	string configKey = 2;
 	string configValue = 3;
-	string configName = 4;
-	string configTip = 5;
-	int32 ftype = 6;
 }
 message CreateQyWebSiteConfigRequest {}
 message CreateQyWebSiteConfigReply {}

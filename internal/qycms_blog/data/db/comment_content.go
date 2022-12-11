@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	biz "github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 )
@@ -39,7 +38,7 @@ func (r *CommentContentRepo) Save(ctx context.Context, g *biz.CommentContentDO) 
 			Valid: true,
 		},
 		Content: g.Content,
-		Meta:    g.Meta,
+		Attrs:   g.Attrs,
 	}
 	err := r.data.Db.Create(newData).Error
 	if err != nil {
@@ -65,7 +64,7 @@ func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO
 		//	Valid: true,
 		//},
 		Content: g.Content,
-		Meta:    g.Meta,
+		Attrs:   g.Attrs,
 	}
 	tData := &po.CommentContentPO{}
 	tData.ID = g.ID
@@ -80,6 +79,9 @@ func (r *CommentContentRepo) Update(ctx context.Context, g *biz.CommentContentDO
 
 func (r *CommentContentRepo) UpdaeStateByIDs(cxt context.Context, ids []uint64, state int) error {
 	return r.data.Db.Model(&po.CommentContentPO{}).Where("id IN ?", ids).Update("status_flag", state).Error
+}
+func (r *CommentContentRepo) UpdaeCommentById(cxt context.Context, id uint64, comment string) error {
+	return r.data.Db.Model(&po.CommentContentPO{}).Where("id =", id).Update("content", comment).Error
 }
 func (r *CommentContentRepo) DeleteList(ctx context.Context, ids []uint64) error {
 	userPO := &po.CommentContentPO{}
@@ -120,7 +122,30 @@ func (r *CommentContentRepo) FindByID(cxt context.Context, id uint64) (*biz.Comm
 		Url:         g.Url,
 		RootId:      uint64(g.RootId.Int64),
 		Content:     g.Content,
-		Meta:        g.Meta,
+		Attrs:       g.Attrs,
+	}
+	return data, nil
+}
+func (r *CommentContentRepo) FindParentByID(cxt context.Context, id uint64) (*biz.CommentContentDO, error) {
+	db := r.data.Db
+	g := &po.CommentContentPO{}
+	err := db.Where("ID in (?)", db.Table("qy_blog_comment_index").Select("parent_id ").Where(" id = ?", id)).Find(&g).Error
+	if err != nil {
+		return nil, err
+	}
+	data := &biz.CommentContentDO{
+		ObjectMeta:  g.ObjectMeta,
+		AgentId:     g.AgentId,
+		MemberId:    g.MemberId,
+		AtMemberIds: g.AtMemberIds,
+		Agent:       g.Agent,
+		MemberName:  g.MemberName,
+		Ip:          g.Ip,
+		Email:       g.Email,
+		Url:         g.Url,
+		RootId:      uint64(g.RootId.Int64),
+		Content:     g.Content,
+		Attrs:       g.Attrs,
 	}
 	return data, nil
 }
@@ -130,18 +155,35 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 
 	var err error
 	query := r.data.Db.Model(&po.CommentContentPO{})
+	if len(opts.Order) == 0 {
+		opts.Order = " created_at desc,id desc "
+	}
 	if len(opts.Content) > 0 {
 		query.Scopes(withFilterKeyLikeValue("content", "%"+opts.Content+"%"))
 	}
 	if opts.StatusFlag > 0 {
 		query.Scopes(withFilterKeyEquarlsValue("status_flag", opts.StatusFlag))
 	}
+	if opts.AgentId > 0 {
+		query.Scopes(withFilterKeyEquarlsValue("agent_id", opts.AgentId))
+	}
+
+	if opts.IsWeb {
+		if opts.RootId >= 0 {
+			query.Scopes(withFilterKeyEquarlsValue("root_id", opts.RootId))
+		}
+	} else {
+		if opts.RootId > 0 {
+			query.Scopes(withFilterKeyEquarlsValue("root_id", opts.RootId))
+		}
+	}
+
 	if opts.PageFlag {
 		ol := gormutil.Unpointer(opts.Offset, opts.Limit)
 		d := query.
 			Offset(ol.Offset).
 			Limit(ol.Limit).
-			Order("updated_at desc,created_at desc,id desc ").
+			Order(opts.Order).
 			Find(&ret.Items).
 			Offset(-1).
 			Limit(-1).
@@ -162,7 +204,7 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 	infos := make([]*biz.CommentContentDO, 0, len(ret.Items))
 	for _, obj := range ret.Items {
 		infos = append(infos, &biz.CommentContentDO{
-			ObjectMeta:  metaV1.ObjectMeta{},
+			ObjectMeta:  obj.ObjectMeta,
 			MemberId:    obj.MemberId,
 			AtMemberIds: obj.AtMemberIds,
 			Agent:       obj.Agent,
@@ -172,7 +214,8 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 			Url:         obj.Url,
 			RootId:      uint64(obj.RootId.Int64),
 			Content:     obj.Content,
-			Meta:        obj.Meta,
+			Attrs:       obj.Attrs,
+			AgentId:     obj.AgentId,
 		})
 	}
 	return &biz.CommentContentDOList{ListMeta: ret.ListMeta, Items: infos}, err

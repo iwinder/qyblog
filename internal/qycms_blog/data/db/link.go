@@ -80,8 +80,8 @@ func (r *linkRepo) DeleteList(ctx context.Context, ids []uint64) error {
 		return nil
 	}
 	err := r.data.Db.Delete(&userPO, ids).Error
-	r.FindIndexLinkAllWitchCache(ctx)
-	r.FindAllWitchCache(ctx)
+	r.setLinkAllCache(ctx, nil, indexLinkCacheKey)
+	r.setLinkAllCache(ctx, nil, allLinkCacheKey)
 	return err
 }
 
@@ -128,7 +128,7 @@ func (r *linkRepo) FindAllWitchCache(ctx context.Context) ([]*biz.LinkDO, error)
 		dataPO := &biz.LinkDOList{}
 		opts := biz.LinkDOListOption{}
 		opts.PageFlag = false
-		opts.Ftype = 1
+		opts.Ftype = 0
 		dataPO, err = r.ListAll(ctx, opts)
 		if err != nil {
 			return nil, err

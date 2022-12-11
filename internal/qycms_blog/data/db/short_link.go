@@ -35,7 +35,7 @@ func (r *shortLinkRepo) Save(ctx context.Context, do *biz.ShortLinkDO) (*biz.Sho
 	}
 	dataDO := &biz.ShortLinkDO{Identifier: po.Identifier}
 	dataDO.ID = dataDO.ID
-	r.findAllWitchCache(ctx)
+	r.setShortLinkAllCache(ctx, nil)
 	return dataDO, nil
 }
 
@@ -52,7 +52,7 @@ func (r *shortLinkRepo) Update(ctx context.Context, do *biz.ShortLinkDO) (*biz.S
 	}
 	dataDO := &biz.ShortLinkDO{Identifier: po.Identifier}
 	dataDO.ID = dataDO.ID
-	r.findAllWitchCache(ctx)
+	r.setShortLinkAllCache(ctx, nil)
 	return dataDO, nil
 }
 
@@ -86,7 +86,7 @@ func (r *shortLinkRepo) FindByID(ctx context.Context, id uint64) (*biz.ShortLink
 	}
 	return objDO, nil
 }
-func (r *shortLinkRepo) findAllWitchCache(ctx context.Context) ([]*biz.ShortLinkDO, error) {
+func (r *shortLinkRepo) FindAllWitchCache(ctx context.Context) ([]*biz.ShortLinkDO, error) {
 	var ret []*biz.ShortLinkDO
 
 	var err error

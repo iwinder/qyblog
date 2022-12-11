@@ -24,8 +24,7 @@ type CommentAgentDO struct {
 	Count     int32
 	RootCount int32
 	AllCount  int32
-	State     int8
-	Attrs     int32
+	Attrs     string
 }
 
 // CommentAgentRepo is a Greater repo.
@@ -33,6 +32,8 @@ type CommentAgentRepo interface {
 	Save(context.Context, *CommentAgentDO) (*CommentAgentDO, error)
 	Update(context.Context, *CommentAgentDO) (*CommentAgentDO, error)
 	FindByID(context.Context, uint64) (*CommentAgentDO, error)
+	UpdateAddCountById(context.Context, uint64, bool) error
+	UpdateMinusCountById(context.Context, uint64, bool) error
 }
 
 // CommentIndexUsecase is a CommentAgentDO usecase.
@@ -70,6 +71,16 @@ func (uc *CommentAgentUsecase) Update(ctx context.Context, g *CommentAgentDO) (*
 	data := &CommentAgentDO{ObjId: dataPO.ObjId, ObjType: g.ObjType}
 	data.ID = dataPO.ID
 	return data, nil
+}
+func (uc *CommentAgentUsecase) UpdateAddCountById(ctx context.Context, id uint64, isRoot bool) error {
+	uc.log.WithContext(ctx).Infof("UpdateAddCountById:  %v-%v", id, isRoot)
+	err := uc.repo.UpdateAddCountById(ctx, id, isRoot)
+	return err
+}
+func (uc *CommentAgentUsecase) UpdateMinusCountById(ctx context.Context, id uint64, isRoot bool) error {
+	uc.log.WithContext(ctx).Infof("UpdateAddCountById:  %v-%v", id, isRoot)
+	err := uc.repo.UpdateAddCountById(ctx, id, isRoot)
+	return err
 }
 
 // FindByID 根据ID查询

@@ -100,6 +100,19 @@ func (r *tagsRepo) FindOneByName(ctx context.Context, name string) (*biz.TagsDO,
 	}
 	return objDO, nil
 }
+func (r *tagsRepo) FindOneByIdentifier(ctx context.Context, name string) (*biz.TagsDO, error) {
+	obj := &po.TagsPO{}
+	err := r.data.Db.Where("identifier = ?", name).First(&obj).Error
+	if err != nil {
+		return nil, err
+	}
+	objDO := &biz.TagsDO{
+		ObjectMeta: obj.ObjectMeta,
+		Name:       obj.Name,
+		Identifier: obj.Identifier,
+	}
+	return objDO, nil
+}
 func (r *tagsRepo) CountByIdentifier(ctx context.Context, str string) (int64, error) {
 	var obj int64
 	err := r.data.Db.Model(&po.TagsPO{}).Where("identifier like ?", str+"%").Count(&obj).Error

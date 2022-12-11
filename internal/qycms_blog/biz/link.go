@@ -33,6 +33,8 @@ type LinkRepo interface {
 	DeleteList(c context.Context, uids []uint64) error
 	FindByID(context.Context, uint64) (*LinkDO, error)
 	ListAll(c context.Context, opts LinkDOListOption) (*LinkDOList, error)
+	FindIndexLinkAllWitchCache(context.Context) ([]*LinkDO, error)
+	FindAllWitchCache(context.Context) ([]*LinkDO, error)
 }
 
 type LinkUsecase struct {
@@ -91,6 +93,21 @@ func (uc *LinkUsecase) FindOneByID(ctx context.Context, id uint64) (*LinkDO, err
 	}
 
 	return obj, nil
+}
+
+func (uc *LinkUsecase) FindAllWitchCache(ctx context.Context) ([]*LinkDO, error) {
+	data, err := uc.repo.FindAllWitchCache(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+func (uc *LinkUsecase) FindIndexLinkAllWitchCache(ctx context.Context) ([]*LinkDO, error) {
+	data, err := uc.repo.FindIndexLinkAllWitchCache(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 // ListAll 批量查询

@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	biz "github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
@@ -59,6 +60,25 @@ func (r *CommentAgentRepo) Update(ctx context.Context, g *biz.CommentAgentDO) (*
 	data := &biz.CommentAgentDO{ObjId: newData.ObjId, ObjType: g.ObjType}
 	data.ID = newData.ID
 	return data, nil
+}
+
+func (r *CommentAgentRepo) UpdateAddCountById(ctx context.Context, id uint64, isRoot bool) error {
+	//r.data.Db.Model(&po.CommentAgentPO{}).Where("id = ?", id).Update("name = 1")
+	str := "UPDATE qy_blog_comment_agent set count = count+1 "
+	if isRoot {
+		str += " , root_count = root_count +1 "
+	}
+	str += " where id = " + fmt.Sprintf("%d", id)
+	return r.data.Db.Exec(str).Error
+}
+func (r *CommentAgentRepo) UpdateMinusCountById(ctx context.Context, id uint64, isRoot bool) error {
+	//r.data.Db.Model(&po.CommentAgentPO{}).Where("id = ?", id).Update("name = 1")
+	str := "UPDATE qy_blog_comment_agent set count = count-1 "
+	if isRoot {
+		str += " , root_count = root_count - 1 "
+	}
+	str += " where id = " + fmt.Sprintf("%d", id)
+	return r.data.Db.Exec(str).Error
 }
 
 func (r *CommentAgentRepo) FindByID(cxt context.Context, id uint64) (*biz.CommentAgentDO, error) {
