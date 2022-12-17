@@ -32,8 +32,9 @@ type CommentIndexRepo interface {
 	UpdateAddCountById(context.Context, uint64, bool) error
 	UpdateMinusCountById(context.Context, uint64, bool) error
 	FindByID(context.Context, uint64) (*CommentIndexDO, error)
-	FindByParentID(context.Context, uint64) (*CommentIndexDO, error)
+	FindAllByParentID(context.Context, uint64) ([]*CommentIndexDO, error)
 	DeleteList(c context.Context, uids []uint64) error
+	UpdateObjIdByAgentIds(context.Context) error
 }
 
 // CommentIndexUsecase is a CommentAgentDO usecase.
@@ -103,6 +104,12 @@ func (uc *CommentIndexUsecase) UpdateMinusCountById(ctx context.Context, id uint
 	return err
 }
 
+func (uc *CommentIndexUsecase) UpdateObjIdByAgentIds(ctx context.Context) error {
+	uc.log.WithContext(ctx).Infof("UpdateObjIdByAgentIds: ")
+	err := uc.repo.UpdateObjIdByAgentIds(ctx)
+	return err
+}
+
 func (uc *CommentIndexUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
 	return uc.repo.DeleteList(ctx, ids)
@@ -121,9 +128,9 @@ func (uc *CommentIndexUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 
 	return g, nil
 }
-func (uc *CommentIndexUsecase) FindByParentID(ctx context.Context, id uint64) (*CommentIndexDO, error) {
+func (uc *CommentIndexUsecase) FindAllByParentID(ctx context.Context, id uint64) ([]*CommentIndexDO, error) {
 	uc.log.WithContext(ctx).Infof("FindByParentID: %v", id)
-	g, err := uc.repo.FindByParentID(ctx, id)
+	g, err := uc.repo.FindAllByParentID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound

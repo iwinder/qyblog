@@ -1,9 +1,17 @@
 package biz
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/emailUtil"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/fileUtil"
+	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
+	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
+	"html/template"
+	"strings"
 )
 
 type CommentDO struct {
@@ -24,6 +32,7 @@ type CommentDO struct {
 	ObjTitle       string
 	ObjLink        string
 	Avatar         string
+	EmailState     int32
 }
 
 type CommentDOList struct {
@@ -33,20 +42,21 @@ type CommentDOList struct {
 }
 
 type CommentUsecase struct {
-	log *log.Helper
-	au  *ArticleUsecase
-	ca  *CommentAgentUsecase
-	ci  *CommentIndexUsecase
-	cc  *CommentContentUsecase
-	uu  *UserUsecase
+	log  *log.Helper
+	au   *ArticleUsecase
+	ca   *CommentAgentUsecase
+	ci   *CommentIndexUsecase
+	cc   *CommentContentUsecase
+	uu   *UserUsecase
+	site *SiteConfigUsecase
 }
 
 func NewCommentUsecase(logger log.Logger, ca *CommentAgentUsecase,
 	ci *CommentIndexUsecase, uu *UserUsecase, au *ArticleUsecase,
-	cc *CommentContentUsecase,
+	cc *CommentContentUsecase, site *SiteConfigUsecase,
 ) *CommentUsecase {
 	return &CommentUsecase{log: log.NewHelper(logger),
-		au: au, ca: ca, ci: ci, cc: cc, uu: uu}
+		au: au, ca: ca, ci: ci, cc: cc, uu: uu, site: site}
 }
 
 // CreateComment 新增评论
@@ -92,6 +102,7 @@ func (uc *CommentUsecase) CreateComment(ctx context.Context, g *CommentDO) (*Com
 		Url:         g.Url,
 		RootId:      g.RootId,
 		Content:     g.Content,
+		EmailState:  g.EmailState,
 	}
 	cc.StatusFlag = g.StatusFlag
 	if cidata != nil {
@@ -108,8 +119,48 @@ func (uc *CommentUsecase) CreateComment(ctx context.Context, g *CommentDO) (*Com
 		if g.ParentId > 0 {
 			uc.ci.UpdateAddCountById(ctx, g.ParentId, g.RootId == 0)
 		}
-	} else {
-		// TODO：推送待审核消息
+	}
+	return data, nil
+}
+
+// CreateCommentWeb 新增评论
+func (uc *CommentUsecase) CreateCommentWeb(ctx context.Context, g *CommentDO, conf *conf.Qycms) (*CommentContentDO, error) {
+	uc.log.WithContext(ctx).Infof("CreateComment: %v-%v", g.MemberId, g.MemberName)
+	data, err := uc.CreateComment(ctx, g)
+	if err != nil {
+		return nil, err
+	}
+	if g.StatusFlag != 1 {
+		// 推送待审核邮件
+		url := uc.site.FindValueByKey(ctx, "site_url")
+		siteName := uc.site.FindValueByKey(ctx, "site_name")
+		logo := uc.site.FindValueByKey(ctx, "site_logo")
+		templatePath := conf.DocPath + fileUtil.EmailTemplatePath
+		subject := fmt.Sprintf("您的 %s 博客有新的待审核留言", siteName)
+		var content strings.Builder
+		content.WriteString(g.MemberName)
+		content.WriteString("：")
+		content.WriteString(stringUtil.RemoveHtmlAndSubstring(g.Content))
+		t, _ := template.ParseFiles(templatePath + "pending-template.html")
+		var body bytes.Buffer
+
+		t.Execute(&body, struct {
+			LOGO         string
+			SITENAME     string
+			SITEURL      string
+			REPLAYCOMENT string
+		}{
+			LOGO:         logo,
+			SITENAME:     siteName,
+			SITEURL:      url,
+			REPLAYCOMENT: content.String(),
+		})
+		err = emailUtil.SendMail(conf.Email.Username, conf.Email.Password,
+			conf.Email.Host, conf.Email.Port, conf.Email.SenderName, conf.Email.AdminEMail,
+			subject, body.String())
+		if err != nil {
+			uc.log.Error(fmt.Errorf("待审核邮件发送失败: %w", err))
+		}
 	}
 	return data, nil
 }
@@ -156,6 +207,16 @@ func (uc *CommentUsecase) UpdateMinusCount(ctx context.Context, idx *CommentInde
 		uc.ci.UpdateMinusCountById(ctx, idx.ParentId, idx.RootId == 0)
 	}
 }
+
+// UpdateContentCountAndObjIds 更新文章的评论数和评论的objId等
+func (uc *CommentUsecase) UpdateContentCountAndObjIds(ctx context.Context) error {
+	err := uc.au.UpdateCommentContByAgentIds(ctx)
+	if err != nil {
+		return err
+	}
+	err = uc.ci.UpdateObjIdByAgentIds(ctx)
+	return err
+}
 func (uc *CommentUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
 	err := uc.cc.DeleteList(ctx, ids)
@@ -175,6 +236,115 @@ func (uc *CommentUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	}
 	return err
 }
+
+func (uc *CommentUsecase) EmailToNotSend(ctx context.Context, conf *conf.Qycms) {
+	opts := CommentContentDOListOption{}
+	opts.Current = 1
+	opts.IsWeb = false
+	opts.EmailState = 1
+	opts.PageSize = 10
+	opts.StatusFlag = 1
+	opts.ListOptions.Init()
+	dataList := uc.ListAllNeedEmail(ctx, opts)
+
+	url := uc.site.FindValueByKey(ctx, "site_url")
+	siteName := uc.site.FindValueByKey(ctx, "site_name")
+	logo := uc.site.FindValueByKey(ctx, "site_logo")
+	siteInfo := make(map[string]string, 0)
+	siteInfo["URL"] = url
+	siteInfo["NAME"] = siteName
+	siteInfo["LOGO"] = logo
+	uc.EmailToSend(ctx, dataList.Items, conf, siteInfo)
+	opts.TotalCount = dataList.TotalCount
+	opts.ListOptions.IsLast()
+	totalPage := opts.Pages
+	var page int64
+	for page = 2; page <= totalPage; page++ {
+		opts.Current = page
+		opts.ListOptions.Init()
+		dataList = uc.ListAllNeedEmail(ctx, opts)
+		uc.EmailToSend(ctx, dataList.Items, conf, siteInfo)
+	}
+
+}
+
+func (uc *CommentUsecase) EmailToSend(ctx context.Context, items []*CommentContentDO, conf *conf.Qycms, siteInfo map[string]string) {
+	name, _ := siteInfo["NAME"]
+	url, _ := siteInfo["URL"]
+	logo, _ := siteInfo["LOGO"]
+	if !strings.HasSuffix(url, "/") {
+		url += "/"
+	}
+	templatePath := conf.DocPath + fileUtil.EmailTemplatePath
+	var sate int32 = 2
+
+	for _, item := range items {
+
+		if item.Children != nil && len(item.Children) > 0 {
+			//仅发送有回复记录的
+			subject := fmt.Sprintf("您在 %s 博客的留言有了回复", name)
+			replyList := make([]string, 0, len(item.Children))
+			var content strings.Builder
+			for _, obj := range item.Children {
+				content.WriteString(obj.MemberName)
+				content.WriteString("：")
+				content.WriteString(stringUtil.RemoveHtmlAndSubstring(obj.Content))
+				replyList = append(replyList, content.String())
+			}
+			t, _ := template.ParseFiles(templatePath + "replay-template.html")
+			var body bytes.Buffer
+
+			t.Execute(&body, struct {
+				LOGO             string
+				SITENAME         string
+				TOUSERNAME       string
+				POSTURL          string
+				POSTNAME         string
+				REPLAYCOMENTLIST []string
+			}{
+				LOGO:             logo,
+				SITENAME:         name,
+				TOUSERNAME:       item.MemberName,
+				POSTURL:          url + item.ObjLink,
+				POSTNAME:         item.ObjTitle,
+				REPLAYCOMENTLIST: replyList,
+			})
+			err := emailUtil.SendMail(conf.Email.Username, conf.Email.Password,
+				conf.Email.Host, conf.Email.Port, conf.Email.SenderName, item.Email,
+				subject, body.String())
+			sate = 2
+			if err != nil {
+				uc.log.Error(fmt.Errorf("邮件发送失败: %w", err))
+				sate = 3
+			}
+			uc.cc.UpdaeEmailStateById(ctx, item.ID, sate)
+
+		}
+	}
+}
+
+func (uc *CommentUsecase) ListAllNeedEmail(ctx context.Context, opts CommentContentDOListOption) *CommentDOList {
+	result := &CommentDOList{}
+	parentList, err := uc.cc.ListAll(ctx, opts)
+	if err != nil {
+		log.Error(err)
+		result.Items = make([]*CommentContentDO, 0, 0)
+		return result
+	}
+	result.ListMeta = parentList.ListMeta
+	result.Items = parentList.Items
+	for i, data := range result.Items {
+		child, cerr := uc.cc.FindAllByParentID(ctx, data.ID, 5)
+		if cerr != nil {
+			log.Error(err)
+			result.Items[i].Children = make([]*CommentContentDO, 0, 0)
+			continue
+		}
+		result.Items[i].Children = child
+	}
+	return result
+}
+
 func (uc *CommentUsecase) ListAllForWeb(ctx context.Context, opts CommentContentDOListOption) *CommentDOList {
 	result := &CommentDOList{Agent: &CommentAgentDO{Count: 0}}
 	if !opts.IsChild && opts.Current == 1 {

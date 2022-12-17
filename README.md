@@ -35,6 +35,7 @@ kratos proto add api/qycms_bff/admin/v1/qy_admin_api_group.proto
 kratos proto add api/qycms_bff/web/v1/qy_web_article.proto
 # 生成api
 kratos proto client api/
+kratos proto client  internal/qycms_blog/conf/conf.proto
 ```
 ## API JSON文件生成
 

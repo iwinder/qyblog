@@ -113,6 +113,10 @@ func (r *CommentIndexRepo) UpdateMinusCountById(ctx context.Context, id uint64, 
 	str += " where id = " + fmt.Sprintf("%d", id)
 	return r.data.Db.Exec(str).Error
 }
+func (r *CommentIndexRepo) UpdateObjIdByAgentIds(ctx context.Context) error {
+	str := " UPDATE qy_blog_comment_index  ci INNER JOIN ( SELECT id, obj_id, obj_type FROM qy_blog_comment_agent ca WHERE ca.id  )  n on ci.agent_id  = n.id SET ci.obj_id = n.obj_id, ci.obj_type=n.obj_type where  ci.obj_id = 0;"
+	return r.data.Db.Exec(str).Error
+}
 func (r *CommentIndexRepo) DeleteList(ctx context.Context, ids []uint64) error {
 	userPO := &po.CommentIndexPO{}
 	if ids == nil || len(ids) == 0 {
@@ -130,13 +134,16 @@ func (r *CommentIndexRepo) FindByID(cxt context.Context, id uint64) (*biz.Commen
 	data := doToCommentIndexDO(g)
 	return data, nil
 }
-func (r *CommentIndexRepo) FindByParentID(cxt context.Context, id uint64) (*biz.CommentIndexDO, error) {
-	g := &po.CommentIndexPO{}
-	err := r.data.Db.Where("parent_id = ?", id).First(&g).Error
+func (r *CommentIndexRepo) FindAllByParentID(cxt context.Context, id uint64) ([]*biz.CommentIndexDO, error) {
+	g := make([]*po.CommentIndexPO, 0, 0)
+	err := r.data.Db.Where("parent_id = ?", id).Find(&g).Error
 	if err != nil {
 		return nil, err
 	}
-	data := doToCommentIndexDO(g)
+	data := make([]*biz.CommentIndexDO, 0, 0)
+	for _, dp := range g {
+		data = append(data, doToCommentIndexDO(dp))
+	}
 	return data, nil
 }
 

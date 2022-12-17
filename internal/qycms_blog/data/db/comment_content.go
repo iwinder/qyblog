@@ -39,6 +39,10 @@ func (r *CommentContentRepo) Save(ctx context.Context, g *biz.CommentContentDO) 
 		},
 		Content: g.Content,
 		Attrs:   g.Attrs,
+		EmailState: sql.NullInt32{
+			Int32: g.EmailState,
+			Valid: true,
+		},
 	}
 	err := r.data.Db.Create(newData).Error
 	if err != nil {
@@ -81,7 +85,10 @@ func (r *CommentContentRepo) UpdaeStateByIDs(cxt context.Context, ids []uint64, 
 	return r.data.Db.Model(&po.CommentContentPO{}).Where("id IN ?", ids).Update("status_flag", state).Error
 }
 func (r *CommentContentRepo) UpdaeCommentById(cxt context.Context, id uint64, comment string) error {
-	return r.data.Db.Model(&po.CommentContentPO{}).Where("id =", id).Update("content", comment).Error
+	return r.data.Db.Model(&po.CommentContentPO{}).Where("id = ?", id).Update("content", comment).Error
+}
+func (r *CommentContentRepo) UpdaeEmailStateById(cxt context.Context, id uint64, satae int32) error {
+	return r.data.Db.Model(&po.CommentContentPO{}).Where("id = ?", id).Update("email_state", satae).Error
 }
 func (r *CommentContentRepo) DeleteList(ctx context.Context, ids []uint64) error {
 	userPO := &po.CommentContentPO{}
@@ -129,7 +136,7 @@ func (r *CommentContentRepo) FindByID(cxt context.Context, id uint64) (*biz.Comm
 func (r *CommentContentRepo) FindParentByID(cxt context.Context, id uint64) (*biz.CommentContentDO, error) {
 	db := r.data.Db
 	g := &po.CommentContentPO{}
-	err := db.Where("ID in (?)", db.Table("qy_blog_comment_index").Select("parent_id ").Where(" id = ?", id)).Find(&g).Error
+	err := db.Where("ID = (?)", db.Table("qy_blog_comment_index").Select("parent_id ").Where(" id = ?", id)).Find(&g).Error
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +156,25 @@ func (r *CommentContentRepo) FindParentByID(cxt context.Context, id uint64) (*bi
 	}
 	return data, nil
 }
+func (r *CommentContentRepo) FindAllByParentID(cxt context.Context, id uint64, size int) ([]*biz.CommentContentDO, error) {
+	db := r.data.Db
+	g := make([]*po.CommentContentPO, 0, 0)
+	var err error
 
+	if size > 0 {
+		err = db.Where("ID in (?)", db.Table("qy_blog_comment_index").Select("id ").Where(" parent_id = ? and status_flag = 1 ", id)).Find(&g).Limit(size).Error
+	} else {
+		err = db.Where("ID in (?)", db.Table("qy_blog_comment_index").Select("id ").Where(" parent_id = ? and status_flag = 1  ", id)).Find(&g).Error
+	}
+	if err != nil {
+		return nil, err
+	}
+	data := make([]*biz.CommentContentDO, 0, 0)
+	for _, dp := range g {
+		data = append(data, doToCommentContentDO(dp))
+	}
+	return data, nil
+}
 func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentContentDOListOption) (*biz.CommentContentDOList, error) {
 	ret := &po.CommentContentPOList{}
 
@@ -176,6 +201,9 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 		if opts.RootId > 0 {
 			query.Scopes(withFilterKeyEquarlsValue("root_id", opts.RootId))
 		}
+	}
+	if opts.EmailState > 0 {
+		query.Scopes(withFilterKeyEquarlsValue("email_state", opts.EmailState))
 	}
 
 	if opts.PageFlag {
@@ -216,7 +244,25 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 			Content:     obj.Content,
 			Attrs:       obj.Attrs,
 			AgentId:     obj.AgentId,
+			EmailState:  int32(obj.EmailState.Int32),
 		})
 	}
 	return &biz.CommentContentDOList{ListMeta: ret.ListMeta, Items: infos}, err
+}
+func doToCommentContentDO(g *po.CommentContentPO) *biz.CommentContentDO {
+	data := &biz.CommentContentDO{
+		ObjectMeta:  g.ObjectMeta,
+		AgentId:     g.AgentId,
+		MemberId:    g.MemberId,
+		AtMemberIds: g.AtMemberIds,
+		Agent:       g.Agent,
+		MemberName:  g.MemberName,
+		Ip:          g.Ip,
+		Email:       g.Email,
+		Url:         g.Url,
+		RootId:      uint64(g.RootId.Int64),
+		Content:     g.Content,
+		Attrs:       g.Attrs,
+	}
+	return data
 }

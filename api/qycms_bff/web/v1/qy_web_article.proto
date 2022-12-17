@@ -31,6 +31,16 @@ service QyWebArticle {
 			get: "/api/web/v1/category/{name}",
 		};
 	};
+	rpc GetQyWebMinaArticle (GetQyWebArticleRequest) returns (GetQyWebMinaArticleReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/mina/article/{name}",
+		};
+	};
+	rpc ListQyWebMinaArticle (ListQyWebArticleRequest) returns (ListQyWebArticleReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/mina/article",
+		};
+	};
 }
 
 message WebArticlePageInfo {
@@ -73,7 +83,29 @@ message WebArticleInfoResponse {
 	bool commentFlag = 22;
 	int32 commentCount = 23;
 }
-
+message WebMinaArticleInfoResponse {
+	string title= 2;
+	string permaLink= 3;
+	string canonicalLink= 4;
+	string summary= 5;
+	string thumbnail= 6;
+	int32 statusFlag = 8;
+	int32  atype = 9;
+	uint64 authorId = 10;
+	WebCategoryResponse category = 11;
+	uint64 commentAgentId = 12;
+	bool published = 13;
+	int32 viewCount = 14;
+	int32 likeCount = 15;
+	int32 hateCount = 16;
+	string contentHtml = 18;
+	google.protobuf.Timestamp publishedAt = 19;
+	string nickName = 20;
+	repeated WebTagsResponse tags = 21;
+	bool commentFlag = 22;
+	int32 commentCount = 23;
+	string content = 24;
+}
 message CreateQyWebArticleRequest {}
 message CreateQyWebArticleReply {}
 
@@ -88,6 +120,9 @@ message GetQyWebArticleRequest {
 }
 message GetQyWebArticleReply {
 	WebArticleInfoResponse data = 1;
+}
+message GetQyWebMinaArticleReply {
+	WebMinaArticleInfoResponse data = 1;
 }
 message GetQyWebTagRequest {
 	string name = 1;

@@ -28,6 +28,8 @@ type CommentContentDO struct {
 	Avatar         string
 	Count          int32
 	RootCount      int32
+	EmailState     int32
+	Children       []*CommentContentDO
 }
 
 type CommentCount struct {
@@ -59,6 +61,8 @@ type CommentContentRepo interface {
 	FindParentByID(context.Context, uint64) (*CommentContentDO, error)
 	ListAll(context.Context, CommentContentDOListOption) (*CommentContentDOList, error)
 	CountByState(context.Context, int) (int64, error)
+	UpdaeEmailStateById(context.Context, uint64, int32) error
+	FindAllByParentID(context.Context, uint64, int) ([]*CommentContentDO, error)
 }
 
 // CommentContentUsecase is a CommentAgentDO usecase.
@@ -86,7 +90,7 @@ func (uc *CommentContentUsecase) CreateCommentContent(ctx context.Context, g *Co
 		return nil, err
 	}
 	g.ID = data.ID
-	uc.ci.CreateCommentIndexByContent(ctx, g)
+	//uc.ci.CreateCommentIndexByContent(ctx, g)
 	return data, nil
 }
 
@@ -112,6 +116,15 @@ func (uc *CommentContentUsecase) UpdaeCommentById(ctx context.Context, id uint64
 	uc.log.WithContext(ctx).Infof("UpdaeCommentById: %v", id)
 	err := uc.repo.UpdaeCommentById(ctx, id, comment)
 	return err
+}
+func (uc *CommentContentUsecase) UpdaeEmailStateById(ctx context.Context, id uint64, state int32) error {
+	uc.log.WithContext(ctx).Infof("UpdaeCommentById: %v", id)
+	err := uc.repo.UpdaeEmailStateById(ctx, id, state)
+	return err
+}
+func (uc *CommentContentUsecase) FindAllByParentID(ctx context.Context, id uint64, size int) ([]*CommentContentDO, error) {
+	uc.log.WithContext(ctx).Infof("UpdaeCommentById: %v", id)
+	return uc.repo.FindAllByParentID(ctx, id, size)
 }
 
 func (uc *CommentContentUsecase) CountAll(ctx context.Context) *CommentCount {

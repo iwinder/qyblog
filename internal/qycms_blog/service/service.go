@@ -13,7 +13,7 @@ import (
 var ProviderSet = wire.NewSet(NewUserService,
 	NewArticleService, NewArticleContentService,
 	NewCommentAgentService, NewBlogAdminUserService,
-	NewBlogWebApiService,
+	NewBlogWebApiService, NewBlogAdminJobsService,
 )
 
 func GetUserInfo(ctx context.Context) *biz.UserInfoDO {

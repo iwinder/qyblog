@@ -466,7 +466,13 @@ type Qycms struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Token       string     `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	SiteMapPath string     `protobuf:"bytes,2,opt,name=siteMapPath,proto3" json:"siteMapPath,omitempty"`
+	Jobs        *JobObj    `protobuf:"bytes,3,opt,name=jobs,proto3" json:"jobs,omitempty"`
+	Email       *EmailObj  `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	DocPath     string     `protobuf:"bytes,5,opt,name=docPath,proto3" json:"docPath,omitempty"`
+	Logger      *LoggerObj `protobuf:"bytes,6,opt,name=logger,proto3" json:"logger,omitempty"`
+	Mode        string     `protobuf:"bytes,7,opt,name=mode,proto3" json:"mode,omitempty"`
 }
 
 func (x *Qycms) Reset() {
@@ -508,6 +514,293 @@ func (x *Qycms) GetToken() string {
 	return ""
 }
 
+func (x *Qycms) GetSiteMapPath() string {
+	if x != nil {
+		return x.SiteMapPath
+	}
+	return ""
+}
+
+func (x *Qycms) GetJobs() *JobObj {
+	if x != nil {
+		return x.Jobs
+	}
+	return nil
+}
+
+func (x *Qycms) GetEmail() *EmailObj {
+	if x != nil {
+		return x.Email
+	}
+	return nil
+}
+
+func (x *Qycms) GetDocPath() string {
+	if x != nil {
+		return x.DocPath
+	}
+	return ""
+}
+
+func (x *Qycms) GetLogger() *LoggerObj {
+	if x != nil {
+		return x.Logger
+	}
+	return nil
+}
+
+func (x *Qycms) GetMode() string {
+	if x != nil {
+		return x.Mode
+	}
+	return ""
+}
+
+type JobObj struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CommentJobCron       string `protobuf:"bytes,1,opt,name=commentJobCron,proto3" json:"commentJobCron,omitempty"`
+	SiteMapJobCron       string `protobuf:"bytes,2,opt,name=siteMapJobCron,proto3" json:"siteMapJobCron,omitempty"`
+	PostViewCountJobCron string `protobuf:"bytes,3,opt,name=postViewCountJobCron,proto3" json:"postViewCountJobCron,omitempty"`
+	EmailSendJobCron     string `protobuf:"bytes,4,opt,name=emailSendJobCron,proto3" json:"emailSendJobCron,omitempty"`
+}
+
+func (x *JobObj) Reset() {
+	*x = JobObj{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *JobObj) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JobObj) ProtoMessage() {}
+
+func (x *JobObj) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JobObj.ProtoReflect.Descriptor instead.
+func (*JobObj) Descriptor() ([]byte, []int) {
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *JobObj) GetCommentJobCron() string {
+	if x != nil {
+		return x.CommentJobCron
+	}
+	return ""
+}
+
+func (x *JobObj) GetSiteMapJobCron() string {
+	if x != nil {
+		return x.SiteMapJobCron
+	}
+	return ""
+}
+
+func (x *JobObj) GetPostViewCountJobCron() string {
+	if x != nil {
+		return x.PostViewCountJobCron
+	}
+	return ""
+}
+
+func (x *JobObj) GetEmailSendJobCron() string {
+	if x != nil {
+		return x.EmailSendJobCron
+	}
+	return ""
+}
+
+type EmailObj struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Host       string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	Port       string `protobuf:"bytes,2,opt,name=port,proto3" json:"port,omitempty"`
+	Username   string `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
+	Password   string `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+	SenderName string `protobuf:"bytes,5,opt,name=senderName,proto3" json:"senderName,omitempty"`
+	AdminEMail string `protobuf:"bytes,6,opt,name=adminEMail,proto3" json:"adminEMail,omitempty"`
+}
+
+func (x *EmailObj) Reset() {
+	*x = EmailObj{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EmailObj) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmailObj) ProtoMessage() {}
+
+func (x *EmailObj) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EmailObj.ProtoReflect.Descriptor instead.
+func (*EmailObj) Descriptor() ([]byte, []int) {
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *EmailObj) GetHost() string {
+	if x != nil {
+		return x.Host
+	}
+	return ""
+}
+
+func (x *EmailObj) GetPort() string {
+	if x != nil {
+		return x.Port
+	}
+	return ""
+}
+
+func (x *EmailObj) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *EmailObj) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *EmailObj) GetSenderName() string {
+	if x != nil {
+		return x.SenderName
+	}
+	return ""
+}
+
+func (x *EmailObj) GetAdminEMail() string {
+	if x != nil {
+		return x.AdminEMail
+	}
+	return ""
+}
+
+type LoggerObj struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Path       string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	Level      string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
+	MaxSize    int32  `protobuf:"varint,3,opt,name=maxSize,proto3" json:"maxSize,omitempty"`       //日志的最大大小（M）
+	MaxBackups int32  `protobuf:"varint,4,opt,name=maxBackups,proto3" json:"maxBackups,omitempty"` //日志的最大保存数量
+	MaxAge     int32  `protobuf:"varint,5,opt,name=maxAge,proto3" json:"maxAge,omitempty"`         //日志文件存储最大天数
+	Compress   bool   `protobuf:"varint,6,opt,name=compress,proto3" json:"compress,omitempty"`     //是否执行压缩
+}
+
+func (x *LoggerObj) Reset() {
+	*x = LoggerObj{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoggerObj) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoggerObj) ProtoMessage() {}
+
+func (x *LoggerObj) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoggerObj.ProtoReflect.Descriptor instead.
+func (*LoggerObj) Descriptor() ([]byte, []int) {
+	return file_internal_qycms_blog_conf_conf_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LoggerObj) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *LoggerObj) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *LoggerObj) GetMaxSize() int32 {
+	if x != nil {
+		return x.MaxSize
+	}
+	return 0
+}
+
+func (x *LoggerObj) GetMaxBackups() int32 {
+	if x != nil {
+		return x.MaxBackups
+	}
+	return 0
+}
+
+func (x *LoggerObj) GetMaxAge() int32 {
+	if x != nil {
+		return x.MaxAge
+	}
+	return 0
+}
+
+func (x *LoggerObj) GetCompress() bool {
+	if x != nil {
+		return x.Compress
+	}
+	return false
+}
+
 type Server_HTTP struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -521,7 +814,7 @@ type Server_HTTP struct {
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -534,7 +827,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[9]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -584,7 +877,7 @@ type Server_GRPC struct {
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -597,7 +890,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[10]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -646,7 +939,7 @@ type Data_Database struct {
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -659,7 +952,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[11]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +997,7 @@ type Data_Redis struct {
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -717,7 +1010,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[12]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -779,7 +1072,7 @@ type Registry_Etcd struct {
 func (x *Registry_Etcd) Reset() {
 	*x = Registry_Etcd{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
+		mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -792,7 +1085,7 @@ func (x *Registry_Etcd) String() string {
 func (*Registry_Etcd) ProtoMessage() {}
 
 func (x *Registry_Etcd) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[13]
+	mi := &file_internal_qycms_blog_conf_conf_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -902,14 +1195,60 @@ var file_internal_qycms_blog_conf_conf_proto_rawDesc = []byte{
 	0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e,
 	0x45, 0x74, 0x63, 0x64, 0x52, 0x04, 0x65, 0x74, 0x63, 0x64, 0x1a, 0x20, 0x0a, 0x04, 0x45, 0x74,
 	0x63, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x1d, 0x0a, 0x05,
-	0x51, 0x79, 0x63, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x40, 0x5a, 0x3e, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x77, 0x69, 0x6e, 0x64, 0x65,
-	0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73, 0x2f, 0x61, 0x70, 0x70, 0x2f,
-	0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0xf0, 0x01, 0x0a,
+	0x05, 0x51, 0x79, 0x63, 0x6d, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x20, 0x0a, 0x0b,
+	0x73, 0x69, 0x74, 0x65, 0x4d, 0x61, 0x70, 0x50, 0x61, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0b, 0x73, 0x69, 0x74, 0x65, 0x4d, 0x61, 0x70, 0x50, 0x61, 0x74, 0x68, 0x12, 0x26,
+	0x0a, 0x04, 0x6a, 0x6f, 0x62, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x6b,
+	0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4a, 0x6f, 0x62, 0x4f, 0x62, 0x6a,
+	0x52, 0x04, 0x6a, 0x6f, 0x62, 0x73, 0x12, 0x2a, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x6b, 0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61,
+	0x70, 0x69, 0x2e, 0x45, 0x6d, 0x61, 0x69, 0x6c, 0x4f, 0x62, 0x6a, 0x52, 0x05, 0x65, 0x6d, 0x61,
+	0x69, 0x6c, 0x12, 0x18, 0x0a, 0x07, 0x64, 0x6f, 0x63, 0x50, 0x61, 0x74, 0x68, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x6f, 0x63, 0x50, 0x61, 0x74, 0x68, 0x12, 0x2d, 0x0a, 0x06,
+	0x6c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x6b,
+	0x72, 0x61, 0x74, 0x6f, 0x73, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72,
+	0x4f, 0x62, 0x6a, 0x52, 0x06, 0x6c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x12, 0x12, 0x0a, 0x04, 0x6d,
+	0x6f, 0x64, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x22,
+	0xb8, 0x01, 0x0a, 0x06, 0x4a, 0x6f, 0x62, 0x4f, 0x62, 0x6a, 0x12, 0x26, 0x0a, 0x0e, 0x63, 0x6f,
+	0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4a, 0x6f, 0x62, 0x43, 0x72, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4a, 0x6f, 0x62, 0x43, 0x72,
+	0x6f, 0x6e, 0x12, 0x26, 0x0a, 0x0e, 0x73, 0x69, 0x74, 0x65, 0x4d, 0x61, 0x70, 0x4a, 0x6f, 0x62,
+	0x43, 0x72, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x73, 0x69, 0x74, 0x65,
+	0x4d, 0x61, 0x70, 0x4a, 0x6f, 0x62, 0x43, 0x72, 0x6f, 0x6e, 0x12, 0x32, 0x0a, 0x14, 0x70, 0x6f,
+	0x73, 0x74, 0x56, 0x69, 0x65, 0x77, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x4a, 0x6f, 0x62, 0x43, 0x72,
+	0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x14, 0x70, 0x6f, 0x73, 0x74, 0x56, 0x69,
+	0x65, 0x77, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x4a, 0x6f, 0x62, 0x43, 0x72, 0x6f, 0x6e, 0x12, 0x2a,
+	0x0a, 0x10, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x53, 0x65, 0x6e, 0x64, 0x4a, 0x6f, 0x62, 0x43, 0x72,
+	0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x53,
+	0x65, 0x6e, 0x64, 0x4a, 0x6f, 0x62, 0x43, 0x72, 0x6f, 0x6e, 0x22, 0xaa, 0x01, 0x0a, 0x08, 0x45,
+	0x6d, 0x61, 0x69, 0x6c, 0x4f, 0x62, 0x6a, 0x12, 0x12, 0x0a, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x6f, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x70,
+	0x6f, 0x72, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x6f, 0x72, 0x74, 0x12,
+	0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70,
+	0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70,
+	0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x73, 0x65, 0x6e, 0x64, 0x65,
+	0x72, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x61, 0x64, 0x6d, 0x69, 0x6e,
+	0x45, 0x4d, 0x61, 0x69, 0x6c, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x61, 0x64, 0x6d,
+	0x69, 0x6e, 0x45, 0x4d, 0x61, 0x69, 0x6c, 0x22, 0xa3, 0x01, 0x0a, 0x09, 0x4c, 0x6f, 0x67, 0x67,
+	0x65, 0x72, 0x4f, 0x62, 0x6a, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x65, 0x76,
+	0x65, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x12,
+	0x18, 0x0a, 0x07, 0x6d, 0x61, 0x78, 0x53, 0x69, 0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05,
+	0x52, 0x07, 0x6d, 0x61, 0x78, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x6d, 0x61, 0x78,
+	0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x73, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x6d,
+	0x61, 0x78, 0x42, 0x61, 0x63, 0x6b, 0x75, 0x70, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x6d, 0x61, 0x78,
+	0x41, 0x67, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x6d, 0x61, 0x78, 0x41, 0x67,
+	0x65, 0x12, 0x1a, 0x0a, 0x08, 0x63, 0x6f, 0x6d, 0x70, 0x72, 0x65, 0x73, 0x73, 0x18, 0x06, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x08, 0x63, 0x6f, 0x6d, 0x70, 0x72, 0x65, 0x73, 0x73, 0x42, 0x40, 0x5a,
+	0x3e, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x77, 0x69, 0x6e,
+	0x64, 0x65, 0x72, 0x2f, 0x71, 0x69, 0x6e, 0x67, 0x79, 0x75, 0x63, 0x6d, 0x73, 0x2f, 0x61, 0x70,
+	0x70, 0x2f, 0x71, 0x79, 0x63, 0x6d, 0x73, 0x5f, 0x62, 0x6c, 0x6f, 0x67, 0x2f, 0x69, 0x6e, 0x74,
+	0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x3b, 0x63, 0x6f, 0x6e, 0x66, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -924,7 +1263,7 @@ func file_internal_qycms_blog_conf_conf_proto_rawDescGZIP() []byte {
 	return file_internal_qycms_blog_conf_conf_proto_rawDescData
 }
 
-var file_internal_qycms_blog_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_internal_qycms_blog_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_internal_qycms_blog_conf_conf_proto_goTypes = []interface{}{
 	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.Server
@@ -935,12 +1274,15 @@ var file_internal_qycms_blog_conf_conf_proto_goTypes = []interface{}{
 	(*Trace)(nil),               // 6: kratos.api.Trace
 	(*Registry)(nil),            // 7: kratos.api.Registry
 	(*Qycms)(nil),               // 8: kratos.api.Qycms
-	(*Server_HTTP)(nil),         // 9: kratos.api.Server.HTTP
-	(*Server_GRPC)(nil),         // 10: kratos.api.Server.GRPC
-	(*Data_Database)(nil),       // 11: kratos.api.Data.Database
-	(*Data_Redis)(nil),          // 12: kratos.api.Data.Redis
-	(*Registry_Etcd)(nil),       // 13: kratos.api.Registry.Etcd
-	(*durationpb.Duration)(nil), // 14: google.protobuf.Duration
+	(*JobObj)(nil),              // 9: kratos.api.JobObj
+	(*EmailObj)(nil),            // 10: kratos.api.EmailObj
+	(*LoggerObj)(nil),           // 11: kratos.api.LoggerObj
+	(*Server_HTTP)(nil),         // 12: kratos.api.Server.HTTP
+	(*Server_GRPC)(nil),         // 13: kratos.api.Server.GRPC
+	(*Data_Database)(nil),       // 14: kratos.api.Data.Database
+	(*Data_Redis)(nil),          // 15: kratos.api.Data.Redis
+	(*Registry_Etcd)(nil),       // 16: kratos.api.Registry.Etcd
+	(*durationpb.Duration)(nil), // 17: google.protobuf.Duration
 }
 var file_internal_qycms_blog_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
@@ -948,23 +1290,26 @@ var file_internal_qycms_blog_conf_conf_proto_depIdxs = []int32{
 	8,  // 2: kratos.api.Bootstrap.qycms:type_name -> kratos.api.Qycms
 	3,  // 3: kratos.api.Bootstrap.auth:type_name -> kratos.api.Auth
 	6,  // 4: kratos.api.Bootstrap.trace:type_name -> kratos.api.Trace
-	9,  // 5: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
-	10, // 6: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
-	11, // 7: kratos.api.Data.database:type_name -> kratos.api.Data.Database
-	12, // 8: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
+	12, // 5: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
+	13, // 6: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
+	14, // 7: kratos.api.Data.database:type_name -> kratos.api.Data.Database
+	15, // 8: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
 	4,  // 9: kratos.api.Auth.jwt:type_name -> kratos.api.Jwt
 	5,  // 10: kratos.api.Auth.casbin:type_name -> kratos.api.Casbin
-	14, // 11: kratos.api.Jwt.expire_duration:type_name -> google.protobuf.Duration
-	13, // 12: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
-	14, // 13: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	14, // 14: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	14, // 15: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	14, // 16: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	17, // 11: kratos.api.Jwt.expire_duration:type_name -> google.protobuf.Duration
+	16, // 12: kratos.api.Registry.etcd:type_name -> kratos.api.Registry.Etcd
+	9,  // 13: kratos.api.Qycms.jobs:type_name -> kratos.api.JobObj
+	10, // 14: kratos.api.Qycms.email:type_name -> kratos.api.EmailObj
+	11, // 15: kratos.api.Qycms.logger:type_name -> kratos.api.LoggerObj
+	17, // 16: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	17, // 17: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	17, // 18: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	17, // 19: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_internal_qycms_blog_conf_conf_proto_init() }
@@ -1082,7 +1427,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_HTTP); i {
+			switch v := v.(*JobObj); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1094,7 +1439,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Server_GRPC); i {
+			switch v := v.(*EmailObj); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1106,7 +1451,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Data_Database); i {
+			switch v := v.(*LoggerObj); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1118,7 +1463,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Data_Redis); i {
+			switch v := v.(*Server_HTTP); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1130,6 +1475,42 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			}
 		}
 		file_internal_qycms_blog_conf_conf_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Server_GRPC); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_qycms_blog_conf_conf_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Data_Database); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_qycms_blog_conf_conf_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Data_Redis); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_qycms_blog_conf_conf_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Registry_Etcd); i {
 			case 0:
 				return &v.state
@@ -1148,7 +1529,7 @@ func file_internal_qycms_blog_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_qycms_blog_conf_conf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

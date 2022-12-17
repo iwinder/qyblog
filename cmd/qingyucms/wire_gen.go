@@ -12,6 +12,8 @@ import (
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
+	"github.com/iwinder/qingyucms/internal/qycms_blog/job"
+	"github.com/iwinder/qingyucms/internal/qycms_blog/job/jbiz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/server"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
 )
@@ -78,11 +80,21 @@ func wireApp(confServer *conf.Server, data *conf.Data, qycms *conf.Qycms, auth *
 	commentIndexRepo := db.NewCommentIndexRepo(dbData, logger)
 	commentIndexUsecase := biz.NewCommentIndexUsecase(commentIndexRepo, logger)
 	commentContentUsecase := biz.NewCommentContentUsecase(commentContentRepo, logger, articleUsecase, commentIndexUsecase, userUsecase)
-	commentUsecase := biz.NewCommentUsecase(logger, commentAgentUsecase, commentIndexUsecase, userUsecase, articleUsecase, commentContentUsecase)
-	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, siteConfigUsecase, linkUsecase, shortLinkUsecase, menusAgentUsecase, menusUsecase, tagsUsecase, categoryUsecase, articleUsecase, commentContentUsecase, commentUsecase, qycms, auth)
-	blogWebApiService := service.NewBlogWebApiService(siteConfigUsecase, articleUsecase, menusUsecase, linkUsecase, shortLinkUsecase, categoryUsecase, tagsUsecase, commentUsecase)
+	commentUsecase := biz.NewCommentUsecase(logger, commentAgentUsecase, commentIndexUsecase, userUsecase, articleUsecase, commentContentUsecase, siteConfigUsecase)
+	siteMapUsecase := biz.NewSiteMapUsecase(logger, siteConfigUsecase, articleUsecase)
+	blogAdminUserService := service.NewBlogAdminUserService(userUsecase, roleUsecase, apiUsecase, roleMenusUsecase, apiGroupUsecase, menusAdminUsecase, roleApiUsecase, fileLibTypeUsecase, fileLibConfigUsecase, fileLibUsecase, siteConfigUsecase, linkUsecase, shortLinkUsecase, menusAgentUsecase, menusUsecase, tagsUsecase, categoryUsecase, articleUsecase, commentContentUsecase, commentUsecase, siteMapUsecase, qycms, auth)
+	articleVisitorRepo := db.NewArticleVisitorRepo(dbData, logger)
+	articleVisitorUsecase := biz.NewArticleVisitorUsecase(articleVisitorRepo, logger)
+	blogWebApiService := service.NewBlogWebApiService(siteConfigUsecase, articleUsecase, menusUsecase, linkUsecase, shortLinkUsecase, categoryUsecase, tagsUsecase, commentUsecase, articleVisitorUsecase, qycms)
 	httpServer := server.NewHTTPServer(confServer, auth, casbinData, blogAdminUserService, blogWebApiService, logger)
-	app := newApp(logger, httpServer)
+	blogAdminJobsService := service.NewBlogAdminJobsService(qycms, commentUsecase, articleUsecase, siteMapUsecase)
+	countCommentJobRepo := jbiz.NewCountCommentJobRepo(blogAdminJobsService, logger)
+	postVCountJobRepo := jbiz.NewPostVCountJobRepo(blogAdminJobsService, logger)
+	siteMapJobRepo := jbiz.NewSiteMapJobRepo(blogAdminJobsService, logger)
+	emailSendJobRepo := jbiz.NewEmailSendJobRepo(blogAdminJobsService, logger)
+	cronJobServer := job.NewCronJobServer(qycms, logger, countCommentJobRepo, postVCountJobRepo, siteMapJobRepo, emailSendJobRepo)
+	qyCronJob := server.NewQyCronJob(logger, cronJobServer)
+	app := newApp(logger, httpServer, qyCronJob)
 	return app, func() {
 		cleanup()
 	}, nil

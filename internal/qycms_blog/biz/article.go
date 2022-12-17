@@ -71,6 +71,10 @@ type ArticleRepo interface {
 	FindByLink(ctx context.Context, link string) (*ArticleDO, error)
 	SetArticleCache(ctx context.Context, user *ArticleDO, key string)
 	GetUserFromCache(ctx context.Context, key string) (*ArticleDO, error)
+	UpdateCommentContByAgentIds(context.Context) error
+	UpdateAllPostsCount(context.Context)
+	AddPostViewCount(context.Context, uint64, string)
+	GetPostViewCount(context.Context, uint64) int64
 }
 
 // ArticleUsecase   is a ArticleDO usecase.
@@ -161,6 +165,21 @@ func (uc *ArticleUsecase) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
+// UpdateCommentContByAgentIds 更新评论总数
+func (uc *ArticleUsecase) UpdateCommentContByAgentIds(ctx context.Context) error {
+	uc.log.WithContext(ctx).Infof("UpdateCommentContByAgentIds")
+	err := uc.repo.UpdateCommentContByAgentIds(ctx)
+	return err
+}
+func (uc *ArticleUsecase) UpdateAllPostsCount(ctx context.Context) {
+	uc.log.WithContext(ctx).Infof("UpdateAllPostsCount")
+	uc.repo.UpdateAllPostsCount(ctx)
+}
+func (uc *ArticleUsecase) AddPostViewCount(ctx context.Context, id uint64, ip string) {
+	uc.log.WithContext(ctx).Infof("UpdateAllPostsCount")
+	uc.repo.AddPostViewCount(ctx, id, ip)
+}
+
 // DeleteList 根据ID批量删除
 func (uc *ArticleUsecase) DeleteList(ctx context.Context, ids []uint64) error {
 	uc.log.WithContext(ctx).Infof("DeleteList: %v", ids)
@@ -223,6 +242,7 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 			uc.log.WithContext(ctx).Error(cerr)
 		}
 		g.ContentHtml = cont.ContentHtml
+		g.Content = cont.Content
 
 		// 标签
 		tsgs, _ := uc.at.FindAllByArticleID(ctx, g.ID)
@@ -233,7 +253,7 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 			g.Category = category
 		}
 
-		g.ViewCount = g.ViewCount + 1
+		g.ViewCount = g.ViewCount
 		dataDo = g
 		uc.repo.SetArticleCache(ctx, dataDo, link)
 	}
@@ -242,6 +262,9 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 	}
 
 	return dataDo, nil
+}
+func (uc *ArticleUsecase) GetPostViewCount(ctx context.Context, id uint64) int64 {
+	return uc.repo.GetPostViewCount(ctx, id)
 }
 
 // FindOneByAgentID 根据ID查询信息
@@ -293,7 +316,17 @@ func (uc *ArticleUsecase) ListAllForWeb(ctx context.Context, opts ArticleDOListO
 
 	return dataDOs, nil
 }
-
+func (uc *ArticleUsecase) GeneratorMapListAll(ctx context.Context, opts ArticleDOListOption) (*ArticleDOList, error) {
+	uc.log.WithContext(ctx).Infof("ListAll")
+	dataDOs, err := uc.repo.ListAll(ctx, opts)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	return dataDOs, nil
+}
 func (uc *ArticleUsecase) getTagsStringByAid(ctx context.Context, aid uint64) []string {
 	oldTsgs, _ := uc.at.FindAllByArticleID(ctx, aid)
 	tagStrins := make([]string, 0, len(oldTsgs))

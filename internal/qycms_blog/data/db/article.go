@@ -5,15 +5,23 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
+	"strconv"
+	"strings"
 	"time"
 )
 
+const POST_VIEW_COUNT = "post_viewCount_"
+
 var articleCacheKey = func(link string) string {
 	return "article_cache_key_" + link
+}
+var articleViewCacheKey = func(id uint64) string {
+	return fmt.Sprintf("post_viewCount_%d", id)
 }
 
 type articleRepo struct {
@@ -152,6 +160,12 @@ func (r *articleRepo) FindByLink(ctx context.Context, link string) (*biz.Article
 	return data, nil
 }
 
+// UpdateCommentContByAgentIds 更新评论总数
+func (r *articleRepo) UpdateCommentContByAgentIds(ctx context.Context) error {
+	db := r.data.Db
+	return db.Table(" qy_blog_article a ").Where(" a.comment_agent_id IN (?)", db.Table("qy_blog_comment_index ci").Distinct("ci.agent_id ").Where(" ci.obj_id =0 ")).Update("comment_count", db.Table(" qy_blog_comment_agent ca ").Select(" `count` ").Where("ca.id = a.comment_agent_id")).Error
+}
+
 // FindByAgentID 根据ID查询
 func (r *articleRepo) FindByAgentID(ctx context.Context, id uint64) (*biz.ArticleDO, error) {
 	g := &po.ArticlePO{}
@@ -161,6 +175,63 @@ func (r *articleRepo) FindByAgentID(ctx context.Context, id uint64) (*biz.Articl
 	}
 	data := bizToArticleDO(g)
 	return data, nil
+}
+
+// UpdateAllPostsCount 持久化redis中的浏览数量
+func (r *articleRepo) UpdateAllPostsCount(ctx context.Context) {
+	keys := r.getPostViewCountKeys(ctx)
+	for _, key := range keys {
+		tmpStrs := strings.Split(key, "_")
+		count := r.getPostViewCountByKey(ctx, key)
+		intNum, _ := strconv.Atoi(tmpStrs[2])
+		r.UpdatePostCount(ctx, uint64(intNum), count) // 更新
+		r.delPostViewCountByKey(ctx, key)
+	}
+}
+
+func (r *articleRepo) UpdatePostCount(ctx context.Context, id uint64, nowCount int64) {
+	str := fmt.Sprintf("UPDATE qy_blog_article set view_count = view_count + %d where id = %d", nowCount, id)
+	err := r.data.Db.Exec(str).Error
+	if err != nil {
+		r.log.WithContext(ctx).Error(fmt.Errorf("UpdatePostCount %d 更新浏览量失败:%w", id, err))
+	}
+}
+
+// addPostViewCount 增加计数到reids
+func (r *articleRepo) AddPostViewCount(ctx context.Context, id uint64, ip string) {
+	key := articleViewCacheKey(id)
+	err := r.data.RedisCli.PFAdd(ctx, key, ip).Err()
+	if err != nil {
+		r.log.WithContext(ctx).Error(fmt.Errorf("addPostViewCount %d 统计失败:%w", id, err))
+	}
+}
+
+func (r *articleRepo) GetPostViewCount(ctx context.Context, id uint64) int64 {
+	key := articleViewCacheKey(id)
+	return r.getPostViewCountByKey(ctx, key)
+}
+func (r *articleRepo) getPostViewCountByKey(ctx context.Context, key string) int64 {
+	count, err := r.data.RedisCli.PFCount(ctx, key).Result()
+	if err != nil {
+		r.log.WithContext(ctx).Error(fmt.Errorf("getPostViewCount %s 获取统计失败:%w", key, err))
+		return 0
+	}
+	return count
+}
+func (r *articleRepo) getPostViewCountKeys(ctx context.Context) []string {
+	list, err := r.data.RedisCli.Keys(ctx, POST_VIEW_COUNT+"*").Result()
+	if err != nil {
+		r.log.WithContext(ctx).Error(fmt.Errorf("getPostViewCount   获取统计keys失败:%w", err))
+		return nil
+	}
+	return list
+}
+func (r *articleRepo) delPostViewCountByKey(ctx context.Context, key string) {
+	err := r.data.RedisCli.Del(ctx, key).Err()
+	if err != nil {
+		r.log.WithContext(ctx).Error(fmt.Errorf("getPostViewCount %s 删除统计失败:%w", key, err))
+
+	}
 }
 
 // ListAll 批量查询

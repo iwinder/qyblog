@@ -15,6 +15,7 @@ func (s *BlogAdminUserService) CreateQyAdminComment(ctx context.Context, in *v1.
 		Content:  in.Content,
 	}
 	opt.StatusFlag = 1
+	opt.EmailState = 2
 	agent, ip := GetHeardInfo(ctx)
 	opt.Agent = agent
 	opt.Ip = ip

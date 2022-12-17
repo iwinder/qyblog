@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'PingFang SC','Helvetica Neue','Helvetica','STHeitiSC-Light','Arial','Microsoft yahei','\005fae\008f6f\0096c5\009ed1',Verdana,sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333333;
+            background: #f2f5f8;
+        }
+        a {
+            color: #3292ff;
+            text-decoration: none;
+            border-bottom-style: dotted;
+            border-bottom-width: 1px;
+        }
+        a:hover{
+            text-decoration:none !important;
+            border-bottom-style: solid;
+        }
+        h1,h2,h3,h4,h5,h6{
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        p {
+            padding: 10px 0;
+            /*margin: 0 20px;*/
+            margin-bottom: 10px;
+        }
+        .btn {
+            font-weight: 500;
+            border-radius: 4px;
+            padding: 16px 30px;
+            text-align: center;
+            background: #3885ff;
+            text-decoration: none;
+            color: #fff;
+            margin: 15px auto;
+            font-size: 16px;
+            display: inline-block;
+            border: none;
+        }
+        .btn:hover{
+            border: none;
+        }
+        .btn-success {
+            background: #2ecc71
+        }
+        blockquote {
+            border-radius: 3px;
+            background: #f5f5f5;
+            margin: 10px 0;
+            padding: 15px 20px;
+            color: #455667;
+        }
+        .center{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper" style="margin:0;padding:0;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tbody>
+        <tr>
+            <td class="inner" style="padding:30px 25px 40px 25px;background:#f2f5f8;" bgcolor="#f2f5f8" align="center">
+                <table width="750" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                    <tr>
+                        <td width="100%" style="border-radius:4px;background:#ffffff;" bgcolor="#ffffff" align="center">
+                            <!-- Header -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <td width="50%" align="left"><div style="width:150px;height:60px;padding: 15px 0 0 20px;"><img src="{{.LOGO}}"  title="{{.SITENAME}}" style="display:inline;margin:0;max-height:50px;width: auto;" border="0"></div></td>
+                                    <td width="50%" align="right"><div style="width:250px;height:60px;line-height:60px;padding-right:20px;">
+
+                                    </div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- Main Body -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <td width="100%">
+                                        <div style="padding:20px 20px 40px;font-size:15px;line-height:1.5;color:#3d464d;">
+                                            <!-- Content -->
+                                            <p>您博客空间 <a href="{{.SITEURL}}" title="{{.SITENAME}}" style="text-decoration:none;border:none;padding:0 6px;">({{.SITENAME}})中的有新的留言待审核！</a></p>
+                                            <p>部分留言信息如下: </p>
+                                            <div style="background-color:#fefcc9; padding:10px 15px; border:1px solid #f7dfa4; font-size: 12px;line-height:160%;">
+                                                {{.REPLAYCOMENT}}
+                                            </div>
+                                            <a id="cTMail-btn" href="{{.SITEURL}}" title="{{.SITENAME}}"
+                                               style="font-size: 16px; line-height: 45px; display: block; background-color: rgb(0, 164, 255); color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;">
+                                                点击此处查看详情
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- Footer -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- Outer Footer -->
+                        <td width="100%" align="center" style="font-size:10px;line-height: 1.5;color: #999999;padding: 5px 0;text-align:center;">
+                            <p style="margin:10px 0 0;">此为系统自动发送邮件, 请勿直接回复.</p>
+<!--                            <p style="margin:10px 0 0;">版权所有 © 2013-2020&nbsp;&nbsp; Windcoder</p>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

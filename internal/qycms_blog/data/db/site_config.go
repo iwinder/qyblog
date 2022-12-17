@@ -123,6 +123,18 @@ func (r *siteConfigRepo) GetValueByKey(key string) (any, bool) {
 //	return err
 //}
 
+func (r *siteConfigRepo) InitLocalSiteConfigCache(ctx context.Context) {
+	alen := 0
+	siteConfigCache.Range(func(k, v interface{}) bool {
+		alen++
+		return true
+	})
+	if alen == 0 {
+		ops := biz.SiteConfigDOListOption{}
+		r.ListAll(ctx, ops)
+	}
+}
+
 func (r *siteConfigRepo) ListAll(ctx context.Context, opts biz.SiteConfigDOListOption) ([]*biz.SiteConfigDO, error) {
 
 	ret := &po.SiteConfigPOList{}
@@ -136,6 +148,7 @@ func (r *siteConfigRepo) ListAll(ctx context.Context, opts biz.SiteConfigDOListO
 		}
 		r.setSiteConfigCache(ctx, ret.Items)
 	}
+
 	var infos []*biz.SiteConfigDO
 	if len(opts.Types) > 0 {
 		str := opts.Types + ","
@@ -154,6 +167,12 @@ func (r *siteConfigRepo) ListAll(ctx context.Context, opts biz.SiteConfigDOListO
 			}
 		}
 	} else {
+		alen := 0
+		siteConfigCache.Range(func(k, v interface{}) bool {
+			alen++
+			return true
+		})
+		needInit := alen == 0
 		infos = make([]*biz.SiteConfigDO, 0, len(ret.Items))
 		for _, obj := range ret.Items {
 			infos = append(infos, &biz.SiteConfigDO{
@@ -164,6 +183,12 @@ func (r *siteConfigRepo) ListAll(ctx context.Context, opts biz.SiteConfigDOListO
 				ConfigTip:   obj.ConfigTip,
 				Ftype:       obj.Ftype,
 			})
+
+		}
+		if needInit {
+			for _, obj := range ret.Items {
+				siteConfigCache.Store(obj.ConfigKey, obj.ConfigValue)
+			}
 		}
 	}
 

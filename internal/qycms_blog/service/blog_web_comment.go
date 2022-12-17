@@ -20,7 +20,8 @@ func (b *BlogWebApiService) CreateQyWebComment(ctx context.Context, in *v1.Creat
 	opt.Agent = agent
 	opt.Ip = ip
 	opt.StatusFlag = 2
-	data, err := b.ctu.CreateComment(ctx, opt)
+	opt.EmailState = 1
+	data, err := b.ctu.CreateCommentWeb(ctx, opt, b.conf)
 	if err != nil {
 		return nil, err
 	}

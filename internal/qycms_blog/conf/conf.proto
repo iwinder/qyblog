@@ -72,4 +72,34 @@ message Registry {
 
 message Qycms {
   string token = 1;
+  string siteMapPath = 2;
+  JobObj jobs = 3;
+  EmailObj email = 4;
+  string docPath = 5;
+  LoggerObj logger = 6;
+  string mode = 7;
+
+}
+message   JobObj {
+  string commentJobCron = 1;
+  string siteMapJobCron = 2;
+  string postViewCountJobCron = 3;
+  string emailSendJobCron = 4;
+}
+
+message EmailObj {
+  string host= 1;
+  string port= 2;
+  string username= 3;
+  string password= 4;
+  string senderName= 5;
+  string adminEMail = 6;
+}
+message LoggerObj {
+  string path = 1;
+  string level = 2;
+  int32 maxSize = 3;              //日志的最大大小（M）
+  int32 maxBackups = 4;               //日志的最大保存数量
+  int32 maxAge = 5;              //日志文件存储最大天数
+  bool compress = 6;           //是否执行压缩
 }

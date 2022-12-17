@@ -31,6 +31,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
+
 	srv := http.NewServer(opts...)
 	r := srv.Route("/api/admin/v1")
 	r.POST("/file/upload/byType/{typeId}", func(ctx http.Context) error {
@@ -62,6 +63,7 @@ func NewHTTPServer(c *conf.Server, authConf *conf.Auth, casbinData *db.CasbinDat
 	v1.RegisterQyAdminCategoryHTTPServer(srv, userService)
 	v1.RegisterQyAdminArticleHTTPServer(srv, userService)
 	v1.RegisterQyAdminCommentHTTPServer(srv, userService)
+	v1.RegisterQyAdminHomeHTTPServer(srv, userService)
 
 	w1.RegisterQyWebSiteConfigHTTPServer(srv, webService)
 	w1.RegisterQyWebArticleHTTPServer(srv, webService)

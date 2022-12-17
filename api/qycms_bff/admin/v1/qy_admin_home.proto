@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package api.qycms_bff.admin.v1;
+import "google/api/annotations.proto";
+option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.qycms_bff.admin.v1";
+
+service QyAdminHome {
+	rpc UpdateContentCountJobsQyAdminHome (CreateQyAdminHomeRequest) returns (CreateQyAdminHomeReply) {
+		option (google.api.http) = {
+			post: "/api/admin/v1/jobs/updateContentCount",
+		};
+	};
+	rpc GeneratorMapJobQyAdminHome (CreateQyAdminHomeRequest) returns (CreateQyAdminHomeReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/jobs/generatorMap",
+		};
+	};
+	rpc UpdateAllPostsCountJobsQyAdminHome (CreateQyAdminHomeRequest) returns (CreateQyAdminHomeReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/jobs/updateAllPostsCount",
+		};
+	};
+	rpc EmailToNotSendCountJobsQyAdminHome (CreateQyAdminHomeRequest) returns (CreateQyAdminHomeReply){
+		option (google.api.http) = {
+			post: "/api/admin/v1/jobs/emailToNotSend",
+		};
+	};
+	rpc GetQyAdminHome (GetQyAdminHomeRequest) returns (GetQyAdminHomeReply);
+	rpc ListQyAdminHome (ListQyAdminHomeRequest) returns (ListQyAdminHomeReply);
+}
+
+message CreateQyAdminHomeRequest {}
+message CreateQyAdminHomeReply {}
+
+message UpdateQyAdminHomeRequest {}
+message UpdateQyAdminHomeReply {}
+
+message DeleteQyAdminHomeRequest {}
+message DeleteQyAdminHomeReply {}
+
+message GetQyAdminHomeRequest {}
+message GetQyAdminHomeReply {}
+
+message ListQyAdminHomeRequest {}
+message ListQyAdminHomeReply {}

@@ -25,7 +25,7 @@ var ProviderSet = wire.NewSet(NewData, NewCasbinData, NewCasbinRuleRepo,
 	NewArticleRepo, NewArticleContentRepo,
 	NewCommentAgentRepo, NewCommentIndexRepo, NewCommentContentRepo,
 	NewLinkRepo, NewShortLinkRepo, NewMenusRepo, NewMenusAgentRepo,
-	NewTagsRepo, NewCategoryRepo, NewArticleTagsRepo,
+	NewTagsRepo, NewCategoryRepo, NewArticleTagsRepo, NewArticleVisitorRepo,
 )
 
 // Data .
@@ -108,7 +108,7 @@ func AutoMigrateTable(dbIns *gorm.DB) {
 		&blogPo.LinkPO{}, &blogPo.ShortLinkPO{}, &blogPo.MenusAgentPO{}, &blogPo.MenusPO{},
 		&blogPo.TagsPO{}, &blogPo.CategoryPO{},
 		&blogPo.CommentAgentPO{}, &blogPo.CommentIndexPO{}, &blogPo.CommentContentPO{},
-		&blogPo.ArticlePO{}, &blogPo.ArticleContentPO{}, &blogPo.ArticleTagsPO{},
+		&blogPo.ArticlePO{}, &blogPo.ArticleContentPO{}, &blogPo.ArticleTagsPO{}, &blogPo.ArticleVisitorPO{},
 	)
 
 }

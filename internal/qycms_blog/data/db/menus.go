@@ -113,7 +113,7 @@ func (r *menusRepo) FindMenusAllByTargetIdWitchCache(ctx context.Context, target
 	var ret []*biz.MenusDO
 
 	var err error
-	cacheKey := userCacheKey(fmt.Sprintf("%d", targetId))
+	cacheKey := menusCacheKey(fmt.Sprintf("%d", targetId))
 	ret, err = r.getMenusAllCache(ctx, cacheKey)
 	if err != nil || ret == nil || len(ret) == 0 {
 		ret, err = r.reSetMenusAllCache(ctx, targetId)
@@ -228,7 +228,7 @@ func (r *menusRepo) reSetMenusAllCache(ctx context.Context, targetId uint64) ([]
 			obj.Children = make([]*biz.MenusDO, 0, 0)
 		}
 	}
-	cacheKey := userCacheKey(fmt.Sprintf("%d", targetId))
+	cacheKey := menusCacheKey(fmt.Sprintf("%d", targetId))
 	r.setMenusAllCache(ctx, ret, cacheKey)
 	return ret, nil
 }

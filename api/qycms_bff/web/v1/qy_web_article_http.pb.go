@@ -21,14 +21,18 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationQyWebArticleGetQyWebArticle = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebArticle"
 const OperationQyWebArticleGetQyWebCategory = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebCategory"
+const OperationQyWebArticleGetQyWebMinaArticle = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebMinaArticle"
 const OperationQyWebArticleGetQyWebTag = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebTag"
 const OperationQyWebArticleListQyWebArticle = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticle"
+const OperationQyWebArticleListQyWebMinaArticle = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebMinaArticle"
 
 type QyWebArticleHTTPServer interface {
 	GetQyWebArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebArticleReply, error)
 	GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error)
+	GetQyWebMinaArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebMinaArticleReply, error)
 	GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error)
 	ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
+	ListQyWebMinaArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
 }
 
 func RegisterQyWebArticleHTTPServer(s *http.Server, srv QyWebArticleHTTPServer) {
@@ -37,6 +41,8 @@ func RegisterQyWebArticleHTTPServer(s *http.Server, srv QyWebArticleHTTPServer) 
 	r.GET("/api/web/v1/article", _QyWebArticle_ListQyWebArticle0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/tag/{name}", _QyWebArticle_GetQyWebTag0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/category/{name}", _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/mina/article/{name}", _QyWebArticle_GetQyWebMinaArticle0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/mina/article", _QyWebArticle_ListQyWebMinaArticle0_HTTP_Handler(srv))
 }
 
 func _QyWebArticle_GetQyWebArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
@@ -124,11 +130,54 @@ func _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv QyWebArticleHTTPServer) fu
 	}
 }
 
+func _QyWebArticle_GetQyWebMinaArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetQyWebArticleRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleGetQyWebMinaArticle)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetQyWebMinaArticle(ctx, req.(*GetQyWebArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetQyWebMinaArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _QyWebArticle_ListQyWebMinaArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListQyWebArticleRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleListQyWebMinaArticle)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListQyWebMinaArticle(ctx, req.(*ListQyWebArticleRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListQyWebArticleReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type QyWebArticleHTTPClient interface {
 	GetQyWebArticle(ctx context.Context, req *GetQyWebArticleRequest, opts ...http.CallOption) (rsp *GetQyWebArticleReply, err error)
 	GetQyWebCategory(ctx context.Context, req *GetQyWebCategoryRequest, opts ...http.CallOption) (rsp *GetQyWebCategoryReply, err error)
+	GetQyWebMinaArticle(ctx context.Context, req *GetQyWebArticleRequest, opts ...http.CallOption) (rsp *GetQyWebMinaArticleReply, err error)
 	GetQyWebTag(ctx context.Context, req *GetQyWebTagRequest, opts ...http.CallOption) (rsp *GetQyWebTagReply, err error)
 	ListQyWebArticle(ctx context.Context, req *ListQyWebArticleRequest, opts ...http.CallOption) (rsp *ListQyWebArticleReply, err error)
+	ListQyWebMinaArticle(ctx context.Context, req *ListQyWebArticleRequest, opts ...http.CallOption) (rsp *ListQyWebArticleReply, err error)
 }
 
 type QyWebArticleHTTPClientImpl struct {
@@ -165,6 +214,19 @@ func (c *QyWebArticleHTTPClientImpl) GetQyWebCategory(ctx context.Context, in *G
 	return &out, err
 }
 
+func (c *QyWebArticleHTTPClientImpl) GetQyWebMinaArticle(ctx context.Context, in *GetQyWebArticleRequest, opts ...http.CallOption) (*GetQyWebMinaArticleReply, error) {
+	var out GetQyWebMinaArticleReply
+	pattern := "/api/web/v1/mina/article/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleGetQyWebMinaArticle))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
 func (c *QyWebArticleHTTPClientImpl) GetQyWebTag(ctx context.Context, in *GetQyWebTagRequest, opts ...http.CallOption) (*GetQyWebTagReply, error) {
 	var out GetQyWebTagReply
 	pattern := "/api/web/v1/tag/{name}"
@@ -183,6 +245,19 @@ func (c *QyWebArticleHTTPClientImpl) ListQyWebArticle(ctx context.Context, in *L
 	pattern := "/api/web/v1/article"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyWebArticleListQyWebArticle))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyWebArticleHTTPClientImpl) ListQyWebMinaArticle(ctx context.Context, in *ListQyWebArticleRequest, opts ...http.CallOption) (*ListQyWebArticleReply, error) {
+	var out ListQyWebArticleReply
+	pattern := "/api/web/v1/mina/article"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleListQyWebMinaArticle))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -33,6 +33,7 @@ type SiteConfigRepo interface {
 	UpdateInBatches(context.Context, []*SiteConfigDO) error
 	GetValueByKey(key string) (any, bool)
 	ListAll(c context.Context, opts SiteConfigDOListOption) ([]*SiteConfigDO, error)
+	InitLocalSiteConfigCache(ctx context.Context)
 }
 
 type SiteConfigUsecase struct {
@@ -84,6 +85,11 @@ func (uc *SiteConfigUsecase) UpdateInBatches(ctx context.Context, data []*SiteCo
 func (uc *SiteConfigUsecase) FindValueByKey(ctx context.Context, key string) string {
 	uc.log.WithContext(ctx).Infof("findByKey: %v", key)
 	val, ok := uc.repo.GetValueByKey(key)
+	if ok {
+		return val.(string)
+	}
+	uc.repo.InitLocalSiteConfigCache(ctx)
+	val, ok = uc.repo.GetValueByKey(key)
 	if ok {
 		return val.(string)
 	}

@@ -41,6 +41,7 @@ type BlogAdminUserService struct {
 	au       *biz.ArticleUsecase
 	cc       *biz.CommentContentUsecase
 	ctu      *biz.CommentUsecase
+	siteMap  *biz.SiteMapUsecase
 }
 
 func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.ApiUsecase, rm *biz.RoleMenusUsecase,
@@ -50,12 +51,14 @@ func NewBlogAdminUserService(uc *biz.UserUsecase, rc *biz.RoleUsecase, ac *biz.A
 	mau *biz.MenusAgentUsecase, mu *biz.MenusUsecase,
 	tau *biz.TagsUsecase, cu *biz.CategoryUsecase,
 	au *biz.ArticleUsecase, cc *biz.CommentContentUsecase, ctu *biz.CommentUsecase,
+	siteMap *biz.SiteMapUsecase,
 	conf *conf.Qycms, authConf *conf.Auth) *BlogAdminUserService {
 	return &BlogAdminUserService{uc: uc, rc: rc, ac: ac, rm: rm,
 		acg: acg, mc: mc, ra: ra, fit: fit, fic: fic, fi: fi,
 		site: site, lk: lk, slk: slk, mau: mau, mu: mu,
 		tau: tau, cu: cu, au: au, cc: cc, ctu: ctu,
-		conf: conf, authConf: authConf}
+		siteMap: siteMap,
+		conf:    conf, authConf: authConf}
 }
 
 func (s *BlogAdminUserService) Login(ctx context.Context, req *v1.LoginReq) (*v1.LoginReply, error) {
