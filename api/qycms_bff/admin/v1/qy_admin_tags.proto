@@ -5,20 +5,23 @@ import "google/api/annotations.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
-
+// 标签管理
 service QyAdminTags {
+	// 新增
 	rpc CreateQyAdminTags (CreateQyAdminTagsRequest) returns (CreateQyAdminTagsReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/tags",
 			body:"*"
 		};
 	};
+	// 更新
 	rpc UpdateQyAdminTags (UpdateQyAdminTagsRequest) returns (UpdateQyAdminTagsReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/tags/{id}",
 			body:"*"
 		};
 	};
+	// 删除
 	rpc DeleteQyAdminTags (DeleteQyAdminTagsRequest) returns (DeleteQyAdminTagsReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/tags",
@@ -27,6 +30,7 @@ service QyAdminTags {
 	};
 	rpc GetQyAdminTags (GetQyAdminTagsRequest) returns (GetQyAdminTagsReply){
 	};
+	// 列表
 	rpc ListQyAdminTags (ListQyAdminTagsRequest) returns (ListQyAdminTagsReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/tags",

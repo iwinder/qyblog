@@ -6,19 +6,23 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+// 导航管理
 service QyAdminMenus {
+	// 新增
 	rpc CreateQyAdminMenus (CreateQyAdminMenusRequest) returns (CreateQyAdminMenusReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/menus",
 			body:"*"
 		};
 	};
+	// 更新
 	rpc UpdateQyAdminMenus (UpdateQyAdminMenusRequest) returns (UpdateQyAdminMenusReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/menus/{id}",
 			body:"*"
 		};
 	};
+	// 删除
 	rpc DeleteQyAdminMenus (DeleteQyAdminMenusRequest) returns (DeleteQyAdminMenusReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/menus",
@@ -26,6 +30,7 @@ service QyAdminMenus {
 		};
 	};
 	rpc GetQyAdminMenus (GetQyAdminMenusRequest) returns (GetQyAdminMenusReply);
+	// 列表
 	rpc ListQyAdminMenus (ListQyAdminMenusRequest) returns (ListQyAdminMenusReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/menus",

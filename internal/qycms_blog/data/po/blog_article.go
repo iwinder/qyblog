@@ -28,7 +28,7 @@ type ArticlePO struct { //Status    `json:"status" gorm:"column:status;default: 
 	LikeCount         int32        `json:"likeCount" gorm:"column:like_Count;default: 0;comment: 点赞数"  `
 	HateCount         int32        `json:"hateCount" gorm:"column:hate_Count;default: 0;comment: 点踩数"  `
 	PublishedAt       time.Time    `json:"publishedAt" gorm:"column:published_at;comment:发布日期"  `
-	TopStatus         int          `json:"status" gorm:"column:top_status;default: 1;comment:状态,1:普通,2:置顶 "  `
+	TopStatus         int          `json:"status" gorm:"column:top_status;default: 1;comment:状态,1:普通,2:精华,3:置顶 "  `
 }
 
 func (u *ArticlePO) TableName() string {

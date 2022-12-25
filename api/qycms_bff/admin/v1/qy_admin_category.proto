@@ -6,19 +6,23 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+// 分类管理
 service QyAdminCategory {
+	// 新增
 	rpc CreateQyAdminCategory (CreateQyAdminCategoryRequest) returns (CreateQyAdminCategoryReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/category",
 			body:"*"
 		};
 	};
+	// 更新
 	rpc UpdateQyAdminCategory (UpdateQyAdminCategoryRequest) returns (UpdateQyAdminCategoryReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/category/{id}",
 			body:"*"
 		};
 	};
+	// 删除
 	rpc DeleteQyAdminCategory (DeleteQyAdminCategoryRequest) returns (DeleteQyAdminCategoryReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/category",
@@ -26,6 +30,7 @@ service QyAdminCategory {
 		};
 	};
 	rpc GetQyAdminCategory (GetQyAdminCategoryRequest) returns (GetQyAdminCategoryReply);
+	// 列表
 	rpc ListQyAdminCategory (ListQyAdminCategoryRequest) returns (ListQyAdminCategoryReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/category",

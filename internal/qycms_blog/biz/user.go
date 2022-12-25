@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
 	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
@@ -186,11 +187,13 @@ func (uc *UserUsecase) ListAll(ctx context.Context, opts UserDOListOption) (*Use
 func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *conf.Auth) (*UserInfoDO, error) {
 	userInfo, err := uc.FindOneByUsername(ctx, u.Username)
 	if err != nil {
-		return nil, errors.New("登录失败" + err.Error())
+		uc.log.WithContext(ctx).Error(fmt.Errorf("登录失败-查询用户:%v", err))
+		return nil, errors.New("登录失败:账号或密码错误")
 	}
 	aerr := bcryptUtil.Compare(userInfo.Password, u.Password+u.Salt)
 	if aerr != nil {
-		return nil, errors.New("登录失败" + aerr.Error())
+		uc.log.WithContext(ctx).Error(fmt.Errorf("登录失败-密码比较失败:%v", aerr))
+		return nil, errors.New("登录失败:账号或密码错误")
 	}
 	var roleNames []string
 	var roleIds []string
@@ -217,10 +220,10 @@ func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *
 		},
 	}
 	// 生成token
-	token, err := jwt2.CreateToken(claims, authConf.Jwt.JwtSecret)
-	if err != nil {
-		log.Errorf("登录失败，生成token失败：%v", err)
-		return nil, errors.New("登录失败" + err.Error())
+	token, jerr := jwt2.CreateToken(claims, authConf.Jwt.JwtSecret)
+	if jerr != nil {
+		uc.log.WithContext(ctx).Error("登录失败，生成token失败：%v", jerr)
+		return nil, errors.New("登录失败:账号或密码错误")
 	}
 
 	user := &UserInfoDO{
@@ -230,7 +233,7 @@ func (uc *UserUsecase) VerifyPassword(ctx context.Context, u *UserDO, authConf *
 		RoleNames: roleNameStr,
 	}
 
-	return user, err
+	return user, jerr
 }
 
 func (uc *UserUsecase) ChangePassword(ctx context.Context, user *UserDO) error {

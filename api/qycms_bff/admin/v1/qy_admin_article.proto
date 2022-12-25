@@ -7,36 +7,43 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+// 文章管理
 service QyAdminArticle {
+	// 新增
 	rpc CreateQyAdminArticle (CreateQyAdminArticleRequest) returns (CreateQyAdminArticleReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/article",
 			body:"*"
 		};
 	};
+	// 更新
 	rpc UpdateQyAdminArticle (UpdateQyAdminArticleRequest) returns (UpdateQyAdminArticleReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/article/{id}",
 			body:"*"
 		};
 	};
+	// 删除
 	rpc DeleteQyAdminArticle (DeleteQyAdminArticleRequest) returns (DeleteQyAdminArticleReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/article",
 			body:"*"
 		};
 	};
+	// 获取详情
 	rpc GetQyAdminArticle (GetQyAdminArticleRequest) returns (GetQyAdminArticleReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/article/{id}",
 		};
 	};
+	// 生成文章链接
 	rpc InitQyAdminArticlePermaLink (InitQyAdminArticlePermaLinkRequest) returns (InitQyAdminArticlePermaLinkReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/article/initPermaLink",
 			body:"*"
 		};
 	};
+	// 列表
 	rpc ListQyAdminArticle (ListQyAdminArticleRequest) returns (ListQyAdminArticleReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/article",

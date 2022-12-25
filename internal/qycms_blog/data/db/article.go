@@ -150,9 +150,10 @@ func (r *articleRepo) FindByID(ctx context.Context, id uint64) (*biz.ArticleDO, 
 	data := bizToArticleDO(g)
 	return data, nil
 }
+
 func (r *articleRepo) FindByLink(ctx context.Context, link string) (*biz.ArticleDO, error) {
 	g := &po.ArticlePO{}
-	err := r.data.Db.Where("perma_link = ?", link).First(&g).Error
+	err := r.data.Db.Where("perma_link = ? and status_flag = 2 and  published = 1 ", link).First(&g).Error
 	if err != nil {
 		return nil, err
 	}

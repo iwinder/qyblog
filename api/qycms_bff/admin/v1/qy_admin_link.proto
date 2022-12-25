@@ -5,14 +5,16 @@ import "google/api/annotations.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
-
+// 友链管理
 service QyAdminLink {
+	// 新增友链
 	rpc CreateQyAdminLink (CreateQyAdminLinkRequest) returns (CreateQyAdminLinkReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/link",
 			body:"*"
 		};
 	};
+	// 更新友链
 	rpc UpdateQyAdminLink (UpdateQyAdminLinkRequest) returns (UpdateQyAdminLinkReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/link/{id}",
@@ -20,6 +22,7 @@ service QyAdminLink {
 		};
 	};
 	rpc DeleteQyAdminLink (DeleteQyAdminLinkRequest) returns (DeleteQyAdminLinkReply);
+	// 批量删除友链
 	rpc DeleteQyAdminLinks (DeleteQyAdminLinksRequest) returns (DeleteQyAdminLinkReply) {
 		option (google.api.http) = {
 			post: "/api/admin/v1/link",
@@ -29,6 +32,7 @@ service QyAdminLink {
 	rpc GetQyAdminLink (GetQyAdminLinkRequest) returns (GetQyAdminLinkReply) {
 
 	};
+	// 友链列表
 	rpc ListQyAdminLink (ListQyAdminLinkRequest) returns (ListQyAdminLinkReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/link",

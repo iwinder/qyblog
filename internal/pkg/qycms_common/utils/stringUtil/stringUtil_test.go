@@ -16,3 +16,9 @@ func TestRemoveHtmlAndSubstring(t *testing.T) {
 	a := RemoveHtmlAndSubstring(data)
 	log.Println("TestRemoveHtmlAndSubstring 结果：", a)
 }
+
+func TestRunMD5(t *testing.T) {
+	//a := PinyinConvert("【译】Oracle调优技巧22：Hash Outer Join")
+	a := MD5ByStr("12345")
+	log.Println("结果：", a)
+}

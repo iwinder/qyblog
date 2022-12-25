@@ -6,24 +6,29 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+// 短连接管理
 service QyAdminShortLink {
+	// 新增短连接
 	rpc CreateQyAdminShortLink (CreateQyAdminShortLinkRequest) returns (CreateQyAdminShortLinkReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/shortLink",
 			body:"*"
 		};
 	};
+	// 更新短连接
 	rpc UpdateQyAdminShortLink (UpdateQyAdminShortLinkRequest) returns (UpdateQyAdminShortLinkReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/shortLink/{id}",
 			body:"*"
 		};
 	};
+	// 删除短链接
 	rpc DeleteQyAdminShortLink (DeleteQyAdminShortLinkRequest) returns (DeleteQyAdminShortLinkReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/shortLink/{id}",
 		};
 	};
+	// 批量删除短链接
 	rpc DeleteQyAdminShortLinks (DeleteQyAdminShortLinksRequest) returns (DeleteQyAdminShortLinkReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/shortLink",
@@ -31,6 +36,7 @@ service QyAdminShortLink {
 		};
 	};
 	rpc GetQyAdminShortLink (GetQyAdminShortLinkRequest) returns (GetQyAdminShortLinkReply);
+	// 短链接列表
 	rpc ListQyAdminShortLink (ListQyAdminShortLinkRequest) returns (ListQyAdminShortLinkReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/shortLink",

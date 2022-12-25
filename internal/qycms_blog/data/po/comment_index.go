@@ -14,6 +14,7 @@ type CommentIndexPO struct {
 	AgentId           uint64        `json:"agentId" gorm:"column:agent_id;default: 0;comment: 主题表ID "  `
 	ObjId             uint64        `json:"objId" gorm:"column:obj_id;default:0;comment: 对象ID "  `
 	ObjType           int32         `json:"objType" gorm:"column:obj_type;default:0;comment: 对象类型 "  `
+	Atype             int32         `json:"Atype" gorm:"column:atype;default:1;comment: 类型 1:正常，2：通知 "  `
 	MemberId          sql.NullInt64 `json:"memberId" gorm:"column:member_id;default:0;comment: 发布者用户ID，0 游客 "  `
 	RootId            sql.NullInt64 `json:"rootId" gorm:"column:root_id;default:0;comment: 根评论ID，不为0是回复评论 "  `
 	ParentId          sql.NullInt64 `json:"parentId" gorm:"column:parent_id;default: 0;comment: 父级评论ID，为0是 root 评论"  `

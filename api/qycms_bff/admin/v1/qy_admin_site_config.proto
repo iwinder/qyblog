@@ -6,7 +6,9 @@ option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 
+// 站点配置
 service QyAdminSiteConfig {
+	// 新增站点配置
 	rpc CreateQyAdminSiteConfig (CreateQyAdminSiteConfigRequest) returns (CreateQyAdminSiteConfigReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/siteConfig",
@@ -14,6 +16,7 @@ service QyAdminSiteConfig {
 		};
 	}
 	rpc UpdateQyAdminSiteConfig (UpdateQyAdminSiteConfigRequest) returns (UpdateQyAdminSiteConfigReply);
+	// 更新站点配置
 	rpc UpdateInBatchesQyAdminSiteConfig (UpdateBatchesQyAdminSiteConfigRequest) returns (UpdateBatchesQyAdminSiteConfigReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/siteConfig",
@@ -22,6 +25,7 @@ service QyAdminSiteConfig {
 	}
 	rpc DeleteQyAdminSiteConfig (DeleteQyAdminSiteConfigRequest) returns (DeleteQyAdminSiteConfigReply);
 	rpc GetQyAdminSiteConfig (GetQyAdminSiteConfigRequest) returns (GetQyAdminSiteConfigReply);
+	// 获取站点配置列表
 	rpc ListQyAdminSiteConfig (ListQyAdminSiteConfigRequest) returns (ListQyAdminSiteConfigReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/siteConfig"

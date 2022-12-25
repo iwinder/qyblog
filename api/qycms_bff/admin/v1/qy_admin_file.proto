@@ -6,43 +6,49 @@ import "google/api/annotations.proto";
 option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
-
+// 媒体库管理
 service QyAdminFile {
+	// 新增媒体库
 	rpc CreateQyAdminFileLibType (CreateQyAdminFileLibTypeRequest) returns (UpdateQyAdminFileLibTypeReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/fileLibType",
 			body:"*"
 		};
 	};
+	// 更新媒体库
 	rpc UpdateQyAdminFileLibType (UpdateQyAdminFileLibTypeRequest) returns (UpdateQyAdminFileLibTypeReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/fileLibType/{id}",
 			body:"*"
 		};
 	};
+	// 媒体库列表
 	rpc ListQyAdminFileLibType (ListQyAdminFileLibTypeRequest) returns (ListQyAdminFileLibTypeReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/fileLibType",
 		};
 	};
+	// 批量删除媒体库
 	rpc DeleteQyAdminFileLibType (DeleteQyAdminFileLibTypeRequest) returns (DeleteQyAdminFileLibTypeReply){
 		option (google.api.http) = {
 			delete: "/api/admin/v1/fileLibType",
 			body:"*"
 		};
 	}
+	// 创建媒体库配置
 	rpc CreateQyAdminFileLibConfig (CreateQyAdminFileLibConfigRequest) returns (CreateQyAdminFileLibConfigReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/fileLibConfig",
 			body:"*"
 		};
 	};
+	// 获取媒体库配置
 	rpc GetQyAdminFileLibConfig (GetQyAdminFileLibConfigRequest) returns (GetQyAdminFileLibConfigReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/fileLibConfig/{typeId}",
 		};
 	};
-
+	// 获取媒体列表
 	rpc ListQyAdminFileLibByType (ListQyAdminFileRequest) returns (ListQyAdminFileReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/fileLib/byType/{typeId}",
