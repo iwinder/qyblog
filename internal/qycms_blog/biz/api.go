@@ -10,6 +10,11 @@ import (
 	"strconv"
 )
 
+var (
+	// ErrApiNotFound is api not found.
+	ErrApiNotFound = errors.NotFound("101404", "api not found")
+)
+
 type ApiDO struct {
 	metaV1.ObjectMeta
 	ApiGroup    string
@@ -83,7 +88,7 @@ func (uc *ApiUsecase) Update(ctx context.Context, obj *ApiDO) (*ApiDO, error) {
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiNotFound
 		}
 		return nil, err
 	}
@@ -108,7 +113,7 @@ func (uc *ApiUsecase) FindOneByID(ctx context.Context, id uint64) (*ApiDO, error
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiNotFound
 		}
 		return nil, err
 	}
@@ -121,7 +126,7 @@ func (uc *ApiUsecase) ListAll(ctx context.Context, opts ApiDOListOption) (*ApiDO
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiNotFound
 		}
 		return nil, err
 	}

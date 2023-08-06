@@ -2,10 +2,15 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrLinkNotFound is link not found.
+	ErrLinkNotFound = errors.NotFound("112404", "link not found")
 )
 
 type LinkDO struct {
@@ -62,7 +67,7 @@ func (uc *LinkUsecase) Update(ctx context.Context, obj *LinkDO) (*LinkDO, error)
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrLinkNotFound
 		}
 		return nil, err
 	}
@@ -87,7 +92,7 @@ func (uc *LinkUsecase) FindOneByID(ctx context.Context, id uint64) (*LinkDO, err
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrLinkNotFound
 		}
 		return nil, err
 	}
@@ -116,7 +121,7 @@ func (uc *LinkUsecase) ListAll(ctx context.Context, opts LinkDOListOption) (*Lin
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrLinkNotFound
 		}
 		return nil, err
 	}

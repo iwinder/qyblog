@@ -2,12 +2,18 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
+
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrCategoryNotFound is category not found.
+	ErrCategoryNotFound = errors.NotFound("105404", "category not found")
 )
 
 type CategoryDO struct {
@@ -72,7 +78,7 @@ func (uc *CategoryUsecase) Update(ctx context.Context, obj *CategoryDO) (*Catego
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}
@@ -91,7 +97,7 @@ func (uc *CategoryUsecase) FindOneByID(ctx context.Context, id uint64) (*Categor
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}
@@ -102,7 +108,7 @@ func (uc *CategoryUsecase) FindByIdentifier(ctx context.Context, name string) (*
 	obj, err := uc.repo.FindByIdentifier(ctx, name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}
@@ -115,7 +121,7 @@ func (uc *CategoryUsecase) ListAll(ctx context.Context, opts CategoryDOListOptio
 	objDOs, err := uc.repo.ListAllWithChildren(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}

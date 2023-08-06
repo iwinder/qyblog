@@ -2,10 +2,15 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrMenusAgentNotFound is menus agent not found.
+	ErrMenusAgentNotFound = errors.NotFound("114404", "menus agent not found")
 )
 
 type MenusAgentDO struct {
@@ -58,7 +63,7 @@ func (uc *MenusAgentUsecase) Update(ctx context.Context, obj *MenusAgentDO) (*Me
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusAgentNotFound
 		}
 		return nil, err
 	}
@@ -83,7 +88,7 @@ func (uc *MenusAgentUsecase) FindOneByID(ctx context.Context, id uint64) (*Menus
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusAgentNotFound
 		}
 		return nil, err
 	}
@@ -97,7 +102,7 @@ func (uc *MenusAgentUsecase) ListAll(ctx context.Context, opts MenusAgentDOListO
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusAgentNotFound
 		}
 		return nil, err
 	}

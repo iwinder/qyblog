@@ -2,10 +2,15 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrShortLinkNotFound is short link not found.
+	ErrShortLinkNotFound = errors.NotFound("116404", "short link not found")
 )
 
 type ShortLinkDO struct {
@@ -60,7 +65,7 @@ func (uc *ShortLinkUsecase) Update(ctx context.Context, obj *ShortLinkDO) (*Shor
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrShortLinkNotFound
 		}
 		return nil, err
 	}
@@ -85,7 +90,7 @@ func (uc *ShortLinkUsecase) FindOneByID(ctx context.Context, id uint64) (*ShortL
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrShortLinkNotFound
 		}
 		return nil, err
 	}
@@ -99,7 +104,7 @@ func (uc *ShortLinkUsecase) ListAll(ctx context.Context, opts ShortLinkDOListOpt
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrShortLinkNotFound
 		}
 		return nil, err
 	}
@@ -110,7 +115,7 @@ func (uc *ShortLinkUsecase) FindAllWitchCache(ctx context.Context) ([]*ShortLink
 	objDOs, err := uc.repo.FindAllWitchCache(ctx)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrShortLinkNotFound
 		}
 		return nil, err
 	}

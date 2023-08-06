@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrFileLibConfigNotFound is file lib config not found.
+	ErrFileLibConfigNotFound = errors.NotFound("110404", "file lib config not found")
+)
+
 type FileLibConfigDO struct {
 	metaV1.ObjectMeta
 	AccessKey string
@@ -48,7 +53,7 @@ func (uc *FileLibConfigUsecase) SaveOrUpdate(ctx context.Context, data *FileLibC
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibConfigNotFound
 		}
 		return nil, err
 	}
@@ -60,7 +65,7 @@ func (uc *FileLibConfigUsecase) FindById(ctx context.Context, id uint64) (*FileL
 	data, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibConfigNotFound
 		}
 		return nil, err
 	}
@@ -71,7 +76,7 @@ func (uc *FileLibConfigUsecase) FindByTypeId(ctx context.Context, id uint64) (*F
 	data, err := uc.repo.FindByTypeId(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibConfigNotFound
 		}
 		return nil, err
 	}
@@ -89,7 +94,7 @@ func (uc *FileLibConfigUsecase) GetTokenByTypeId(ctx context.Context, id uint64)
 	data, err := uc.repo.GetTokenByTypeId(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return "", ErrUserNotFound
+			return "", ErrFileLibConfigNotFound
 		}
 		return "", err
 	}

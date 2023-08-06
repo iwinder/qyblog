@@ -3,7 +3,6 @@ package biz
 import (
 	"context"
 	"fmt"
-	v1 "github.com/iwinder/qingyucms/api/qycms_blog/web/v1"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
 
@@ -15,8 +14,8 @@ import (
 )
 
 var (
-	// ErrUserNotFound is user not found.
-	ErrDataNotFound = errors.NotFound(v1.BLogErrorReason_BLOG_DATA_NOT_FOUND.String(), "data not found")
+	// ErrArticleNotFound is article not found.
+	ErrArticleNotFound = errors.NotFound("103404", "article not found")
 )
 
 // ArticleDO is a ArticleDO model.
@@ -144,7 +143,7 @@ func (uc *ArticleUsecase) Update(ctx context.Context, g *ArticleDO) (*ArticleDO,
 	data, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}
@@ -205,7 +204,7 @@ func (uc *ArticleUsecase) FindOneByID(ctx context.Context, id uint64) (*ArticleD
 	g, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}
@@ -230,9 +229,9 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				dataDo = &ArticleDO{PermaLink: "err404"}
 				uc.repo.SetArticleCache(ctx, dataDo, link)
-				return nil, ErrDataNotFound
+				return nil, ErrArticleNotFound
 			} else if err.Error() == "redis: nil" {
-				return nil, ErrDataNotFound
+				return nil, ErrArticleNotFound
 			}
 			return nil, err
 		}
@@ -258,7 +257,7 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 		uc.repo.SetArticleCache(ctx, dataDo, link)
 	}
 	if dataDo.PermaLink == "err404" {
-		return nil, ErrDataNotFound
+		return nil, ErrArticleNotFound
 	}
 
 	return dataDo, nil
@@ -273,7 +272,7 @@ func (uc *ArticleUsecase) FindOneByAgentID(ctx context.Context, id uint64) (*Art
 	g, err := uc.repo.FindByAgentID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}
@@ -286,7 +285,7 @@ func (uc *ArticleUsecase) ListAll(ctx context.Context, opts ArticleDOListOption)
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}
@@ -302,7 +301,7 @@ func (uc *ArticleUsecase) ListAllForWeb(ctx context.Context, opts ArticleDOListO
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}
@@ -321,7 +320,7 @@ func (uc *ArticleUsecase) GeneratorMapListAll(ctx context.Context, opts ArticleD
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleNotFound
 		}
 		return nil, err
 	}

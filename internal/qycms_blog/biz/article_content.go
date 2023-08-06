@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrArticleContentNotFound is article content  not found.
+	ErrArticleContentNotFound = errors.NotFound("104404", "article content not found")
+)
+
 type ArticleContentDO struct {
 	ID          uint64
 	StatusFlag  int
@@ -68,7 +73,7 @@ func (uc *ArticleContentUsecase) Update(ctx context.Context, g *ArticleContentDO
 	dataPO, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleContentNotFound
 		}
 		return nil, err
 	}
@@ -107,7 +112,7 @@ func (uc *ArticleContentUsecase) FindOneByID(ctx context.Context, id uint64) (*A
 	g, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrArticleContentNotFound
 		}
 		return nil, err
 	}

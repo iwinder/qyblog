@@ -33,6 +33,18 @@ func (b *BlogWebApiService) ListQyWebComment(ctx context.Context, in *v1.ListQyW
 	opts.ListOptions.Pages = 0
 	opts.ListOptions.Current = -1
 	opts.ListOptions.PageSize = 20
+	if in.AgentId <= 0 {
+		pageInfo := &v1.WebCommentPageInfo{
+			Current:   1,
+			PageSize:  20,
+			Total:     0,
+			Pages:     1,
+			FirstFlag: true,
+			LastFlag:  true,
+		}
+		objs := make([]*v1.WebCommentInfoResponse, 0, 0)
+		return &v1.ListQyWebCommentReply{PageInfo: pageInfo, Count: 0, Items: objs}, nil
+	}
 	if in.Current > 0 {
 		opts.ListOptions.Pages = in.Pages
 		opts.ListOptions.Current = in.Current

@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrFileLibNotFound is file lib not found.
+	ErrFileLibNotFound = errors.NotFound("109404", "file lib not found")
+)
+
 type FileLibDO struct {
 	metaV1.ObjectMeta
 	OriginFileName string // 原始名称
@@ -56,7 +61,7 @@ func (uc *FileLibUsecase) Save(ctx context.Context, data *FileLibDO) (*FileLibDO
 	dataDO, err := uc.repo.Save(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibNotFound
 		}
 		return nil, err
 	}
@@ -68,7 +73,7 @@ func (uc *FileLibUsecase) Update(ctx context.Context, data *FileLibDO) (*FileLib
 	dataDO, err := uc.repo.Update(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibNotFound
 		}
 		return nil, err
 	}
@@ -94,7 +99,7 @@ func (uc *FileLibUsecase) ListAll(ctx context.Context, opts FileLibDOListOption)
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibNotFound
 		}
 		return nil, err
 	}

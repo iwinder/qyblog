@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	kerrors "github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
 	jwt2 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/jwt"
@@ -17,8 +18,8 @@ import (
 )
 
 var (
-// ErrUserNotFound is user not found.
-//ErrUserNotFound = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
+	// ErrUserNotFound is user not found.
+	ErrUserNotFound = kerrors.NotFound("1002404", "user not found")
 )
 
 // UserDO is a UserDO model.

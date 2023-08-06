@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrApiGroupNotFound is api group not found.
+	ErrApiGroupNotFound = errors.NotFound("102404", "api group not found")
+)
+
 type ApiGroupDO struct {
 	metaV1.ObjectMeta
 	Name       string
@@ -57,7 +62,7 @@ func (uc *ApiGroupUsecase) Update(ctx context.Context, obj *ApiGroupDO) (*ApiGro
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiGroupNotFound
 		}
 		return nil, err
 	}
@@ -82,7 +87,7 @@ func (uc *ApiGroupUsecase) FindOneByID(ctx context.Context, id uint64) (*ApiGrou
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiGroupNotFound
 		}
 		return nil, err
 	}
@@ -95,7 +100,7 @@ func (uc *ApiGroupUsecase) ListAll(ctx context.Context, opts ApiGroupDOListOptio
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrApiGroupNotFound
 		}
 		return nil, err
 	}

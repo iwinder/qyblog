@@ -4,13 +4,13 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	v1 "github.com/iwinder/qingyucms/api/qycms_blog/admin/v1"
+	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
 )
 
-// NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.ArticleService, logger log.Logger) *grpc.Server {
+// NewGRPCServer new a gRPC server.  gRPC 示例，本项目暂未使用
+func NewGRPCServer(c *conf.Server, greeter *service.BlogAdminUserService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -26,6 +26,6 @@ func NewGRPCServer(c *conf.Server, greeter *service.ArticleService, logger log.L
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterArticleServer(srv, greeter)
+	v1.RegisterQyAdminUserServer(srv, greeter)
 	return srv
 }

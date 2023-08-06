@@ -69,7 +69,7 @@ func (uc *MenusAdminUsecase) Update(ctx context.Context, obj *MenusAdminDO) (*Me
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusNotFound
 		}
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (uc *MenusAdminUsecase) FindOneByID(ctx context.Context, id uint64) (*Menus
 	objDO, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusNotFound
 		}
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (uc *MenusAdminUsecase) ListAll(ctx context.Context, opts MenusAdminDOListO
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusNotFound
 		}
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func (uc *MenusAdminUsecase) FindAllByRoleID(ctx context.Context, rid uint64) ([
 //	objDOs, err := uc.repo.ListAll(ctx, opts)
 //	if err != nil {
 //		if errors.Is(err, gorm.ErrRecordNotFound) {
-//			return nil, ErrUserNotFound
+//			return nil, ErrMenusNotFound
 //		}
 //		return nil, err
 //	}
@@ -190,7 +190,7 @@ func (uc *MenusAdminUsecase) ListAllChildren(ctx context.Context, opts MenusAdmi
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrMenusNotFound
 		}
 		return nil, err
 	}

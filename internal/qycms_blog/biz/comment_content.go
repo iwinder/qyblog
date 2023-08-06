@@ -9,6 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrCommentContentNotFound is comment content  not found.
+	ErrCommentContentNotFound = errors.NotFound("107404", "comment content not found")
+)
+
 type CommentContentDO struct {
 	metaV1.ObjectMeta
 	AgentId        uint64
@@ -100,7 +105,7 @@ func (uc *CommentContentUsecase) Update(ctx context.Context, g *CommentContentDO
 	data, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}
@@ -150,7 +155,7 @@ func (uc *CommentContentUsecase) FindByID(ctx context.Context, id uint64) (*Comm
 	g, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}
@@ -162,7 +167,7 @@ func (uc *CommentContentUsecase) ListAll(ctx context.Context, opts CommentConten
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCategoryNotFound
 		}
 		return nil, err
 	}

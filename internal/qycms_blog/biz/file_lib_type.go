@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrFileLibTypeNotFound is file lib type not found.
+	ErrFileLibTypeNotFound = errors.NotFound("111404", "file lib type not found")
+)
+
 type FileLibTypeDO struct {
 	metaV1.ObjectMeta
 	Name       string
@@ -45,7 +50,7 @@ func (uc *FileLibTypeUsecase) Save(ctx context.Context, data *FileLibTypeDO) (*F
 	dataDO, err := uc.repo.Save(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibTypeNotFound
 		}
 		return nil, err
 	}
@@ -57,7 +62,7 @@ func (uc *FileLibTypeUsecase) Update(ctx context.Context, data *FileLibTypeDO) (
 	dataDO, err := uc.repo.Update(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibTypeNotFound
 		}
 		return nil, err
 	}
@@ -75,7 +80,7 @@ func (uc *FileLibTypeUsecase) ListAll(ctx context.Context, opts FileLibTypeDOLis
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrFileLibTypeNotFound
 		}
 		return nil, err
 	}

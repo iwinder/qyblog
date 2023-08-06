@@ -2,12 +2,17 @@ package biz
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrTagNotFound is tag not found.
+	ErrTagNotFound = errors.NotFound("118404", "tag not found")
 )
 
 type TagsDO struct {
@@ -71,7 +76,7 @@ func (uc *TagsUsecase) Update(ctx context.Context, obj *TagsDO) (*TagsDO, error)
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}
@@ -94,7 +99,7 @@ func (uc *TagsUsecase) FindOneByName(ctx context.Context, name string) (*TagsDO,
 	obj, err := uc.repo.FindOneByName(ctx, name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}
@@ -105,7 +110,7 @@ func (uc *TagsUsecase) FindOneByIdentifier(ctx context.Context, name string) (*T
 	obj, err := uc.repo.FindOneByIdentifier(ctx, name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}
@@ -118,7 +123,7 @@ func (uc *TagsUsecase) FindOneByID(ctx context.Context, id uint64) (*TagsDO, err
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}
@@ -131,7 +136,7 @@ func (uc *TagsUsecase) ListAll(ctx context.Context, opts TagsDOListOption) (*Tag
 	objDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}
@@ -143,7 +148,7 @@ func (uc *TagsUsecase) FindAllByArticleID(ctx context.Context, articleId uint64)
 	objDOs, err := uc.repo.FindAllByArticleID(ctx, articleId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrTagNotFound
 		}
 		return nil, err
 	}

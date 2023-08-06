@@ -7,12 +7,11 @@ import (
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	v1 "github.com/iwinder/qingyucms/api/qycms_user/v1"
 )
 
 var (
-	// ErrUserNotFound is user not found.
-	ErrUserNotFound = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
+	// ErrCommentAgentNotFound is common agent not found.
+	ErrCommentAgentNotFound = errors.NotFound("106404", "common agent not found")
 )
 
 // CommentAgentDO is a CommentAgentDO model.
@@ -64,7 +63,7 @@ func (uc *CommentAgentUsecase) Update(ctx context.Context, g *CommentAgentDO) (*
 	dataPO, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCommentAgentNotFound
 		}
 		return nil, err
 	}
@@ -89,7 +88,7 @@ func (uc *CommentAgentUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 	g, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCommentAgentNotFound
 		}
 		return nil, err
 	}

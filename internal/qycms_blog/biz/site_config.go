@@ -2,10 +2,15 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrSiteConfigNotFound is site config not found.
+	ErrSiteConfigNotFound = errors.NotFound("117404", "site config not found")
 )
 
 type SiteConfigDO struct {
@@ -50,7 +55,7 @@ func (uc *SiteConfigUsecase) Save(ctx context.Context, data *SiteConfigDO) (*Sit
 	dataDO, err := uc.repo.Save(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrSiteConfigNotFound
 		}
 		return nil, err
 	}
@@ -62,7 +67,7 @@ func (uc *SiteConfigUsecase) Update(ctx context.Context, data *SiteConfigDO) (*S
 	dataDO, err := uc.repo.Update(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrSiteConfigNotFound
 		}
 		return nil, err
 	}
@@ -74,7 +79,7 @@ func (uc *SiteConfigUsecase) UpdateInBatches(ctx context.Context, data []*SiteCo
 	err := uc.repo.UpdateInBatches(ctx, data)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return ErrUserNotFound
+			return ErrSiteConfigNotFound
 		}
 		return err
 	}
@@ -101,7 +106,7 @@ func (uc *SiteConfigUsecase) ListAll(ctx context.Context, opts SiteConfigDOListO
 	dataDOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrSiteConfigNotFound
 		}
 		return nil, err
 	}

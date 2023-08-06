@@ -2,11 +2,16 @@ package biz
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
 	"gorm.io/gorm"
+)
+
+var (
+	// ErrRoleNotFound is role not found.
+	ErrRoleNotFound = errors.NotFound("115404", "role not found")
 )
 
 type RoleDO struct {
@@ -67,7 +72,7 @@ func (uc *RoleUsecase) Update(ctx context.Context, obj *RoleDO) (*RoleDO, error)
 	objDO, err := uc.repo.Update(ctx, obj)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrRoleNotFound
 		}
 		return nil, err
 	}
@@ -92,7 +97,7 @@ func (uc *RoleUsecase) FindOneByID(ctx context.Context, id uint64) (*RoleDO, err
 	obj, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrRoleNotFound
 		}
 		return nil, err
 	}
@@ -108,7 +113,7 @@ func (uc *RoleUsecase) FindByUserId(ctx context.Context, userId uint64) ([]*Role
 	obj, err := uc.repo.FindByUserId(ctx, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrRoleNotFound
 		}
 		return nil, err
 	}
@@ -136,7 +141,7 @@ func (uc *RoleUsecase) ListAll(ctx context.Context, opts RoleDOListOption) (*Rol
 	objPOs, err := uc.repo.ListAll(ctx, opts)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrRoleNotFound
 		}
 		return nil, err
 	}

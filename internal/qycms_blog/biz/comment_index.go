@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	// ErrCommentIndexNotFound is comment index not found.
+	ErrCommentIndexNotFound = errors.NotFound("108404", "comment index not found")
+)
+
 type CommentIndexDO struct {
 	metaV1.ObjectMeta
 	AgentId   uint64
@@ -81,7 +86,7 @@ func (uc *CommentIndexUsecase) Update(ctx context.Context, g *CommentIndexDO) (*
 	data, err := uc.repo.Update(ctx, g)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCommentIndexNotFound
 		}
 		return nil, err
 	}
@@ -121,7 +126,7 @@ func (uc *CommentIndexUsecase) FindByID(ctx context.Context, id uint64) (*Commen
 	g, err := uc.repo.FindByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCommentIndexNotFound
 		}
 		return nil, err
 	}
@@ -133,7 +138,7 @@ func (uc *CommentIndexUsecase) FindAllByParentID(ctx context.Context, id uint64)
 	g, err := uc.repo.FindAllByParentID(ctx, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, ErrCommentIndexNotFound
 		}
 		return nil, err
 	}
