@@ -285,6 +285,7 @@ func (r *articleRepo) ListAll(ctx context.Context, opts biz.ArticleDOListOption)
 	ret.Current = opts.Current
 	ret.PageSize = opts.PageSize
 	ret.LastFlag = opts.LastFlag
+	ret.Pages = opts.Pages
 
 	infos := make([]*biz.ArticleDO, 0, len(ret.Items))
 	for _, data := range ret.Items {

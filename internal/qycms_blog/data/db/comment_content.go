@@ -229,6 +229,7 @@ func (r *CommentContentRepo) ListAll(ctx context.Context, opts biz.CommentConten
 	ret.Current = opts.Current
 	ret.PageSize = opts.PageSize
 	ret.LastFlag = opts.LastFlag
+	ret.Pages = opts.Pages
 	infos := make([]*biz.CommentContentDO, 0, len(ret.Items))
 	for _, obj := range ret.Items {
 		infos = append(infos, &biz.CommentContentDO{
