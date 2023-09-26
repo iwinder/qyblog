@@ -11,6 +11,7 @@ service QyWebArticle {
 	rpc CreateQyWebArticle (CreateQyWebArticleRequest) returns (CreateQyWebArticleReply);
 	rpc UpdateQyWebArticle (UpdateQyWebArticleRequest) returns (UpdateQyWebArticleReply);
 	rpc DeleteQyWebArticle (DeleteQyWebArticleRequest) returns (DeleteQyWebArticleReply);
+	// 查看文章详情
 	rpc GetQyWebArticle (GetQyWebArticleRequest) returns (GetQyWebArticleReply){
 		option (google.api.http) = {
 			get: "/api/web/v1/article/{name}",

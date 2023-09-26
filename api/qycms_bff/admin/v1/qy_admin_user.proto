@@ -7,14 +7,14 @@ option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 // 用户管理
 service QyAdminUser {
-	// 新增用户
+	// 新增
 	rpc CreateUser (CreateUserRequest) returns (CreateUserReply){
 		option (google.api.http) = {
 			post: "/api/admin/v1/user",
 			body:"*"
 		};
 	}
-	// 更新用户
+	// 修改
 	rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply){
 		option (google.api.http) = {
 			put: "/api/admin/v1/user/{id}",
@@ -35,13 +35,13 @@ service QyAdminUser {
 		};
 	};
 
-	// 获取用户个人信息
+	// 查看个人信息
 	rpc GetMyInfo (GetMyInfoRequest) returns (GetUserReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/user/myInfo"
 		};
 	}
-	// 获取用户信息
+	// 查看详情
 	rpc GetUser (GetUserRequest) returns (GetUserReply){
 		option (google.api.http) = {
 			get: "/api/admin/v1/user/{id}"
