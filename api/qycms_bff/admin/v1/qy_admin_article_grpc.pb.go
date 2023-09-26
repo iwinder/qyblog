@@ -22,11 +22,17 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminArticleClient interface {
+	// 新增
 	CreateQyAdminArticle(ctx context.Context, in *CreateQyAdminArticleRequest, opts ...grpc.CallOption) (*CreateQyAdminArticleReply, error)
+	// 更新
 	UpdateQyAdminArticle(ctx context.Context, in *UpdateQyAdminArticleRequest, opts ...grpc.CallOption) (*UpdateQyAdminArticleReply, error)
+	// 删除
 	DeleteQyAdminArticle(ctx context.Context, in *DeleteQyAdminArticleRequest, opts ...grpc.CallOption) (*DeleteQyAdminArticleReply, error)
+	// 获取详情
 	GetQyAdminArticle(ctx context.Context, in *GetQyAdminArticleRequest, opts ...grpc.CallOption) (*GetQyAdminArticleReply, error)
+	// 生成文章链接
 	InitQyAdminArticlePermaLink(ctx context.Context, in *InitQyAdminArticlePermaLinkRequest, opts ...grpc.CallOption) (*InitQyAdminArticlePermaLinkReply, error)
+	// 列表
 	ListQyAdminArticle(ctx context.Context, in *ListQyAdminArticleRequest, opts ...grpc.CallOption) (*ListQyAdminArticleReply, error)
 }
 
@@ -96,11 +102,17 @@ func (c *qyAdminArticleClient) ListQyAdminArticle(ctx context.Context, in *ListQ
 // All implementations must embed UnimplementedQyAdminArticleServer
 // for forward compatibility
 type QyAdminArticleServer interface {
+	// 新增
 	CreateQyAdminArticle(context.Context, *CreateQyAdminArticleRequest) (*CreateQyAdminArticleReply, error)
+	// 更新
 	UpdateQyAdminArticle(context.Context, *UpdateQyAdminArticleRequest) (*UpdateQyAdminArticleReply, error)
+	// 删除
 	DeleteQyAdminArticle(context.Context, *DeleteQyAdminArticleRequest) (*DeleteQyAdminArticleReply, error)
+	// 获取详情
 	GetQyAdminArticle(context.Context, *GetQyAdminArticleRequest) (*GetQyAdminArticleReply, error)
+	// 生成文章链接
 	InitQyAdminArticlePermaLink(context.Context, *InitQyAdminArticlePermaLinkRequest) (*InitQyAdminArticlePermaLinkReply, error)
+	// 列表
 	ListQyAdminArticle(context.Context, *ListQyAdminArticleRequest) (*ListQyAdminArticleReply, error)
 	mustEmbedUnimplementedQyAdminArticleServer()
 }

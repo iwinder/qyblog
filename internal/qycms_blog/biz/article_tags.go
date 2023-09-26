@@ -11,8 +11,8 @@ type ArticleTagsDO struct {
 }
 
 type ArticleTagsRepo interface {
-	CreateInBatches(ctx context.Context, articleTagss []*ArticleTagsDO) error
-	UpdateInBatches(ctx context.Context, articleTagss []*ArticleTagsDO) error
+	CreateInBatches(ctx context.Context, articleTags []*ArticleTagsDO) error
+	UpdateInBatches(ctx context.Context, articleTags []*ArticleTagsDO) error
 	DeleteByArticleID(ctx context.Context, articleId uint64) error
 }
 
@@ -31,6 +31,7 @@ func (uc *ArticleTagsUsecase) SaveTagsForArticle(ctx context.Context, article *A
 	oldTsgs, err := uc.tu.FindAllByArticleID(ctx, article.ID)
 	if err != nil {
 		uc.log.WithContext(ctx).Error(err)
+		return err
 	}
 	oldTsgMap := make(map[string]*TagsDO, len(oldTsgs))
 	for _, tag := range oldTsgs {
@@ -72,6 +73,7 @@ func (uc *ArticleTagsUsecase) SaveTagsForArticle(ctx context.Context, article *A
 		aerr := uc.repo.DeleteByArticleID(ctx, article.ID)
 		if aerr != nil {
 			uc.log.WithContext(ctx).Error(aerr)
+			return aerr
 		}
 		// 关联关系
 		if len(articleTagss) > 0 {
@@ -117,9 +119,9 @@ func (uc *ArticleTagsUsecase) UpdateRoleForUser(ctx context.Context, article *Ar
 	return nil
 }
 func (uc *ArticleTagsUsecase) FindAllByArticleID(ctx context.Context, aid uint64) ([]*TagsDO, error) {
-	oldTsgs, err := uc.tu.FindAllByArticleID(ctx, aid)
+	oldTags, err := uc.tu.FindAllByArticleID(ctx, aid)
 	if err != nil {
 		uc.log.WithContext(ctx).Error(err)
 	}
-	return oldTsgs, nil
+	return oldTags, nil
 }

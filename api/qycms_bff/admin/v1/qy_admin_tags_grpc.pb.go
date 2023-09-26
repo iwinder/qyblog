@@ -22,10 +22,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminTagsClient interface {
+	// 新增
 	CreateQyAdminTags(ctx context.Context, in *CreateQyAdminTagsRequest, opts ...grpc.CallOption) (*CreateQyAdminTagsReply, error)
+	// 更新
 	UpdateQyAdminTags(ctx context.Context, in *UpdateQyAdminTagsRequest, opts ...grpc.CallOption) (*UpdateQyAdminTagsReply, error)
+	// 删除
 	DeleteQyAdminTags(ctx context.Context, in *DeleteQyAdminTagsRequest, opts ...grpc.CallOption) (*DeleteQyAdminTagsReply, error)
 	GetQyAdminTags(ctx context.Context, in *GetQyAdminTagsRequest, opts ...grpc.CallOption) (*GetQyAdminTagsReply, error)
+	// 列表
 	ListQyAdminTags(ctx context.Context, in *ListQyAdminTagsRequest, opts ...grpc.CallOption) (*ListQyAdminTagsReply, error)
 }
 
@@ -86,10 +90,14 @@ func (c *qyAdminTagsClient) ListQyAdminTags(ctx context.Context, in *ListQyAdmin
 // All implementations must embed UnimplementedQyAdminTagsServer
 // for forward compatibility
 type QyAdminTagsServer interface {
+	// 新增
 	CreateQyAdminTags(context.Context, *CreateQyAdminTagsRequest) (*CreateQyAdminTagsReply, error)
+	// 更新
 	UpdateQyAdminTags(context.Context, *UpdateQyAdminTagsRequest) (*UpdateQyAdminTagsReply, error)
+	// 删除
 	DeleteQyAdminTags(context.Context, *DeleteQyAdminTagsRequest) (*DeleteQyAdminTagsReply, error)
 	GetQyAdminTags(context.Context, *GetQyAdminTagsRequest) (*GetQyAdminTagsReply, error)
+	// 列表
 	ListQyAdminTags(context.Context, *ListQyAdminTagsRequest) (*ListQyAdminTagsReply, error)
 	mustEmbedUnimplementedQyAdminTagsServer()
 }

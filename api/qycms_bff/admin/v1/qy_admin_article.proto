@@ -88,6 +88,7 @@ message ArticleInfoResponse {
 	repeated string tagStrings = 21;
 	string categoryName = 22;
 	bool commentFlag = 23;
+	repeated ArticleResourcesInfoResponse resources = 24;
 }
 
 message CreateQyAdminArticleRequest {
@@ -109,6 +110,7 @@ message CreateQyAdminArticleRequest {
 	repeated string tagStrings = 21;
 	string categoryName = 22;
 	bool commentFlag = 23;
+	repeated ArticleResourcesInfoResponse resources = 24;
 }
 message CreateQyAdminArticleReply {
 	uint64 id = 1;
@@ -134,6 +136,7 @@ message UpdateQyAdminArticleRequest {
 	repeated string tagStrings = 21;
 	string categoryName = 22;
 	bool commentFlag = 23;
+	repeated ArticleResourcesInfoResponse resources = 24;
 }
 message UpdateQyAdminArticleReply {
 	uint64 id = 1;
@@ -171,4 +174,12 @@ message ListQyAdminArticleRequest {
 message ListQyAdminArticleReply {
 	ArticlePageInfo pageInfo = 1;
 	repeated ArticleInfoResponse items = 2;
+}
+
+
+message ArticleResourcesInfoResponse {
+	uint64 id = 1;
+	string name= 2;
+	string url= 3;
+	string password= 4;
 }

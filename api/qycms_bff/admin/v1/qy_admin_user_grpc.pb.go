@@ -36,6 +36,7 @@ type QyAdminUserClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(ctx context.Context, in *ListUserRequest, opts ...grpc.CallOption) (*ListUserReply, error)
+	// 重置密码
 	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 	// 验证密码用于登录
 	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordReply, error)
@@ -148,6 +149,7 @@ type QyAdminUserServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// 批量获取用户
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
+	// 重置密码
 	ChangePassword(context.Context, *ChangePasswordRequest) (*CreateUserReply, error)
 	// 验证密码用于登录
 	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error)

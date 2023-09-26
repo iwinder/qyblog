@@ -22,10 +22,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminMenusClient interface {
+	// 新增
 	CreateQyAdminMenus(ctx context.Context, in *CreateQyAdminMenusRequest, opts ...grpc.CallOption) (*CreateQyAdminMenusReply, error)
+	// 更新
 	UpdateQyAdminMenus(ctx context.Context, in *UpdateQyAdminMenusRequest, opts ...grpc.CallOption) (*UpdateQyAdminMenusReply, error)
+	// 删除
 	DeleteQyAdminMenus(ctx context.Context, in *DeleteQyAdminMenusRequest, opts ...grpc.CallOption) (*DeleteQyAdminMenusReply, error)
 	GetQyAdminMenus(ctx context.Context, in *GetQyAdminMenusRequest, opts ...grpc.CallOption) (*GetQyAdminMenusReply, error)
+	// 列表
 	ListQyAdminMenus(ctx context.Context, in *ListQyAdminMenusRequest, opts ...grpc.CallOption) (*ListQyAdminMenusReply, error)
 }
 
@@ -86,10 +90,14 @@ func (c *qyAdminMenusClient) ListQyAdminMenus(ctx context.Context, in *ListQyAdm
 // All implementations must embed UnimplementedQyAdminMenusServer
 // for forward compatibility
 type QyAdminMenusServer interface {
+	// 新增
 	CreateQyAdminMenus(context.Context, *CreateQyAdminMenusRequest) (*CreateQyAdminMenusReply, error)
+	// 更新
 	UpdateQyAdminMenus(context.Context, *UpdateQyAdminMenusRequest) (*UpdateQyAdminMenusReply, error)
+	// 删除
 	DeleteQyAdminMenus(context.Context, *DeleteQyAdminMenusRequest) (*DeleteQyAdminMenusReply, error)
 	GetQyAdminMenus(context.Context, *GetQyAdminMenusRequest) (*GetQyAdminMenusReply, error)
+	// 列表
 	ListQyAdminMenus(context.Context, *ListQyAdminMenusRequest) (*ListQyAdminMenusReply, error)
 	mustEmbedUnimplementedQyAdminMenusServer()
 }

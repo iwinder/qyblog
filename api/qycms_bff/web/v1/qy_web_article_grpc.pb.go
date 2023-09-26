@@ -29,6 +29,7 @@ type QyWebArticleClient interface {
 	ListQyWebArticle(ctx context.Context, in *ListQyWebArticleRequest, opts ...grpc.CallOption) (*ListQyWebArticleReply, error)
 	GetQyWebTag(ctx context.Context, in *GetQyWebTagRequest, opts ...grpc.CallOption) (*GetQyWebTagReply, error)
 	GetQyWebCategory(ctx context.Context, in *GetQyWebCategoryRequest, opts ...grpc.CallOption) (*GetQyWebCategoryReply, error)
+	ListQyWebArticleResources(ctx context.Context, in *ListQyWebArticleResourcesRequest, opts ...grpc.CallOption) (*ListQyWebArticleResourcesReply, error)
 	GetQyWebMinaArticle(ctx context.Context, in *GetQyWebArticleRequest, opts ...grpc.CallOption) (*GetQyWebMinaArticleReply, error)
 	ListQyWebMinaArticle(ctx context.Context, in *ListQyWebArticleRequest, opts ...grpc.CallOption) (*ListQyWebArticleReply, error)
 }
@@ -104,6 +105,15 @@ func (c *qyWebArticleClient) GetQyWebCategory(ctx context.Context, in *GetQyWebC
 	return out, nil
 }
 
+func (c *qyWebArticleClient) ListQyWebArticleResources(ctx context.Context, in *ListQyWebArticleResourcesRequest, opts ...grpc.CallOption) (*ListQyWebArticleResourcesReply, error) {
+	out := new(ListQyWebArticleResourcesReply)
+	err := c.cc.Invoke(ctx, "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticleResources", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *qyWebArticleClient) GetQyWebMinaArticle(ctx context.Context, in *GetQyWebArticleRequest, opts ...grpc.CallOption) (*GetQyWebMinaArticleReply, error) {
 	out := new(GetQyWebMinaArticleReply)
 	err := c.cc.Invoke(ctx, "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebMinaArticle", in, out, opts...)
@@ -133,6 +143,7 @@ type QyWebArticleServer interface {
 	ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
 	GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error)
 	GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error)
+	ListQyWebArticleResources(context.Context, *ListQyWebArticleResourcesRequest) (*ListQyWebArticleResourcesReply, error)
 	GetQyWebMinaArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebMinaArticleReply, error)
 	ListQyWebMinaArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
 	mustEmbedUnimplementedQyWebArticleServer()
@@ -162,6 +173,9 @@ func (UnimplementedQyWebArticleServer) GetQyWebTag(context.Context, *GetQyWebTag
 }
 func (UnimplementedQyWebArticleServer) GetQyWebCategory(context.Context, *GetQyWebCategoryRequest) (*GetQyWebCategoryReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQyWebCategory not implemented")
+}
+func (UnimplementedQyWebArticleServer) ListQyWebArticleResources(context.Context, *ListQyWebArticleResourcesRequest) (*ListQyWebArticleResourcesReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListQyWebArticleResources not implemented")
 }
 func (UnimplementedQyWebArticleServer) GetQyWebMinaArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebMinaArticleReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetQyWebMinaArticle not implemented")
@@ -308,6 +322,24 @@ func _QyWebArticle_GetQyWebCategory_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _QyWebArticle_ListQyWebArticleResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListQyWebArticleResourcesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QyWebArticleServer).ListQyWebArticleResources(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticleResources",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QyWebArticleServer).ListQyWebArticleResources(ctx, req.(*ListQyWebArticleResourcesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _QyWebArticle_GetQyWebMinaArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetQyWebArticleRequest)
 	if err := dec(in); err != nil {
@@ -378,6 +410,10 @@ var QyWebArticle_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetQyWebCategory",
 			Handler:    _QyWebArticle_GetQyWebCategory_Handler,
+		},
+		{
+			MethodName: "ListQyWebArticleResources",
+			Handler:    _QyWebArticle_ListQyWebArticleResources_Handler,
 		},
 		{
 			MethodName: "GetQyWebMinaArticle",

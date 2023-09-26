@@ -146,6 +146,22 @@ func (b *BlogWebApiService) ListQyWebMinaArticle(ctx context.Context, in *v1.Lis
 	return &v1.ListQyWebArticleReply{PageInfo: pageInfo, Items: objs}, nil
 }
 
+func (b *BlogWebApiService) ListQyWebArticleResources(ctx context.Context, in *v1.ListQyWebArticleResourcesRequest) (*v1.ListQyWebArticleResourcesReply, error) {
+	data, err := b.fu.FindAllByArticlePermaLink(ctx, in.PermaLink)
+	if err != nil {
+		return nil, err
+	}
+	objs := make([]*v1.WebArticleResourcesResponse, 0, len(data))
+	for _, item := range data {
+		objs = append(objs, &v1.WebArticleResourcesResponse{
+			Name:     item.Name,
+			Url:      item.Url,
+			Password: item.Password,
+		})
+	}
+	return &v1.ListQyWebArticleResourcesReply{Items: objs}, nil
+}
+
 func bizToWebArticleResponse(obj *biz.ArticleDO) *v1.WebArticleInfoResponse {
 	objInfoRsp := &v1.WebArticleInfoResponse{
 		Title:          obj.Title,
@@ -183,6 +199,17 @@ func bizToWebArticleResponse(obj *biz.ArticleDO) *v1.WebArticleInfoResponse {
 			})
 		}
 		objInfoRsp.Tags = tags
+	}
+	if len(obj.Resource) > 0 {
+		files := make([]*v1.WebArticleResourcesResponse, 0, len(obj.Resource))
+		for _, file := range obj.Resource {
+			files = append(files, &v1.WebArticleResourcesResponse{
+				Name:     file.Name,
+				Url:      file.Url,
+				Password: file.Password,
+			})
+		}
+		objInfoRsp.Resources = files
 	}
 	return objInfoRsp
 }

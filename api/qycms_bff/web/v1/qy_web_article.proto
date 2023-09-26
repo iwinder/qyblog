@@ -31,6 +31,11 @@ service QyWebArticle {
 			get: "/api/web/v1/category/{name}",
 		};
 	};
+	rpc ListQyWebArticleResources (ListQyWebArticleResourcesRequest) returns (ListQyWebArticleResourcesReply){
+		option (google.api.http) = {
+			get: "/api/web/v1/article/resources",
+		};
+	};
 	rpc GetQyWebMinaArticle (GetQyWebArticleRequest) returns (GetQyWebMinaArticleReply){
 		option (google.api.http) = {
 			get: "/api/web/v1/mina/article/{name}",
@@ -82,6 +87,7 @@ message WebArticleInfoResponse {
 	repeated WebTagsResponse tags = 21;
 	bool commentFlag = 22;
 	int32 commentCount = 23;
+	repeated WebArticleResourcesResponse resources = 24;
 }
 message WebMinaArticleInfoResponse {
 	string title= 2;
@@ -151,4 +157,16 @@ message ListQyWebArticleRequest {
 message ListQyWebArticleReply {
 	WebArticlePageInfo pageInfo = 1;
 	repeated WebArticleInfoResponse items = 2;
+}
+
+message ListQyWebArticleResourcesRequest {
+	string permaLink = 1;
+}
+message WebArticleResourcesResponse {
+	string name = 7;
+	string url = 8;
+	string password = 9;
+}
+message ListQyWebArticleResourcesReply {
+	repeated WebArticleResourcesResponse items = 1;
 }

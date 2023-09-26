@@ -145,7 +145,7 @@ message ListQyAdminCommentRequest {
 	int64 pages = 4;
 	bool firstFlag = 5;
 	bool lastFlag = 6;
-	string SearchText = 7;
+	string searchText = 7;
 	int32 statusFlag = 8;
 }
 message ListQyAdminCommentReply {

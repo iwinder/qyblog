@@ -22,9 +22,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminHomeClient interface {
+	// 更新评论统计
 	UpdateContentCountJobsQyAdminHome(ctx context.Context, in *CreateQyAdminHomeRequest, opts ...grpc.CallOption) (*CreateQyAdminHomeReply, error)
+	// 更新网站地图
 	GeneratorMapJobQyAdminHome(ctx context.Context, in *CreateQyAdminHomeRequest, opts ...grpc.CallOption) (*CreateQyAdminHomeReply, error)
+	// 更新文章统计
 	UpdateAllPostsCountJobsQyAdminHome(ctx context.Context, in *CreateQyAdminHomeRequest, opts ...grpc.CallOption) (*CreateQyAdminHomeReply, error)
+	// 手动推送邮件
 	EmailToNotSendCountJobsQyAdminHome(ctx context.Context, in *CreateQyAdminHomeRequest, opts ...grpc.CallOption) (*CreateQyAdminHomeReply, error)
 	GetQyAdminHome(ctx context.Context, in *GetQyAdminHomeRequest, opts ...grpc.CallOption) (*GetQyAdminHomeReply, error)
 	ListQyAdminHome(ctx context.Context, in *ListQyAdminHomeRequest, opts ...grpc.CallOption) (*ListQyAdminHomeReply, error)
@@ -96,9 +100,13 @@ func (c *qyAdminHomeClient) ListQyAdminHome(ctx context.Context, in *ListQyAdmin
 // All implementations must embed UnimplementedQyAdminHomeServer
 // for forward compatibility
 type QyAdminHomeServer interface {
+	// 更新评论统计
 	UpdateContentCountJobsQyAdminHome(context.Context, *CreateQyAdminHomeRequest) (*CreateQyAdminHomeReply, error)
+	// 更新网站地图
 	GeneratorMapJobQyAdminHome(context.Context, *CreateQyAdminHomeRequest) (*CreateQyAdminHomeReply, error)
+	// 更新文章统计
 	UpdateAllPostsCountJobsQyAdminHome(context.Context, *CreateQyAdminHomeRequest) (*CreateQyAdminHomeReply, error)
+	// 手动推送邮件
 	EmailToNotSendCountJobsQyAdminHome(context.Context, *CreateQyAdminHomeRequest) (*CreateQyAdminHomeReply, error)
 	GetQyAdminHome(context.Context, *GetQyAdminHomeRequest) (*GetQyAdminHomeReply, error)
 	ListQyAdminHome(context.Context, *ListQyAdminHomeRequest) (*ListQyAdminHomeReply, error)

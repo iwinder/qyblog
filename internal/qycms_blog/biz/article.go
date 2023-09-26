@@ -21,30 +21,33 @@ var (
 // ArticleDO is a ArticleDO model.
 type ArticleDO struct {
 	metaV1.ObjectMeta
-	Title          string
-	PermaLink      string
-	CanonicalLink  string
-	Summary        string
-	Thumbnail      string
-	Password       string
-	Atype          int
-	CategoryId     uint64
-	CategoryName   string
-	CommentAgentId uint64
-	CommentFlag    bool
-	Published      bool
-	ViewCount      int32
-	CommentCount   int32
-	LikeCount      int32
-	HateCount      int32
-	Nickname       string
-	PublishedAt    time.Time
-	TagStrings     []string
-	Tags           []*TagsDO
-	Category       *CategoryDO
-	Content        string
-	ContentHtml    string
-	TagName        string
+	Title           string
+	PermaLink       string
+	CanonicalLink   string
+	Summary         string
+	Thumbnail       string
+	Password        string
+	Atype           int
+	CategoryId      uint64
+	CategoryName    string
+	CommentAgentId  uint64
+	CommentFlag     bool
+	Published       bool
+	ViewCount       int32
+	CommentCount    int32
+	LikeCount       int32
+	HateCount       int32
+	Nickname        string
+	PublishedAt     time.Time
+	TagStrings      []string
+	Tags            []*TagsDO
+	Category        *CategoryDO
+	Content         string
+	ContentHtml     string
+	TagName         string
+	Resource        []*ArticleResourceDO
+	ResourceStrings []string
+	ResourceCount   int64
 }
 
 type ArticleDOList struct {
@@ -84,15 +87,16 @@ type ArticleUsecase struct {
 	at   *ArticleTagsUsecase
 	ca   *CommentAgentUsecase
 	cu   *CategoryUsecase
+	fu   *ArticleResourceUsecase
 }
 
 // NewArticleUsecase new a ArticleDO usecase.
 func NewArticleUsecase(repo ArticleRepo, logger log.Logger,
 	ac *ArticleContentUsecase, at *ArticleTagsUsecase, ca *CommentAgentUsecase,
-	cu *CategoryUsecase,
+	cu *CategoryUsecase, fu *ArticleResourceUsecase,
 ) *ArticleUsecase {
 	return &ArticleUsecase{repo: repo, log: log.NewHelper(logger),
-		ac: ac, at: at, ca: ca, cu: cu,
+		ac: ac, at: at, ca: ca, cu: cu, fu: fu,
 	}
 }
 
@@ -133,6 +137,8 @@ func (uc *ArticleUsecase) Create(ctx context.Context, g *ArticleDO) (*ArticleDO,
 	cad.UpdatedBy = g.CreatedBy
 	cado.ObjId = data.ID
 	uc.ca.Update(ctx, cado)
+	// 新增 相关文件 信息
+	uc.fu.SaveResourcesForArticle(ctx, g.ID, g.Resource)
 	return data, nil
 }
 
@@ -151,9 +157,19 @@ func (uc *ArticleUsecase) Update(ctx context.Context, g *ArticleDO) (*ArticleDO,
 	_, cerr := uc.ac.UpdateByArticle(ctx, g)
 	if cerr != nil {
 		log.Error(cerr)
+		return nil, cerr
 	}
 	// 保存Tags
-	uc.at.SaveTagsForArticle(ctx, g)
+	terr := uc.at.SaveTagsForArticle(ctx, g)
+	if terr != nil {
+		return nil, terr
+	}
+
+	// 更新 相关文件 信息
+	ferr := uc.fu.UpdateResourcesForArticle(ctx, g.ID, g.Resource)
+	if ferr != nil {
+		return nil, ferr
+	}
 	return data, nil
 }
 
@@ -218,6 +234,12 @@ func (uc *ArticleUsecase) FindOneByID(ctx context.Context, id uint64) (*ArticleD
 
 	// 标签
 	g.TagStrings = uc.getTagsStringByAid(ctx, id)
+	// 查询列表
+	files, ferr := uc.fu.FindAllByArticleID(ctx, id)
+	if ferr != nil {
+		uc.log.WithContext(ctx).Error(ferr)
+	}
+	g.Resource = files
 	return g, nil
 }
 func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*ArticleDO, error) {
@@ -254,6 +276,13 @@ func (uc *ArticleUsecase) FindOneByLink(ctx context.Context, link string) (*Arti
 
 		g.ViewCount = g.ViewCount
 		dataDo = g
+
+		// 查询 文件
+		files, ferr := uc.fu.FindAllByArticleID(ctx, g.ID)
+		if ferr != nil {
+			uc.log.WithContext(ctx).Error(ferr)
+		}
+		g.Resource = files
 		uc.repo.SetArticleCache(ctx, dataDo, link)
 	}
 	if dataDo.PermaLink == "err404" {

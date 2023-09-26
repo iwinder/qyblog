@@ -22,10 +22,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminCategoryClient interface {
+	// 新增
 	CreateQyAdminCategory(ctx context.Context, in *CreateQyAdminCategoryRequest, opts ...grpc.CallOption) (*CreateQyAdminCategoryReply, error)
+	// 更新
 	UpdateQyAdminCategory(ctx context.Context, in *UpdateQyAdminCategoryRequest, opts ...grpc.CallOption) (*UpdateQyAdminCategoryReply, error)
+	// 删除
 	DeleteQyAdminCategory(ctx context.Context, in *DeleteQyAdminCategoryRequest, opts ...grpc.CallOption) (*DeleteQyAdminCategoryReply, error)
 	GetQyAdminCategory(ctx context.Context, in *GetQyAdminCategoryRequest, opts ...grpc.CallOption) (*GetQyAdminCategoryReply, error)
+	// 列表
 	ListQyAdminCategory(ctx context.Context, in *ListQyAdminCategoryRequest, opts ...grpc.CallOption) (*ListQyAdminCategoryReply, error)
 }
 
@@ -86,10 +90,14 @@ func (c *qyAdminCategoryClient) ListQyAdminCategory(ctx context.Context, in *Lis
 // All implementations must embed UnimplementedQyAdminCategoryServer
 // for forward compatibility
 type QyAdminCategoryServer interface {
+	// 新增
 	CreateQyAdminCategory(context.Context, *CreateQyAdminCategoryRequest) (*CreateQyAdminCategoryReply, error)
+	// 更新
 	UpdateQyAdminCategory(context.Context, *UpdateQyAdminCategoryRequest) (*UpdateQyAdminCategoryReply, error)
+	// 删除
 	DeleteQyAdminCategory(context.Context, *DeleteQyAdminCategoryRequest) (*DeleteQyAdminCategoryReply, error)
 	GetQyAdminCategory(context.Context, *GetQyAdminCategoryRequest) (*GetQyAdminCategoryReply, error)
+	// 列表
 	ListQyAdminCategory(context.Context, *ListQyAdminCategoryRequest) (*ListQyAdminCategoryReply, error)
 	mustEmbedUnimplementedQyAdminCategoryServer()
 }

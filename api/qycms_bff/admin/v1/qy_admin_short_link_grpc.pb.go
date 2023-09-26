@@ -22,11 +22,16 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminShortLinkClient interface {
+	// 新增短连接
 	CreateQyAdminShortLink(ctx context.Context, in *CreateQyAdminShortLinkRequest, opts ...grpc.CallOption) (*CreateQyAdminShortLinkReply, error)
+	// 更新短连接
 	UpdateQyAdminShortLink(ctx context.Context, in *UpdateQyAdminShortLinkRequest, opts ...grpc.CallOption) (*UpdateQyAdminShortLinkReply, error)
+	// 删除短链接
 	DeleteQyAdminShortLink(ctx context.Context, in *DeleteQyAdminShortLinkRequest, opts ...grpc.CallOption) (*DeleteQyAdminShortLinkReply, error)
+	// 批量删除短链接
 	DeleteQyAdminShortLinks(ctx context.Context, in *DeleteQyAdminShortLinksRequest, opts ...grpc.CallOption) (*DeleteQyAdminShortLinkReply, error)
 	GetQyAdminShortLink(ctx context.Context, in *GetQyAdminShortLinkRequest, opts ...grpc.CallOption) (*GetQyAdminShortLinkReply, error)
+	// 短链接列表
 	ListQyAdminShortLink(ctx context.Context, in *ListQyAdminShortLinkRequest, opts ...grpc.CallOption) (*ListQyAdminShortLinkReply, error)
 }
 
@@ -96,11 +101,16 @@ func (c *qyAdminShortLinkClient) ListQyAdminShortLink(ctx context.Context, in *L
 // All implementations must embed UnimplementedQyAdminShortLinkServer
 // for forward compatibility
 type QyAdminShortLinkServer interface {
+	// 新增短连接
 	CreateQyAdminShortLink(context.Context, *CreateQyAdminShortLinkRequest) (*CreateQyAdminShortLinkReply, error)
+	// 更新短连接
 	UpdateQyAdminShortLink(context.Context, *UpdateQyAdminShortLinkRequest) (*UpdateQyAdminShortLinkReply, error)
+	// 删除短链接
 	DeleteQyAdminShortLink(context.Context, *DeleteQyAdminShortLinkRequest) (*DeleteQyAdminShortLinkReply, error)
+	// 批量删除短链接
 	DeleteQyAdminShortLinks(context.Context, *DeleteQyAdminShortLinksRequest) (*DeleteQyAdminShortLinkReply, error)
 	GetQyAdminShortLink(context.Context, *GetQyAdminShortLinkRequest) (*GetQyAdminShortLinkReply, error)
+	// 短链接列表
 	ListQyAdminShortLink(context.Context, *ListQyAdminShortLinkRequest) (*ListQyAdminShortLinkReply, error)
 	mustEmbedUnimplementedQyAdminShortLinkServer()
 }

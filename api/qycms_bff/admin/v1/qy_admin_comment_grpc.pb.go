@@ -26,15 +26,16 @@ type QyAdminCommentClient interface {
 	CreateQyAdminComment(ctx context.Context, in *CreateQyAdminCommentRequest, opts ...grpc.CallOption) (*CreateQyAdminCommentReply, error)
 	// 更新
 	UpdateQyAdminComment(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error)
-	// 更新内容
+	// 更新评论内容
 	UpdateQyAdminCommentContent(ctx context.Context, in *UpdateQyAdminCommentRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentReply, error)
-	// 更新状态 批准、驳回
+	// 更新状态
 	UpdateQyAdminCommentState(ctx context.Context, in *UpdateQyAdminCommentStateRequest, opts ...grpc.CallOption) (*UpdateQyAdminCommentStateReply, error)
 	// 删除
 	DeleteQyAdminComment(ctx context.Context, in *DeleteQyAdminCommentRequest, opts ...grpc.CallOption) (*DeleteQyAdminCommentReply, error)
 	GetQyAdminComment(ctx context.Context, in *GetQyAdminCommentRequest, opts ...grpc.CallOption) (*GetQyAdminCommentReply, error)
 	// 获取列表
 	ListQyAdminComment(ctx context.Context, in *ListQyAdminCommentRequest, opts ...grpc.CallOption) (*ListQyAdminCommentReply, error)
+	// 获取评论总计
 	GetQyAdminCommentCount(ctx context.Context, in *GetQyAdminCommentCountRequest, opts ...grpc.CallOption) (*GetQyAdminCommentCountReply, error)
 }
 
@@ -126,15 +127,16 @@ type QyAdminCommentServer interface {
 	CreateQyAdminComment(context.Context, *CreateQyAdminCommentRequest) (*CreateQyAdminCommentReply, error)
 	// 更新
 	UpdateQyAdminComment(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
-	// 更新内容
+	// 更新评论内容
 	UpdateQyAdminCommentContent(context.Context, *UpdateQyAdminCommentRequest) (*UpdateQyAdminCommentReply, error)
-	// 更新状态 批准、驳回
+	// 更新状态
 	UpdateQyAdminCommentState(context.Context, *UpdateQyAdminCommentStateRequest) (*UpdateQyAdminCommentStateReply, error)
 	// 删除
 	DeleteQyAdminComment(context.Context, *DeleteQyAdminCommentRequest) (*DeleteQyAdminCommentReply, error)
 	GetQyAdminComment(context.Context, *GetQyAdminCommentRequest) (*GetQyAdminCommentReply, error)
 	// 获取列表
 	ListQyAdminComment(context.Context, *ListQyAdminCommentRequest) (*ListQyAdminCommentReply, error)
+	// 获取评论总计
 	GetQyAdminCommentCount(context.Context, *GetQyAdminCommentCountRequest) (*GetQyAdminCommentCountReply, error)
 	mustEmbedUnimplementedQyAdminCommentServer()
 }

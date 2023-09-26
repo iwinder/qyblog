@@ -22,12 +22,19 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminFileClient interface {
+	// 新增媒体库
 	CreateQyAdminFileLibType(ctx context.Context, in *CreateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error)
+	// 更新媒体库
 	UpdateQyAdminFileLibType(ctx context.Context, in *UpdateQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileLibTypeReply, error)
+	// 媒体库列表
 	ListQyAdminFileLibType(ctx context.Context, in *ListQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*ListQyAdminFileLibTypeReply, error)
+	// 批量删除媒体库
 	DeleteQyAdminFileLibType(ctx context.Context, in *DeleteQyAdminFileLibTypeRequest, opts ...grpc.CallOption) (*DeleteQyAdminFileLibTypeReply, error)
+	// 创建媒体库配置
 	CreateQyAdminFileLibConfig(ctx context.Context, in *CreateQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*CreateQyAdminFileLibConfigReply, error)
+	// 获取媒体库配置
 	GetQyAdminFileLibConfig(ctx context.Context, in *GetQyAdminFileLibConfigRequest, opts ...grpc.CallOption) (*GetQyAdminFileLibConfigReply, error)
+	// 获取媒体列表
 	ListQyAdminFileLibByType(ctx context.Context, in *ListQyAdminFileRequest, opts ...grpc.CallOption) (*ListQyAdminFileReply, error)
 	CreateQyAdminFile(ctx context.Context, in *CreateQyAdminFileRequest, opts ...grpc.CallOption) (*CreateQyAdminFileReply, error)
 	UpdateQyAdminFile(ctx context.Context, in *UpdateQyAdminFileRequest, opts ...grpc.CallOption) (*UpdateQyAdminFileReply, error)
@@ -156,12 +163,19 @@ func (c *qyAdminFileClient) ListQyAdminFile(ctx context.Context, in *ListQyAdmin
 // All implementations must embed UnimplementedQyAdminFileServer
 // for forward compatibility
 type QyAdminFileServer interface {
+	// 新增媒体库
 	CreateQyAdminFileLibType(context.Context, *CreateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
+	// 更新媒体库
 	UpdateQyAdminFileLibType(context.Context, *UpdateQyAdminFileLibTypeRequest) (*UpdateQyAdminFileLibTypeReply, error)
+	// 媒体库列表
 	ListQyAdminFileLibType(context.Context, *ListQyAdminFileLibTypeRequest) (*ListQyAdminFileLibTypeReply, error)
+	// 批量删除媒体库
 	DeleteQyAdminFileLibType(context.Context, *DeleteQyAdminFileLibTypeRequest) (*DeleteQyAdminFileLibTypeReply, error)
+	// 创建媒体库配置
 	CreateQyAdminFileLibConfig(context.Context, *CreateQyAdminFileLibConfigRequest) (*CreateQyAdminFileLibConfigReply, error)
+	// 获取媒体库配置
 	GetQyAdminFileLibConfig(context.Context, *GetQyAdminFileLibConfigRequest) (*GetQyAdminFileLibConfigReply, error)
+	// 获取媒体列表
 	ListQyAdminFileLibByType(context.Context, *ListQyAdminFileRequest) (*ListQyAdminFileReply, error)
 	CreateQyAdminFile(context.Context, *CreateQyAdminFileRequest) (*CreateQyAdminFileReply, error)
 	UpdateQyAdminFile(context.Context, *UpdateQyAdminFileRequest) (*UpdateQyAdminFileReply, error)

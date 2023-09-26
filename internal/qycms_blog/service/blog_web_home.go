@@ -18,17 +18,20 @@ type BlogWebApiService struct {
 	tu   *biz.TagsUsecase
 	ctu  *biz.CommentUsecase
 	avu  *biz.ArticleVisitorUsecase
+	fu   *biz.ArticleResourceUsecase
 }
 
 func NewBlogWebApiService(
 	site *biz.SiteConfigUsecase, au *biz.ArticleUsecase,
 	mu *biz.MenusUsecase, lu *biz.LinkUsecase, slu *biz.ShortLinkUsecase,
 	cu *biz.CategoryUsecase, tu *biz.TagsUsecase, ctu *biz.CommentUsecase,
-	avu *biz.ArticleVisitorUsecase, conf *conf.Qycms,
+	avu *biz.ArticleVisitorUsecase, fu *biz.ArticleResourceUsecase,
+	conf *conf.Qycms,
 ) *BlogWebApiService {
 	return &BlogWebApiService{
 		site: site, au: au, mu: mu,
 		lu: lu, slu: slu, cu: cu, tu: tu, ctu: ctu,
-		avu: avu, conf: conf,
+		avu: avu, fu: fu,
+		conf: conf,
 	}
 }

@@ -22,11 +22,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminLinkClient interface {
+	// 新增友链
 	CreateQyAdminLink(ctx context.Context, in *CreateQyAdminLinkRequest, opts ...grpc.CallOption) (*CreateQyAdminLinkReply, error)
+	// 更新友链
 	UpdateQyAdminLink(ctx context.Context, in *UpdateQyAdminLinkRequest, opts ...grpc.CallOption) (*UpdateQyAdminLinkReply, error)
 	DeleteQyAdminLink(ctx context.Context, in *DeleteQyAdminLinkRequest, opts ...grpc.CallOption) (*DeleteQyAdminLinkReply, error)
+	// 批量删除友链
 	DeleteQyAdminLinks(ctx context.Context, in *DeleteQyAdminLinksRequest, opts ...grpc.CallOption) (*DeleteQyAdminLinkReply, error)
 	GetQyAdminLink(ctx context.Context, in *GetQyAdminLinkRequest, opts ...grpc.CallOption) (*GetQyAdminLinkReply, error)
+	// 友链列表
 	ListQyAdminLink(ctx context.Context, in *ListQyAdminLinkRequest, opts ...grpc.CallOption) (*ListQyAdminLinkReply, error)
 }
 
@@ -96,11 +100,15 @@ func (c *qyAdminLinkClient) ListQyAdminLink(ctx context.Context, in *ListQyAdmin
 // All implementations must embed UnimplementedQyAdminLinkServer
 // for forward compatibility
 type QyAdminLinkServer interface {
+	// 新增友链
 	CreateQyAdminLink(context.Context, *CreateQyAdminLinkRequest) (*CreateQyAdminLinkReply, error)
+	// 更新友链
 	UpdateQyAdminLink(context.Context, *UpdateQyAdminLinkRequest) (*UpdateQyAdminLinkReply, error)
 	DeleteQyAdminLink(context.Context, *DeleteQyAdminLinkRequest) (*DeleteQyAdminLinkReply, error)
+	// 批量删除友链
 	DeleteQyAdminLinks(context.Context, *DeleteQyAdminLinksRequest) (*DeleteQyAdminLinkReply, error)
 	GetQyAdminLink(context.Context, *GetQyAdminLinkRequest) (*GetQyAdminLinkReply, error)
+	// 友链列表
 	ListQyAdminLink(context.Context, *ListQyAdminLinkRequest) (*ListQyAdminLinkReply, error)
 	mustEmbedUnimplementedQyAdminLinkServer()
 }

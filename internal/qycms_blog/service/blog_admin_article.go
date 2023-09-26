@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
+	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
 	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
@@ -127,6 +128,21 @@ func bizToArticleDO(in *v1.CreateQyAdminArticleRequest) *biz.ArticleDO {
 		objDO.StatusFlag = 2
 		objDO.PublishedAt = time.Now()
 	}
+	flen := len(in.Resources)
+	if flen > 0 {
+		files := make([]*biz.ArticleResourceDO, 0, flen)
+		for _, file := range in.Resources {
+			files = append(files, &biz.ArticleResourceDO{
+				ObjectMeta: metaV1.ObjectMeta{
+					ID: file.Id,
+				},
+				Name:     file.Name,
+				Url:      file.Url,
+				Password: file.Password,
+			})
+		}
+		objDO.Resource = files
+	}
 	return objDO
 }
 func bizToArticleDOByUpdate(in *v1.UpdateQyAdminArticleRequest) *biz.ArticleDO {
@@ -154,6 +170,22 @@ func bizToArticleDOByUpdate(in *v1.UpdateQyAdminArticleRequest) *biz.ArticleDO {
 		objDO.StatusFlag = 2
 		objDO.PublishedAt = time.Now()
 	}
+	flen := len(in.Resources)
+	if flen > 0 {
+		files := make([]*biz.ArticleResourceDO, 0, flen)
+		for _, file := range in.Resources {
+			files = append(files, &biz.ArticleResourceDO{
+				ObjectMeta: metaV1.ObjectMeta{
+					ID: file.Id,
+				},
+				ArticleID: objDO.ID,
+				Name:      file.Name,
+				Url:       file.Url,
+				Password:  file.Password,
+			})
+		}
+		objDO.Resource = files
+	}
 	return objDO
 }
 func bizToArticleResponse(obj *biz.ArticleDO) v1.ArticleInfoResponse {
@@ -178,6 +210,20 @@ func bizToArticleResponse(obj *biz.ArticleDO) v1.ArticleInfoResponse {
 		Content:        obj.Content,
 		ContentHtml:    obj.ContentHtml,
 		CommentFlag:    obj.CommentFlag,
+	}
+
+	flen := len(obj.Resource)
+	if flen > 0 {
+		files := make([]*v1.ArticleResourcesInfoResponse, 0, flen)
+		for _, file := range obj.Resource {
+			files = append(files, &v1.ArticleResourcesInfoResponse{
+				Id:       file.ID,
+				Name:     file.Name,
+				Url:      file.Url,
+				Password: file.Password,
+			})
+		}
+		objInfoRsp.Resources = files
 	}
 	return objInfoRsp
 }

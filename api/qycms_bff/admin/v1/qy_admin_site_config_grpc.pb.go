@@ -22,11 +22,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type QyAdminSiteConfigClient interface {
+	// 新增站点配置
 	CreateQyAdminSiteConfig(ctx context.Context, in *CreateQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*CreateQyAdminSiteConfigReply, error)
 	UpdateQyAdminSiteConfig(ctx context.Context, in *UpdateQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateQyAdminSiteConfigReply, error)
+	// 更新站点配置
 	UpdateInBatchesQyAdminSiteConfig(ctx context.Context, in *UpdateBatchesQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*UpdateBatchesQyAdminSiteConfigReply, error)
 	DeleteQyAdminSiteConfig(ctx context.Context, in *DeleteQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*DeleteQyAdminSiteConfigReply, error)
 	GetQyAdminSiteConfig(ctx context.Context, in *GetQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*GetQyAdminSiteConfigReply, error)
+	// 获取站点配置列表
 	ListQyAdminSiteConfig(ctx context.Context, in *ListQyAdminSiteConfigRequest, opts ...grpc.CallOption) (*ListQyAdminSiteConfigReply, error)
 }
 
@@ -96,11 +99,14 @@ func (c *qyAdminSiteConfigClient) ListQyAdminSiteConfig(ctx context.Context, in 
 // All implementations must embed UnimplementedQyAdminSiteConfigServer
 // for forward compatibility
 type QyAdminSiteConfigServer interface {
+	// 新增站点配置
 	CreateQyAdminSiteConfig(context.Context, *CreateQyAdminSiteConfigRequest) (*CreateQyAdminSiteConfigReply, error)
 	UpdateQyAdminSiteConfig(context.Context, *UpdateQyAdminSiteConfigRequest) (*UpdateQyAdminSiteConfigReply, error)
+	// 更新站点配置
 	UpdateInBatchesQyAdminSiteConfig(context.Context, *UpdateBatchesQyAdminSiteConfigRequest) (*UpdateBatchesQyAdminSiteConfigReply, error)
 	DeleteQyAdminSiteConfig(context.Context, *DeleteQyAdminSiteConfigRequest) (*DeleteQyAdminSiteConfigReply, error)
 	GetQyAdminSiteConfig(context.Context, *GetQyAdminSiteConfigRequest) (*GetQyAdminSiteConfigReply, error)
+	// 获取站点配置列表
 	ListQyAdminSiteConfig(context.Context, *ListQyAdminSiteConfigRequest) (*ListQyAdminSiteConfigReply, error)
 	mustEmbedUnimplementedQyAdminSiteConfigServer()
 }

@@ -24,6 +24,7 @@ const OperationQyWebArticleGetQyWebCategory = "/api.qycms_bff.web.v1.QyWebArticl
 const OperationQyWebArticleGetQyWebMinaArticle = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebMinaArticle"
 const OperationQyWebArticleGetQyWebTag = "/api.qycms_bff.web.v1.QyWebArticle/GetQyWebTag"
 const OperationQyWebArticleListQyWebArticle = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticle"
+const OperationQyWebArticleListQyWebArticleResources = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebArticleResources"
 const OperationQyWebArticleListQyWebMinaArticle = "/api.qycms_bff.web.v1.QyWebArticle/ListQyWebMinaArticle"
 
 type QyWebArticleHTTPServer interface {
@@ -32,6 +33,7 @@ type QyWebArticleHTTPServer interface {
 	GetQyWebMinaArticle(context.Context, *GetQyWebArticleRequest) (*GetQyWebMinaArticleReply, error)
 	GetQyWebTag(context.Context, *GetQyWebTagRequest) (*GetQyWebTagReply, error)
 	ListQyWebArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
+	ListQyWebArticleResources(context.Context, *ListQyWebArticleResourcesRequest) (*ListQyWebArticleResourcesReply, error)
 	ListQyWebMinaArticle(context.Context, *ListQyWebArticleRequest) (*ListQyWebArticleReply, error)
 }
 
@@ -41,6 +43,7 @@ func RegisterQyWebArticleHTTPServer(s *http.Server, srv QyWebArticleHTTPServer) 
 	r.GET("/api/web/v1/article", _QyWebArticle_ListQyWebArticle0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/tag/{name}", _QyWebArticle_GetQyWebTag0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/category/{name}", _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv))
+	r.GET("/api/web/v1/article/resources", _QyWebArticle_ListQyWebArticleResources0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/mina/article/{name}", _QyWebArticle_GetQyWebMinaArticle0_HTTP_Handler(srv))
 	r.GET("/api/web/v1/mina/article", _QyWebArticle_ListQyWebMinaArticle0_HTTP_Handler(srv))
 }
@@ -130,6 +133,25 @@ func _QyWebArticle_GetQyWebCategory0_HTTP_Handler(srv QyWebArticleHTTPServer) fu
 	}
 }
 
+func _QyWebArticle_ListQyWebArticleResources0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListQyWebArticleResourcesRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationQyWebArticleListQyWebArticleResources)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListQyWebArticleResources(ctx, req.(*ListQyWebArticleResourcesRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListQyWebArticleResourcesReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _QyWebArticle_GetQyWebMinaArticle0_HTTP_Handler(srv QyWebArticleHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetQyWebArticleRequest
@@ -177,6 +199,7 @@ type QyWebArticleHTTPClient interface {
 	GetQyWebMinaArticle(ctx context.Context, req *GetQyWebArticleRequest, opts ...http.CallOption) (rsp *GetQyWebMinaArticleReply, err error)
 	GetQyWebTag(ctx context.Context, req *GetQyWebTagRequest, opts ...http.CallOption) (rsp *GetQyWebTagReply, err error)
 	ListQyWebArticle(ctx context.Context, req *ListQyWebArticleRequest, opts ...http.CallOption) (rsp *ListQyWebArticleReply, err error)
+	ListQyWebArticleResources(ctx context.Context, req *ListQyWebArticleResourcesRequest, opts ...http.CallOption) (rsp *ListQyWebArticleResourcesReply, err error)
 	ListQyWebMinaArticle(ctx context.Context, req *ListQyWebArticleRequest, opts ...http.CallOption) (rsp *ListQyWebArticleReply, err error)
 }
 
@@ -245,6 +268,19 @@ func (c *QyWebArticleHTTPClientImpl) ListQyWebArticle(ctx context.Context, in *L
 	pattern := "/api/web/v1/article"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationQyWebArticleListQyWebArticle))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *QyWebArticleHTTPClientImpl) ListQyWebArticleResources(ctx context.Context, in *ListQyWebArticleResourcesRequest, opts ...http.CallOption) (*ListQyWebArticleResourcesReply, error) {
+	var out ListQyWebArticleResourcesReply
+	pattern := "/api/web/v1/article/resources"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationQyWebArticleListQyWebArticleResources))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
