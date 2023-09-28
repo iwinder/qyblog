@@ -45,9 +45,10 @@
   - api：自动生成 API JSON 文件
   - sql：数据库文件
   - templates：邮件等模板
+  - configs: 一些配置文件，目前将 casbin 规则文件放在了这里
 - internal 服务实现所在位置
     - biz：定义 do,具体业务层，DO 与 PO 互转层
-    - conf: 定义读取配置文件的对象。由于目前将 casbin 规则文件放在了这里，Dockerfile的配置文件指定指令未变更，直接使用docker部署会有问题。
+    - conf: 定义读取配置文件的对象。
     - data：定义 PO，数据库连接创建以及增删改查等基本服务， PO服务执行层。
     - job：定时任务
     - server: http与grpc协议服务实际注册层，如果需要多个api文件中请求注册到项目中，则需要调整这里面的http或者 grpc 文件，增加类似 `v1.RegisterUserHTTPServer(srv, userService)`的语句。

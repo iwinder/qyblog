@@ -20,7 +20,7 @@ auth:
     jwt_secret: "secret"
     expire_duration: 3600s
   casbin:
-    model_path: "/home/wind/Work/program/go/src/github.com/iwinder/qingyucms/configs/authz_model.conf"
+    model_path: "/home/wind/Work/program/go/src/github.com/iwinder/qingyucms/doc/configs/authz_model.conf"
 qycms:
   token: SAkSgsuN
   siteMapPath: "/home/wind/Work/program/common/tmp/"
