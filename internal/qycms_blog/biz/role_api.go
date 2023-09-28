@@ -3,7 +3,7 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/auth/auth_constants"
 	"strconv"
 )
 

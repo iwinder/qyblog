@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	qy_logger "github.com/iwinder/qingyucms/internal/pkg/qycms_common/qy-logger"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/job"
+	qy_logger "github.com/iwinder/qyblog/internal/pkg/qycms_common/qy-logger"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/job"
 	"os"
 
 	"github.com/go-kratos/kratos/v2"

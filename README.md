@@ -1,6 +1,12 @@
 # 项目简介
 
-本项目是对原个人 Java 项目 [qycms](https://gitee.com/windcoder/qycms) 的 GoLang 版改造， 由于时间有限，这一版直接使用了B站的开源微服务框架 [Kratos](https://go-kratos.dev/) ，配套前端项目 [qyblog-web](https://gitee.com/windcoder/qyblog-web/tree/master/)，采用 [vue3](https://cn.vuejs.org/) + [Ant Design Vue](https://www.antdv.com/)重构，使用 [nuxt3](https://nuxt.com/) 实现 ssr，小程序部分使用 [uni-app](https://en.uniapp.dcloud.io/) 重构。
+本项目是对原个人 Java 项目 【qyblog-java】([github](https://github.com/iwinder/qyblog-java) | [gitee](https://gitee.com/windcoder/qyblog-java)) 的 GoLang 版改造， 由于时间有限，这一版直接使用了B站的开源微服务框架 [Kratos](https://go-kratos.dev/) 。
+
+配套前端项目 【qyblog-web】采用 [vue3](https://cn.vuejs.org/) + [Ant Design Vue](https://www.antdv.com/)重构，使用 [nuxt3](https://nuxt.com/) 实现 ssr，小程序部分使用 [uni-app](https://en.uniapp.dcloud.io/) 重构。
+
+前端项目地址：
+- github ：[https://github.com/iwinder/qyblog-web](https://github.com/iwinder/qyblog-web)
+- gitee ：[https://gitee.com/windcoder/qyblog-web](https://gitee.com/windcoder/qyblog-web)
 
 ### 当前功能
 项目目前以个人博客自用为主，加上微服务化会增加实际运行成本，短期内不会有微服务化的考虑。目前实现了如下的基础功能。

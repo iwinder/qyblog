@@ -9,13 +9,13 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/job"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/job/jbiz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/server"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/db"
+	"github.com/iwinder/qyblog/internal/qycms_blog/job"
+	"github.com/iwinder/qyblog/internal/qycms_blog/job/jbiz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/server"
+	"github.com/iwinder/qyblog/internal/qycms_blog/service"
 )
 
 // Injectors from wire.go:

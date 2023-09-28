@@ -2,7 +2,7 @@ package fileUtil
 
 import (
 	"fmt"
-	stringUtil "github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
+	stringUtil "github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/stringUtil"
 	"io/ioutil"
 	"strings"
 )

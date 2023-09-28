@@ -3,7 +3,7 @@ syntax = "proto3";
 package api.qycms_bff.admin.v1;
 import "google/api/annotations.proto";
 
-option go_package = "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1;v1";
+option go_package = "github.com/iwinder/qyblog/api/qycms_bff/admin/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.qycms_bff.admin.v1";
 

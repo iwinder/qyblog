@@ -3,9 +3,9 @@ package db
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/gormutil"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/gormutil"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/po"
 	"gorm.io/gorm/clause"
 )
 

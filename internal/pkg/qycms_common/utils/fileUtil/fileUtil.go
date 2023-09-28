@@ -1,7 +1,7 @@
 package fileUtil
 
 import (
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/dateUtil"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/dateUtil"
 	"os"
 	"path/filepath"
 	"strings"

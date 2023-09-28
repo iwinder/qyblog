@@ -3,13 +3,13 @@ package server
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
-	w1 "github.com/iwinder/qingyucms/api/qycms_bff/web/v1"
-	mid "github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/middleware"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/filter"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
+	w1 "github.com/iwinder/qyblog/api/qycms_bff/web/v1"
+	mid "github.com/iwinder/qyblog/internal/pkg/qycms_common/auth/middleware"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/filter"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/db"
+	"github.com/iwinder/qyblog/internal/qycms_blog/service"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/auth"
 	"strings"
 )
 

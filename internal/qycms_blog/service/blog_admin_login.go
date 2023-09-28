@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
 )
 
 type BlogAdminUserService struct {

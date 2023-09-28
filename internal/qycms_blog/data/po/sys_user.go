@@ -1,9 +1,9 @@
 package po
 
 import (
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/bcryptUtil"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/idUtil"
+	metaV1 "github.com/iwinder/qyblog/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/bcryptUtil"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/idUtil"
 	"gorm.io/gorm"
 )
 

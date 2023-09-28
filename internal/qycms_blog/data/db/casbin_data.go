@@ -5,8 +5,8 @@ import (
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/po"
 	"strings"
 	"sync"
 )

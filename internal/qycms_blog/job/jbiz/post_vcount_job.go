@@ -3,7 +3,7 @@ package jbiz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
+	"github.com/iwinder/qyblog/internal/qycms_blog/service"
 )
 
 type PostVCountJobRepo struct {

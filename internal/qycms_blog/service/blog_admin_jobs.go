@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
 )
 
 type BlogAdminJobsService struct {

@@ -3,8 +3,8 @@ package job
 import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/job/jbiz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/job/jbiz"
 	"github.com/robfig/cron/v3"
 )
 

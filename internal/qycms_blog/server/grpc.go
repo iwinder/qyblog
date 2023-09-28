@@ -4,9 +4,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/conf"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/service"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
+	"github.com/iwinder/qyblog/internal/qycms_blog/conf"
+	"github.com/iwinder/qyblog/internal/qycms_blog/service"
 )
 
 // NewGRPCServer new a gRPC server.  gRPC 示例，本项目暂未使用

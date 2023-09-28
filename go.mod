@@ -1,4 +1,4 @@
-module github.com/iwinder/qingyucms
+module github.com/iwinder/qyblog
 
 go 1.18
 

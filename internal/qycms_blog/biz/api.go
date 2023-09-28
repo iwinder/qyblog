@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/auth/auth_constants"
+	metaV1 "github.com/iwinder/qyblog/internal/pkg/qycms_common/meta/v1"
 	"gorm.io/gorm"
 	"strconv"
 )

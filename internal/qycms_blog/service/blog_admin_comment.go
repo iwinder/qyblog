@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
+	metaV1 "github.com/iwinder/qyblog/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

@@ -10,11 +10,11 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/auth/auth_constants"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/auth/auth_constants"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/db"
 	"strings"
-	//"github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
-	//db "github.com/iwinder/qingyucms/internal/qycms_blog/data/db"
+	//"github.com/iwinder/qyblog/internal/qycms_blog/data/db"
+	//db "github.com/iwinder/qyblog/internal/qycms_blog/data/db"
 )
 
 const (

@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/web/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/web/v1"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
 )
 
 func (b *BlogWebApiService) GetQyWebFooterMenus(ctx context.Context, in *v1.GetQyWebMenusRequest) (*v1.GetQyWebMenusReply, error) {

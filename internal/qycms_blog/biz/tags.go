@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
-	metaV1 "github.com/iwinder/qingyucms/internal/pkg/qycms_common/meta/v1"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
+	metaV1 "github.com/iwinder/qyblog/internal/pkg/qycms_common/meta/v1"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/stringUtil"
 	"gorm.io/gorm"
 )
 

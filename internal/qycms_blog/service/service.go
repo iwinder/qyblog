@@ -6,7 +6,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 	jwtV4 "github.com/golang-jwt/jwt/v4"
 	"github.com/google/wire"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
 )
 
 // ProviderSet is service providers.

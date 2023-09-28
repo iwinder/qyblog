@@ -20,11 +20,11 @@ auth:
     jwt_secret: "secret"
     expire_duration: 3600s
   casbin:
-    model_path: "/home/wind/Work/program/go/src/github.com/iwinder/qingyucms/doc/configs/authz_model.conf"
+    model_path: "/home/wind/Work/program/go/src/github.com/iwinder/qyblog/doc/configs/authz_model.conf"
 qycms:
   token: SAkSgsuN
   siteMapPath: "/home/wind/Work/program/common/tmp/"
-  docPath: "/home/wind/Work/program/go/src/github.com/iwinder/qingyucms/doc/"
+  docPath: "/home/wind/Work/program/go/src/github.com/iwinder/qyblog/doc/"
   logger:
     path:  "/home/wind/Work/program/common/tmp/qycms.log"   # 指定日志存储位置
     level:  DEBUG     # 日志等级

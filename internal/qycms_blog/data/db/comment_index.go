@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
-	biz "github.com/iwinder/qingyucms/internal/qycms_blog/biz"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/data/po"
+	biz "github.com/iwinder/qyblog/internal/qycms_blog/biz"
+	"github.com/iwinder/qyblog/internal/qycms_blog/data/po"
 )
 
 type CommentIndexRepo struct {

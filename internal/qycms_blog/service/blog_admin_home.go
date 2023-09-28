@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
 )
 
 func (s *BlogAdminUserService) UpdateContentCountJobsQyAdminHome(ctx context.Context, request *v1.CreateQyAdminHomeRequest) (*v1.CreateQyAdminHomeReply, error) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/douyacun/gositemap"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/sitemapUtil"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/sitemapUtil"
 	"strings"
 	"time"
 )

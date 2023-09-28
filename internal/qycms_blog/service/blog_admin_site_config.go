@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	v1 "github.com/iwinder/qingyucms/api/qycms_bff/admin/v1"
-	"github.com/iwinder/qingyucms/internal/qycms_blog/biz"
+	v1 "github.com/iwinder/qyblog/api/qycms_bff/admin/v1"
+	"github.com/iwinder/qyblog/internal/qycms_blog/biz"
 )
 
 func (s *BlogAdminUserService) CreateQyAdminSiteConfig(ctx context.Context, in *v1.CreateQyAdminSiteConfigRequest) (*v1.CreateQyAdminSiteConfigReply, error) {

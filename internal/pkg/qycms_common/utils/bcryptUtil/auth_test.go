@@ -1,7 +1,7 @@
 package bcryptUtil
 
 import (
-	"github.com/iwinder/qingyucms/internal/pkg/qycms_common/utils/stringUtil"
+	"github.com/iwinder/qyblog/internal/pkg/qycms_common/utils/stringUtil"
 	"log"
 	"testing"
 )
